@@ -21,13 +21,40 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
           and a supportive community of cyclists across Northern Ireland.
         </p>
 
-        <h2>How to Join</h2>
-        <p>
-          The easiest way to join TQCC is through <strong>Cycling Ireland</strong>.
-          You can sign up online and select Titanic Quarter CC as your club:
+        <p class="text-tqcc-gray mb-8">
+          If you have any queries, please e-mail our membership officer at <a href="mailto:titanicquartercc@gmail.com" class="text-tqcc-pink hover:underline">titanicquartercc@gmail.com</a>
         </p>
 
-        <div class="not-prose my-8">
+        <h2>How to Join</h2>
+
+        <h3 class="flex items-center gap-3">
+          <span class="bg-tqcc-yellow text-tqcc-black font-bold rounded-full w-10 h-10 flex items-center justify-center flex-shrink-0">1</span>
+          Join us for a taster ride
+        </h3>
+        <p>
+          As with all cycling clubs, members are required to be covered by third party liability insurance and this is included with a Cycling Ireland licence. Potential members are welcome to come out on <strong>two 'taster rides'</strong> with the club and you can sign a form before the ride which will mean you are covered by insurance during the group ride.
+        </p>
+
+        <h3 class="flex items-center gap-3">
+          <span class="bg-tqcc-yellow text-tqcc-black font-bold rounded-full w-10 h-10 flex items-center justify-center flex-shrink-0">2</span>
+          Already have a valid Cycling Ireland licence?
+        </h3>
+        <p>
+          If you already have a valid Cycling Ireland licence and are 'unattached', you can request a transfer to TQCC. If you're a member of another club, you will need to request a transfer from your current club. Please <a href="mailto:titanicquartercc@gmail.com" class="text-tqcc-pink hover:underline">contact us</a> to arrange your club membership.
+        </p>
+
+        <h3 class="flex items-center gap-3">
+          <span class="bg-tqcc-yellow text-tqcc-black font-bold rounded-full w-10 h-10 flex items-center justify-center flex-shrink-0">3</span>
+          Don't have a Cycling Ireland licence?
+        </h3>
+        <p>
+          <strong>We strongly recommend joining via Cycling Ireland to keep things simple.</strong> You can register by clicking the link below (90% of our members hold a 'Leisure Licence').
+        </p>
+        <p>
+          When you register, you will be asked what club you wish to join — select <strong>Titanic Quarter Cycling Club</strong>. You'll pay both the Cycling Ireland licence fee and your TQCC club membership fee together in one transaction via the CI portal.
+        </p>
+
+        <div class="not-prose my-6">
           <a
             href="https://www.cyclingireland.ie/get-involved/membership/"
             target="_blank"
@@ -38,11 +65,38 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
           </a>
         </div>
 
-        <p>
-          <strong>British Cycling members</strong> are also welcome. If you have
-          a British Cycling membership, please <a href={`${baseUrl}/contact`} class="text-tqcc-pink hover:underline">contact the club</a>
-          for details on how to register with us.
+        <p class="text-sm text-tqcc-gray">
+          <strong>British Cycling members</strong> are also welcome — please <a href={`${baseUrl}/contact`} class="text-tqcc-pink hover:underline">contact the club</a> for registration details.
         </p>
+
+        <h3 class="flex items-center gap-3">
+          <span class="bg-tqcc-yellow text-tqcc-black font-bold rounded-full w-10 h-10 flex items-center justify-center flex-shrink-0">4</span>
+          Membership Fees
+        </h3>
+        <p>
+          Annual membership of TQCC runs from 1st January to 31st December. Club membership fees for 2026 are:
+        </p>
+        <ul>
+          <li><strong>18 & over</strong> = £20</li>
+          <li><strong>65 & over</strong> = £10</li>
+          <li><strong>Associate membership</strong> (non-cycling) = £10</li>
+        </ul>
+        <p class="text-sm text-tqcc-gray">
+          Note: These are TQCC club fees only. If registering via Cycling Ireland (Step 3), you'll also pay the separate CI licence fee in the same transaction.
+        </p>
+
+        <h2>What to Bring</h2>
+        <p>
+          For your first ride with us, make sure you have:
+        </p>
+        <ul>
+          <li><strong>A road bike</strong> in good working condition</li>
+          <li><strong>Helmet</strong> (mandatory)</li>
+          <li><strong>Spare tube</strong> and basic repair kit</li>
+          <li><strong>Water bottles</strong></li>
+          <li><strong>Appropriate clothing</strong> for the weather</li>
+          <li><strong>Money</strong> for a coffee stop!</li>
+        </ul>
 
         <div class="not-prose bg-tqcc-yellow/10 border-l-4 border-tqcc-yellow p-6 rounded-r-lg my-8">
           <h3 class="font-bold text-lg mb-2">New to cycling?</h3>
@@ -55,34 +109,20 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
           </p>
         </div>
 
-        <h2>Try Before You Join</h2>
-        <p>
-          Not sure if club cycling is for you? No problem! We welcome potential
-          members to join us for <strong>two taster rides</strong> before
-          committing to membership.
-        </p>
-        <p>
-          Since all club members need third party liability insurance (included
-          with your Cycling Ireland licence), you'll just need to sign a simple
-          form before your taster ride. This ensures you're covered by insurance
-          during the group ride, so you can relax and enjoy getting to know the club.
-        </p>
-        <p>
-          Please <a href={`${baseUrl}/contact`} class="text-tqcc-pink hover:underline">contact the club</a> before attending your first taster ride.
-          This allows us to arrange the paperwork in advance and ensure you join a ride that matches your experience level.
-          We'll guide you through the process and help you choose the best ride to start with!
-        </p>
+        <hr class="not-prose border-t-2 border-gray-200 my-12" />
 
-        <h2>Membership Benefits</h2>
+        <h2>Why Join TQCC?</h2>
         <ul>
-          <li>Access to all club rides and events</li>
-          <li>Club kit at discounted rates</li>
-          <li>Cycling Ireland affiliation and insurance</li>
-          <li>Social events and end-of-season gatherings</li>
-          <li>A supportive community of fellow cyclists</li>
+          <li><strong>Access to all club rides and events</strong> — from leisurely social spins to challenging training rides</li>
+          <li><strong>Club kit at discounted rates</strong> — look the part in official TQCC colours</li>
+          <li><strong>Cycling Ireland affiliation and insurance</strong> — third party liability coverage included</li>
+          <li><strong>Social events</strong> and end-of-season gatherings</li>
+          <li><strong>A supportive community</strong> of fellow cyclists who share your passion</li>
         </ul>
 
-        <h2>Ride Etiquette</h2>
+        <h2>Before Your First Ride</h2>
+
+        <h3>Ride Etiquette</h3>
         <p>
           Safety and respect are at the heart of everything we do. All riders are
           expected to follow basic group riding etiquette:
@@ -90,26 +130,16 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
         <ul>
           <li>Arrive on time with your bike in good working order</li>
           <li>Wear a helmet at all times</li>
-          <li>Carry spare tubes, pump, and basic tools</li>
           <li>Ride two abreast where safe, single file on busy roads</li>
           <li>Call out hazards and signal turns for the group</li>
           <li>Respect the pace of the group you've joined</li>
           <li>Be friendly and welcoming to new riders</li>
         </ul>
 
-        <h2>About Our Ride Leaders</h2>
+        <h3>About Our Ride Leaders</h3>
         <p>
-          Every TQCC group ride is led by a volunteer <strong>Ride Leader (RL)</strong> — an experienced club member who plans and guides the ride. Ride Leaders are the backbone of our club, ensuring every ride is safe, enjoyable, and appropriate for the group's ability level.
+          Every TQCC group ride is led by a volunteer <strong>Ride Leader (RL)</strong> — an experienced club member who plans and guides the ride. Before each ride, your Ride Leader will have planned a suitable route, considered road conditions and traffic patterns, and prepared a briefing on pace and group riding signals.
         </p>
-
-        <h3>What Ride Leaders Do</h3>
-        <p>Before each ride, your Ride Leader will have:</p>
-        <ul>
-          <li>Planned a route suitable for the group's experience level</li>
-          <li>Considered road conditions, traffic patterns, and the group's target pace</li>
-          <li>Prepared to brief riders on the route, expected pace, and group riding signals</li>
-        </ul>
-
         <p>
           At the start of the ride, the RL will explain the route, discuss the planned pace, and review the calls and hand signals we use to communicate on the road. They're there to help new riders feel confident and to ensure everyone knows what to expect.
         </p>
@@ -126,21 +156,8 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
 
         <h3>Your Safety is Your Responsibility</h3>
         <p>
-          Ride Leaders provide guidance and structure, but every rider is ultimately responsible for their own safety. Ride within your abilities, maintain your bike in good working order, and speak up if you're uncomfortable with any aspect of the ride. Our Ride Leaders are here to help, but safe group riding requires the attention and cooperation of everyone on the ride.
+          Ride Leaders provide guidance and structure, but every rider is ultimately responsible for their own safety. Ride within your abilities, maintain your bike in good working order, and speak up if you're uncomfortable with any aspect of the ride. Safe group riding requires the attention and cooperation of everyone on the ride.
         </p>
-
-        <h2>What to Bring</h2>
-        <p>
-          For your first ride, you'll need:
-        </p>
-        <ul>
-          <li>A road bike in good working condition</li>
-          <li>Helmet (mandatory)</li>
-          <li>Appropriate clothing for the weather</li>
-          <li>Water bottles</li>
-          <li>Spare tube and basic repair kit</li>
-          <li>Money for a coffee stop!</li>
-        </ul>
       </div>
 
       <!-- CTA -->
@@ -149,8 +166,8 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
           Ready to get started?
         </h2>
         <p class="text-white/80 mb-6 max-w-xl mx-auto">
-          Get in touch with us to find out more about membership, or just turn
-          up to one of our rides — we'd love to see you there.
+          Get in touch to arrange a taster ride or ask any questions about membership.
+          We'd love to see you out on the road with us!
         </p>
         <a
           href={`${baseUrl}/contact`}
