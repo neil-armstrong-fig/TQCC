@@ -42,14 +42,9 @@ const leaderboard = buildLeaderboard(activities, 5);
                 {i + 1}
               </span>
               <div>
-                <a
-                  href={`https://www.strava.com/athletes/${entry.athleteId}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="font-medium hover:text-orange-500 transition-colors"
-                >
+                <p class="font-medium">
                   {entry.name}
-                </a>
+                </p>
                 <p class="text-xs text-tqcc-gray">
                   {entry.activityCount}{" "}
                   {entry.activityCount === 1 ? "activity" : "activities"}

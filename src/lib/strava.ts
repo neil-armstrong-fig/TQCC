@@ -5,14 +5,12 @@ interface StravaTokenResponse {
 }
 
 export interface StravaActivity {
-  id: number;
   name: string;
   distance: number;
   moving_time: number;
   type: string;
   total_elevation_gain?: number;
   athlete: {
-    id: number;
     firstname: string;
     lastname: string;
   };
@@ -114,10 +112,9 @@ export function buildLeaderboard(
   const byAthlete = new Map<string, LeaderboardEntry>();
 
   for (const activity of activities) {
-    // Use athlete ID if available, otherwise use name as key
-    const athleteId = activity.athlete.id;
+    // Use athlete name as key since club activities don't include athlete ID
     const name = `${activity.athlete.firstname} ${activity.athlete.lastname.charAt(0)}.`;
-    const key = athleteId ? String(athleteId) : name;
+    const key = name;
 
     const existing = byAthlete.get(key);
     if (existing) {
@@ -127,7 +124,7 @@ export function buildLeaderboard(
     } else {
       byAthlete.set(key, {
         name,
-        athleteId: athleteId || 0,
+        athleteId: 0, // Not available from club activities endpoint
         totalDistance: activity.distance,
         totalDuration: activity.moving_time,
         activityCount: 1,
