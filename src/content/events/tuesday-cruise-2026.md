@@ -1,7 +1,7 @@
 ---
 title: "Easter Tuesday Cruise"
 date: 2026-04-07
-location: "Northern Ireland"
+location: "Lap of Strangford Lough"
 description: "A challenging 71.7-mile Easter Tuesday cruise featuring 2,930 feet of climbing through scenic Northern Ireland countryside."
 rideType: "Club Ride"
 membershipRequired: true

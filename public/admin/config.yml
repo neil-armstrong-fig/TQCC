@@ -72,7 +72,12 @@ collections:
     summary: "{{title}} — {{date}}"
     fields:
       - { label: "Title", name: "title", widget: "string", required: true }
-      - { label: "Date", name: "date", widget: "datetime", required: true }
+      - { label: "Date", name: "date", widget: "datetime", required: true, hint: "For month-only events, set to the last day of the month (e.g., Oct 31 for October)" }
+      - label: "Specific Day Known"
+        name: "daySpecified"
+        widget: "boolean"
+        default: true
+        hint: "Uncheck this if only the month is known (event will show as 'October 2026' instead of a specific date)"
       - { label: "End Date", name: "endDate", widget: "datetime", required: false }
       - { label: "Location", name: "location", widget: "string", required: true }
       - { label: "Description", name: "description", widget: "text", required: true }

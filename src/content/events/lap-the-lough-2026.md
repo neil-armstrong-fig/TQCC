@@ -1,7 +1,8 @@
 ---
 title: "Lap the Lough 2026"
-date: 2026-08-16
-location: "Around Strangford Lough"
+date: 2026-08-31
+daySpecified: false
+location: "Around Lough Neagh"
 description: "The official Lap The Lough has been cancelled, however we will be running our own club event to allow club members the opportunity to do this great course."
 rideType: "Club Ride"
 distance: "89 miles"

@@ -1,7 +1,7 @@
 ---
 title: "Summer Solstice Sportive 2026"
 date: 2026-06-12
-location: "TBC"
+location: "Belfast, Carryduff, Saintfield"
 description: "The only event open to cyclists not in the club. An evening route roughly 44 miles. All groups and abilities welcome!"
 rideType: "Sportive"
 distance: "~44 miles"

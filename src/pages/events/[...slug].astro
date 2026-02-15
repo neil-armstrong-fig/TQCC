@@ -16,12 +16,80 @@ const { event } = Astro.props;
 const { Content } = await render(event);
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
 
-const formattedDate = event.data.date.toLocaleDateString("en-GB", {
-  weekday: "long",
-  day: "numeric",
-  month: "long",
-  year: "numeric",
-});
+// Format date or date range
+let formattedDate: string;
+let showTime = true;
+
+if (!event.data.daySpecified) {
+  // Month-only display
+  formattedDate = event.data.date.toLocaleDateString("en-GB", {
+    month: "long",
+    year: "numeric",
+  });
+  showTime = false;
+} else if (event.data.endDate) {
+  // Date range
+  const startDate = event.data.date;
+  const endDate = event.data.endDate;
+  const sameMonth = startDate.getMonth() === endDate.getMonth() && startDate.getFullYear() === endDate.getFullYear();
+  const sameYear = startDate.getFullYear() === endDate.getFullYear();
+
+  if (sameMonth) {
+    // Same month: "Saturday 25th - Sunday 26th July 2026"
+    const startDay = startDate.toLocaleDateString("en-GB", {
+      weekday: "long",
+      day: "numeric",
+    });
+    const endDay = endDate.toLocaleDateString("en-GB", {
+      weekday: "long",
+      day: "numeric",
+    });
+    const monthYear = startDate.toLocaleDateString("en-GB", {
+      month: "long",
+      year: "numeric",
+    });
+    formattedDate = `${startDay} - ${endDay} ${monthYear}`;
+  } else if (sameYear) {
+    // Different months, same year: "Saturday 25 July - Monday 5 August 2026"
+    const startStr = startDate.toLocaleDateString("en-GB", {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+    });
+    const endStr = endDate.toLocaleDateString("en-GB", {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    });
+    formattedDate = `${startStr} - ${endStr}`;
+  } else {
+    // Different years
+    const startStr = startDate.toLocaleDateString("en-GB", {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    });
+    const endStr = endDate.toLocaleDateString("en-GB", {
+      weekday: "long",
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    });
+    formattedDate = `${startStr} - ${endStr}`;
+  }
+  showTime = false; // Don't show time for multi-day events
+} else {
+  // Single date with day
+  formattedDate = event.data.date.toLocaleDateString("en-GB", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+}
+
 const formattedTime = event.data.date.toLocaleTimeString("en-GB", {
   hour: "2-digit",
   minute: "2-digit",
@@ -77,7 +145,7 @@ const formattedTime = event.data.date.toLocaleTimeString("en-GB", {
             <svg class="w-5 h-5 text-tqcc-gray shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
             </svg>
-            <span>{formattedDate} at {formattedTime}</span>
+            <span>{formattedDate}{showTime ? ` at ${formattedTime}` : !event.data.daySpecified ? " (date TBC)" : ""}</span>
           </div>
           <div class="flex items-center gap-3">
             <svg class="w-5 h-5 text-tqcc-gray shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">

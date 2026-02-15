@@ -1,7 +1,7 @@
 ---
 title: "Colour Run 2026"
 date: 2026-03-29
-location: "Titanic Quarter, Belfast"
+location: "Belfast to Comber"
 description: "An annual event to mark the start of the longer evenings after a harsh winter! Each pace group will organise their own route all leaving from Titanic Quarter Belfast, and meeting at The Georgian House in Comber for lunch."
 rideType: "Club Ride"
 meetingPoint: "Titanic Quarter"

@@ -1,6 +1,7 @@
 ---
 title: "End of Season Social 2026"
-date: 2026-10-26
+date: 2026-10-31
+daySpecified: false
 location: "TBC"
 description: "Celebrate a great year with the club! Join us for our end of season social gathering."
 rideType: "Social"

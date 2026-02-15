@@ -28,6 +28,7 @@ const events = defineCollection({
   schema: z.object({
     title: z.string(),
     date: z.coerce.date(),
+    daySpecified: z.boolean().default(true),
     endDate: z.coerce.date().optional(),
     location: z.string(),
     description: z.string(),
