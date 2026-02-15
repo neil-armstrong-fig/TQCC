@@ -3,8 +3,8 @@ import tailwindcss from "@tailwindcss/vite";
 import sitemap from "@astrojs/sitemap";
 
 export default defineConfig({
-  site: "https://neil-armstrong-fig.github.io",
-  base: import.meta.env.PROD ? "/TQCC" : "/",
+  site: "https://stirring-baklava-d1133c.netlify.app",
+  base: "/",
   vite: {
     plugins: [tailwindcss()],
   },

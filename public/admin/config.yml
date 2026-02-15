@@ -8,8 +8,8 @@ publish_mode: editorial_workflow
 media_folder: "public/images/uploads"
 public_folder: "/images/uploads"
 
-site_url: https://neil-armstrong-fig.github.io/TQCC
-display_url: https://neil-armstrong-fig.github.io/TQCC
+site_url: https://stirring-baklava-d1133c.netlify.app
+display_url: https://stirring-baklava-d1133c.netlify.app
 
 slug:
   encoding: "ascii"
