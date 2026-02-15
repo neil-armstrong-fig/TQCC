@@ -27,29 +27,26 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
         Join Belfast's friendliest cycling club. Weekly group rides for all abilities,
         from beginners to experienced riders. Community cycling in Belfast since 2014.
       </p>
-      <div class="flex flex-wrap gap-4">
+      <div class="flex flex-row flex-wrap sm:flex-nowrap gap-4">
         <a
           href={`${baseUrl}/rides-events`}
-          class="bg-tqcc-yellow text-tqcc-black font-bold px-8 py-3 rounded-lg hover:bg-tqcc-yellow-dark transition-colors"
+          class="flex-1 sm:flex-initial text-center bg-tqcc-yellow text-tqcc-black font-bold px-8 py-3 rounded-lg hover:bg-tqcc-yellow-dark transition-colors"
         >
           See Our Rides
         </a>
         <a
           href={`${baseUrl}/about`}
-          class="border-2 border-tqcc-yellow text-tqcc-yellow font-bold px-8 py-3 rounded-lg hover:bg-tqcc-yellow hover:text-tqcc-black transition-colors"
+          class="flex-1 sm:flex-initial text-center border-2 border-tqcc-yellow text-tqcc-yellow font-bold px-8 py-3 rounded-lg hover:bg-tqcc-yellow hover:text-tqcc-black transition-colors"
         >
           About TQCC
         </a>
         <a
           href={`${baseUrl}/membership`}
-          class="bg-tqcc-pink text-white font-bold px-8 py-3 rounded-lg hover:bg-tqcc-pink-light transition-colors"
+          class="w-full sm:w-auto text-center bg-tqcc-pink text-white font-bold px-8 py-3 rounded-lg hover:bg-tqcc-pink-light transition-colors"
         >
           Join the Club
         </a>
       </div>
     </div>
   </div>
-
-  <!-- Decorative pink stripe along the bottom (Giro d'Italia homage) -->
-  <div class="absolute bottom-0 left-0 right-0 h-1 bg-tqcc-pink"></div>
 </section>
