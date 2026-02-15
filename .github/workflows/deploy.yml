@@ -58,3 +58,16 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
+  trigger-netlify:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'
+    steps:
+      - name: Trigger Netlify Build
+        run: |
+          if [ -n "${{ secrets.NETLIFY_BUILD_HOOK }}" ]; then
+            curl -X POST -d {} "${{ secrets.NETLIFY_BUILD_HOOK }}"
+            echo "✅ Netlify build triggered"
+          else
+            echo "⚠️  NETLIFY_BUILD_HOOK secret not configured"
+          fi
