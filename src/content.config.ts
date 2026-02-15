@@ -109,6 +109,7 @@ const paceGroups = defineCollection({
         name: z.string(),
         stravaUrl: z.string().url(),
         distance: z.number(),
+        elevation: z.number(),
         description: z.string().optional(),
       })
     ),

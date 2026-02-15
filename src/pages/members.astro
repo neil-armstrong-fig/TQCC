@@ -19,12 +19,28 @@ const sortedGroups = paceGroups.sort((a, b) => a.data.order - b.data.order);
           Enter the club password to access this page.
         </p>
         <form id="password-form" class="max-w-sm mx-auto">
-          <input
-            type="password"
-            id="password-input"
-            placeholder="Password"
-            class="w-full px-4 py-3 border border-gray-300 rounded-lg text-center text-lg focus:outline-none focus:ring-2 focus:ring-tqcc-yellow"
-          />
+          <div class="relative">
+            <input
+              type="password"
+              id="password-input"
+              placeholder="Password"
+              class="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg text-center text-lg focus:outline-none focus:ring-2 focus:ring-tqcc-yellow"
+            />
+            <button
+              type="button"
+              id="toggle-password"
+              class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+              aria-label="Toggle password visibility"
+            >
+              <svg id="eye-open" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>
+              <svg id="eye-closed" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+              </svg>
+            </button>
+          </div>
           <button
             type="submit"
             class="mt-4 w-full bg-tqcc-yellow text-tqcc-black font-bold px-6 py-3 rounded-lg hover:bg-tqcc-yellow-dark transition-colors"
@@ -41,11 +57,137 @@ const sortedGroups = paceGroups.sort((a, b) => a.data.order - b.data.order);
       <div id="members-content" class="hidden">
         <h1 class="text-4xl font-bold mb-8">Members Area</h1>
 
-        <div class="prose prose-lg max-w-none mb-12">
+        <div class="prose prose-lg max-w-none mb-8">
           <p class="text-xl text-tqcc-gray leading-relaxed">
             Welcome to the TQCC members-only area. Browse our curated routes by
             pace group below.
           </p>
+        </div>
+
+        <!-- Filter Controls -->
+        <div class="bg-gray-50 border border-gray-200 rounded-lg mb-8">
+          <button
+            id="toggle-filters"
+            class="w-full flex items-center justify-between p-6 text-left hover:bg-gray-100 transition-colors cursor-pointer"
+          >
+            <h2 class="text-xl font-bold">Filter Routes</h2>
+            <svg
+              id="filter-chevron"
+              class="w-6 h-6 transition-transform duration-200"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+          <div id="filter-content" class="hidden px-6 pb-6">
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- Distance Filter -->
+            <div>
+              <label class="block text-sm font-semibold mb-2">
+                Distance Range
+              </label>
+              <div id="distance-slider-container" class="slider-container relative h-10 flex items-center mb-3">
+                <input
+                  type="range"
+                  id="distance-min"
+                  min="0"
+                  max="110"
+                  value="0"
+                  step="1"
+                  class="dual-range dual-range-min absolute w-full h-2 bg-transparent rounded-lg appearance-none cursor-pointer pointer-events-none"
+                />
+                <input
+                  type="range"
+                  id="distance-max"
+                  min="0"
+                  max="110"
+                  value="110"
+                  step="1"
+                  class="dual-range dual-range-max absolute w-full h-2 bg-transparent rounded-lg appearance-none cursor-pointer pointer-events-none"
+                />
+              </div>
+              <div class="flex items-center gap-2 text-sm">
+                <input
+                  type="number"
+                  id="distance-min-input"
+                  min="0"
+                  max="110"
+                  value="0"
+                  step="1"
+                  class="w-20 px-2 py-1 border border-gray-300 rounded text-center focus:outline-none focus:ring-2 focus:ring-tqcc-yellow"
+                />
+                <span class="text-gray-500">to</span>
+                <input
+                  type="number"
+                  id="distance-max-input"
+                  min="0"
+                  max="110"
+                  value="110"
+                  step="1"
+                  class="w-20 px-2 py-1 border border-gray-300 rounded text-center focus:outline-none focus:ring-2 focus:ring-tqcc-yellow"
+                />
+                <span id="distance-unit-label" class="text-tqcc-pink font-semibold">mi</span>
+              </div>
+            </div>
+
+            <!-- Elevation Filter -->
+            <div>
+              <label class="block text-sm font-semibold mb-2">
+                Elevation Range
+              </label>
+              <div id="elevation-slider-container" class="slider-container relative h-10 flex items-center mb-3">
+                <input
+                  type="range"
+                  id="elevation-min"
+                  min="0"
+                  max="9000"
+                  value="0"
+                  step="100"
+                  class="dual-range dual-range-min absolute w-full h-2 bg-transparent rounded-lg appearance-none cursor-pointer pointer-events-none"
+                />
+                <input
+                  type="range"
+                  id="elevation-max"
+                  min="0"
+                  max="9000"
+                  value="9000"
+                  step="100"
+                  class="dual-range dual-range-max absolute w-full h-2 bg-transparent rounded-lg appearance-none cursor-pointer pointer-events-none"
+                />
+              </div>
+              <div class="flex items-center gap-2 text-sm">
+                <input
+                  type="number"
+                  id="elevation-min-input"
+                  min="0"
+                  max="9000"
+                  value="0"
+                  step="100"
+                  class="w-20 px-2 py-1 border border-gray-300 rounded text-center focus:outline-none focus:ring-2 focus:ring-tqcc-yellow"
+                />
+                <span class="text-gray-500">to</span>
+                <input
+                  type="number"
+                  id="elevation-max-input"
+                  min="0"
+                  max="9000"
+                  value="9000"
+                  step="100"
+                  class="w-20 px-2 py-1 border border-gray-300 rounded text-center focus:outline-none focus:ring-2 focus:ring-tqcc-yellow"
+                />
+                <span id="elevation-unit-label" class="text-tqcc-pink font-semibold">ft</span>
+              </div>
+            </div>
+          </div>
+          <button
+            id="reset-filters"
+            class="mt-4 px-4 py-2 text-sm bg-tqcc-yellow text-tqcc-black font-semibold rounded-lg hover:bg-tqcc-yellow-dark transition-colors cursor-pointer"
+          >
+            Reset Filters
+          </button>
+          </div>
         </div>
 
         <!-- Route Picker by Pace Group -->
@@ -66,24 +208,29 @@ const sortedGroups = paceGroups.sort((a, b) => a.data.order - b.data.order);
                       href={route.stravaUrl}
                       target="_blank"
                       rel="noopener noreferrer"
-                      class="block border border-gray-200 rounded-lg p-4 hover:border-tqcc-yellow hover:shadow-md transition-all bg-gray-50"
+                      class="route-card block border border-gray-200 rounded-lg p-4 hover:border-tqcc-yellow hover:shadow-md transition-all bg-gray-50"
+                      data-distance-miles={route.distance}
+                      data-elevation-feet={route.elevation}
                     >
                       <div class="flex items-start justify-between mb-2">
                         <h3 class="font-bold text-lg text-tqcc-black">
                           {route.name}
                         </h3>
-                        <span class="text-tqcc-yellow font-bold text-sm whitespace-nowrap ml-2">
+                        <div class="flex flex-col items-end text-tqcc-pink font-bold text-sm whitespace-nowrap ml-2">
                           <span class="distance-string" data-distance={`${route.distance} miles`}>
                             {route.distance} mi
                           </span>
-                        </span>
+                          <span class="elevation-string text-xs" data-elevation={`${route.elevation} feet`}>
+                            {route.elevation} ft
+                          </span>
+                        </div>
                       </div>
                       {route.description && (
                         <p class="text-sm text-tqcc-gray mb-3">
                           {route.description}
                         </p>
                       )}
-                      <div class="flex items-center text-sm text-tqcc-pink font-semibold">
+                      <div class="flex items-center text-sm text-tqcc-yellow font-semibold">
                         View on Strava →
                       </div>
                     </a>
@@ -98,10 +245,138 @@ const sortedGroups = paceGroups.sort((a, b) => a.data.order - b.data.order);
   </section>
 </BaseLayout>
 
+<style>
+  /* Slider container with background track */
+  .slider-container {
+    --min-percent: 0;
+    --max-percent: 100;
+  }
+
+  .slider-container::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    height: 0.5rem;
+    border-radius: 0.5rem;
+    background: linear-gradient(
+      to right,
+      #d1d5db 0%,
+      #d1d5db var(--min-percent),
+      #FFD700 var(--min-percent),
+      #FFD700 var(--max-percent),
+      #d1d5db var(--max-percent),
+      #d1d5db 100%
+    );
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  /* Dual-thumb range slider styling */
+  .dual-range {
+    -webkit-appearance: none;
+    appearance: none;
+    background: transparent;
+    pointer-events: all;
+    z-index: 2;
+  }
+
+  /* Track for dual range sliders - transparent */
+  .dual-range::-webkit-slider-track {
+    height: 0.5rem;
+    border-radius: 0.5rem;
+    background: transparent;
+  }
+
+  .dual-range::-moz-range-track {
+    height: 0.5rem;
+    border-radius: 0.5rem;
+    background: transparent;
+  }
+
+  /* Thumb styling - differentiate min and max */
+  .dual-range-min::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 50%;
+    background: var(--color-tqcc-yellow);
+    border: 2px solid var(--color-tqcc-black);
+    cursor: pointer;
+    position: relative;
+    z-index: 10;
+  }
+
+  .dual-range-max::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 50%;
+    background: var(--color-tqcc-black);
+    border: 2px solid var(--color-tqcc-yellow);
+    cursor: pointer;
+    position: relative;
+    z-index: 10;
+  }
+
+  /* Firefox thumb styling */
+  .dual-range-min::-moz-range-thumb {
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 50%;
+    background: var(--color-tqcc-yellow);
+    border: 2px solid var(--color-tqcc-black);
+    cursor: pointer;
+  }
+
+  .dual-range-max::-moz-range-thumb {
+    width: 1.25rem;
+    height: 1.25rem;
+    border-radius: 50%;
+    background: var(--color-tqcc-black);
+    border: 2px solid var(--color-tqcc-yellow);
+    cursor: pointer;
+  }
+
+  /* Focus states */
+  .dual-range:focus {
+    outline: none;
+  }
+
+  .dual-range:focus::-webkit-slider-thumb {
+    box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.3);
+  }
+
+  .dual-range:focus::-moz-range-thumb {
+    box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.3);
+  }
+
+  /* Bring active thumb to front */
+  .dual-range:active::-webkit-slider-thumb {
+    z-index: 20;
+  }
+
+  .dual-range:active::-moz-range-thumb {
+    z-index: 20;
+  }
+
+  /* Max slider on top for track clicks */
+  .dual-range-max {
+    z-index: 3;
+  }
+
+  .dual-range-min {
+    z-index: 2;
+  }
+</style>
+
 <script>
   // Simple hash of the password for basic comparison.
   // This is NOT cryptographically secure — it's just casual gating.
-  // The password is "tqcc" — change the hash below if you change it.
   async function hashPassword(password: string): Promise<string> {
     const encoder = new TextEncoder();
     const data = encoder.encode(password);
@@ -111,9 +386,13 @@ const sortedGroups = paceGroups.sort((a, b) => a.data.order - b.data.order);
       .join("");
   }
 
-  // SHA-256 hash of "tqcc-members-area"
-  const EXPECTED_HASH =
-    "ad4dd7d984c27ec37aa7a0dd231af79029679fb61a7a15cfb57204f316398358";
+  // SHA-256 hashes for accepted passwords
+  // "no one left behind"
+  const EXPECTED_HASH_1 =
+    "07d6c74da0a9bfee3ce0ce96a5ec7918a784c5ce1f844eec1ddd6f6533fd16f7";
+  // "nooneleftbehind"
+  const EXPECTED_HASH_2 =
+    "bbbc00d75f221f3ba91ab0a58ae1019c9498d3b33a031f4d70893a29ea706ac3";
   const STORAGE_KEY = "tqcc-members-auth";
 
   const gate = document.getElementById("password-gate")!;
@@ -121,6 +400,22 @@ const sortedGroups = paceGroups.sort((a, b) => a.data.order - b.data.order);
   const form = document.getElementById("password-form")!;
   const input = document.getElementById("password-input") as HTMLInputElement;
   const error = document.getElementById("error-message")!;
+  const toggleBtn = document.getElementById("toggle-password")!;
+  const eyeOpen = document.getElementById("eye-open")!;
+  const eyeClosed = document.getElementById("eye-closed")!;
+
+  // Password reveal toggle
+  toggleBtn.addEventListener("click", () => {
+    if (input.type === "password") {
+      input.type = "text";
+      eyeOpen.classList.add("hidden");
+      eyeClosed.classList.remove("hidden");
+    } else {
+      input.type = "password";
+      eyeOpen.classList.remove("hidden");
+      eyeClosed.classList.add("hidden");
+    }
+  });
 
   function unlock() {
     gate.classList.add("hidden");
@@ -135,13 +430,413 @@ const sortedGroups = paceGroups.sort((a, b) => a.data.order - b.data.order);
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     const hash = await hashPassword(input.value.trim().toLowerCase());
-    if (hash === EXPECTED_HASH) {
+    if (hash === EXPECTED_HASH_1 || hash === EXPECTED_HASH_2) {
       sessionStorage.setItem(STORAGE_KEY, "true");
       unlock();
     } else {
       error.classList.remove("hidden");
       input.value = "";
       input.focus();
+    }
+  });
+</script>
+
+<script>
+  import { getPreferredUnit, milesToKm, kmToMiles } from "../lib/units";
+
+  // Filter state
+  // Initialize to opposite unit to force conversion on first updateFilterRanges call
+  let currentUnit: "miles" | "km" = "miles";
+
+  // Filter elements
+  const distanceMinInput = document.getElementById("distance-min") as HTMLInputElement;
+  const distanceMaxInput = document.getElementById("distance-max") as HTMLInputElement;
+  const elevationMinInput = document.getElementById("elevation-min") as HTMLInputElement;
+  const elevationMaxInput = document.getElementById("elevation-max") as HTMLInputElement;
+  const distanceMinNumberInput = document.getElementById("distance-min-input") as HTMLInputElement;
+  const distanceMaxNumberInput = document.getElementById("distance-max-input") as HTMLInputElement;
+  const elevationMinNumberInput = document.getElementById("elevation-min-input") as HTMLInputElement;
+  const elevationMaxNumberInput = document.getElementById("elevation-max-input") as HTMLInputElement;
+  const distanceUnitLabel = document.getElementById("distance-unit-label")!;
+  const elevationUnitLabel = document.getElementById("elevation-unit-label")!;
+  const resetButton = document.getElementById("reset-filters")!;
+  const toggleFiltersBtn = document.getElementById("toggle-filters")!;
+  const filterContent = document.getElementById("filter-content")!;
+  const filterChevron = document.getElementById("filter-chevron")!;
+
+  const FILTER_EXPANDED_KEY = "tqcc-filters-expanded";
+
+  // Toggle filter visibility
+  function toggleFilters() {
+    const isExpanded = filterContent.classList.contains("hidden");
+
+    if (isExpanded) {
+      filterContent.classList.remove("hidden");
+      filterChevron.style.transform = "rotate(180deg)";
+      localStorage.setItem(FILTER_EXPANDED_KEY, "true");
+      applyFilters();
+    } else {
+      filterContent.classList.add("hidden");
+      filterChevron.style.transform = "rotate(0deg)";
+      localStorage.setItem(FILTER_EXPANDED_KEY, "false");
+      // When collapsed, show all routes
+      document.querySelectorAll(".route-card").forEach((card) => {
+        (card as HTMLElement).style.display = "block";
+      });
+    }
+  }
+
+  // Restore filter state from localStorage
+  function restoreFilterState() {
+    const storedValue = localStorage.getItem(FILTER_EXPANDED_KEY);
+
+    // Default to collapsed if no preference is set
+    const isExpanded = storedValue === "true";
+
+    if (isExpanded) {
+      filterContent.classList.remove("hidden");
+      filterChevron.style.transform = "rotate(180deg)";
+    } else {
+      // Ensure it's collapsed and chevron points down
+      filterContent.classList.add("hidden");
+      filterChevron.style.transform = "rotate(0deg)";
+    }
+  }
+
+  // Update dual range slider track using CSS custom properties
+  function updateDualRangeTrack(minSlider: HTMLInputElement, maxSlider: HTMLInputElement) {
+    const min = parseFloat(minSlider.min);
+    const max = parseFloat(minSlider.max);
+    const minVal = parseFloat(minSlider.value);
+    const maxVal = parseFloat(maxSlider.value);
+
+    const minPercent = ((minVal - min) / (max - min)) * 100;
+    const maxPercent = ((maxVal - min) / (max - min)) * 100;
+
+    // Update CSS custom properties on the parent container
+    const container = minSlider.parentElement as HTMLElement;
+    if (container) {
+      container.style.setProperty('--min-percent', `${minPercent}%`);
+      container.style.setProperty('--max-percent', `${maxPercent}%`);
+    }
+  }
+
+  // Enforce min/max constraints
+  function enforceMinMax(minSlider: HTMLInputElement, maxSlider: HTMLInputElement) {
+    const minVal = parseFloat(minSlider.value);
+    const maxVal = parseFloat(maxSlider.value);
+
+    if (minVal > maxVal) {
+      minSlider.value = maxVal.toString();
+    }
+    if (maxVal < minVal) {
+      maxSlider.value = minVal.toString();
+    }
+  }
+
+  // Convert filter values based on current unit
+  function getFilterValues() {
+    const unit = getPreferredUnit();
+
+    let distanceMin = parseFloat(distanceMinInput.value);
+    let distanceMax = parseFloat(distanceMaxInput.value);
+    let elevationMin = parseFloat(elevationMinInput.value);
+    let elevationMax = parseFloat(elevationMaxInput.value);
+
+    // Always work in miles/feet internally, convert display
+    if (unit === "km") {
+      // Sliders are in km/m when in km mode, convert to miles/feet for comparison
+      distanceMin = kmToMiles(distanceMin);
+      distanceMax = kmToMiles(distanceMax);
+      elevationMin = elevationMin * 3.28084; // meters to feet
+      elevationMax = elevationMax * 3.28084;
+    }
+
+    return { distanceMin, distanceMax, elevationMin, elevationMax };
+  }
+
+  // Sync number inputs with sliders
+  function syncNumberInputs() {
+    distanceMinNumberInput.value = distanceMinInput.value;
+    distanceMaxNumberInput.value = distanceMaxInput.value;
+    elevationMinNumberInput.value = elevationMinInput.value;
+    elevationMaxNumberInput.value = elevationMaxInput.value;
+  }
+
+  // Update unit labels
+  function updateUnitLabels() {
+    const unit = getPreferredUnit();
+    distanceUnitLabel.textContent = unit === "km" ? "km" : "mi";
+    elevationUnitLabel.textContent = unit === "km" ? "m" : "ft";
+  }
+
+  // Check if filters are at default (max) values and disable reset button accordingly
+  function updateResetButtonState() {
+    const unit = getPreferredUnit();
+    const distMin = parseFloat(distanceMinInput.value);
+    const distMax = parseFloat(distanceMaxInput.value);
+    const elevMin = parseFloat(elevationMinInput.value);
+    const elevMax = parseFloat(elevationMaxInput.value);
+
+    const distMaxLimit = unit === "km" ? 180 : 110;
+    const elevMaxLimit = unit === "km" ? 2750 : 9000;
+
+    const isAtDefault = distMin === 0 && distMax === distMaxLimit && elevMin === 0 && elevMax === elevMaxLimit;
+
+    if (isAtDefault) {
+      resetButton.disabled = true;
+      resetButton.classList.add("opacity-50", "cursor-not-allowed");
+    } else {
+      resetButton.disabled = false;
+      resetButton.classList.remove("opacity-50", "cursor-not-allowed");
+    }
+  }
+
+  function updateFilterRanges() {
+    const unit = getPreferredUnit();
+
+    if (unit !== currentUnit) {
+      // Unit changed, convert filter values
+      const currentDistMin = parseFloat(distanceMinInput.value);
+      const currentDistMax = parseFloat(distanceMaxInput.value);
+      const currentElevMin = parseFloat(elevationMinInput.value);
+      const currentElevMax = parseFloat(elevationMaxInput.value);
+      const currentDistMaxLimit = parseFloat(distanceMaxInput.max);
+      const currentElevMaxLimit = parseFloat(elevationMaxInput.max);
+
+      if (unit === "km") {
+        // Convert miles to km
+        distanceMinInput.max = "180"; // ~110 miles
+        distanceMaxInput.max = "180";
+        distanceMinNumberInput.max = "180";
+        distanceMaxNumberInput.max = "180";
+
+        // Check if at max position before converting
+        const distMinAtMax = currentDistMax >= currentDistMaxLimit;
+        const newDistMin = Math.round(milesToKm(currentDistMin));
+        const newDistMax = distMinAtMax ? 180 : Math.round(milesToKm(currentDistMax));
+
+        distanceMinInput.value = newDistMin.toString();
+        distanceMaxInput.value = newDistMax.toString();
+
+        // Convert feet to meters
+        elevationMinInput.max = "2750"; // ~9000 feet
+        elevationMaxInput.max = "2750";
+        elevationMinInput.step = "50";
+        elevationMaxInput.step = "50";
+        elevationMinNumberInput.max = "2750";
+        elevationMaxNumberInput.max = "2750";
+        elevationMinNumberInput.step = "50";
+        elevationMaxNumberInput.step = "50";
+
+        const elevAtMax = currentElevMax >= currentElevMaxLimit;
+        const newElevMin = Math.round(currentElevMin / 3.28084);
+        const newElevMax = elevAtMax ? 2750 : Math.round(currentElevMax / 3.28084);
+
+        elevationMinInput.value = newElevMin.toString();
+        elevationMaxInput.value = newElevMax.toString();
+      } else {
+        // Convert km to miles
+        distanceMinInput.max = "110";
+        distanceMaxInput.max = "110";
+        distanceMinNumberInput.max = "110";
+        distanceMaxNumberInput.max = "110";
+
+        const distMinAtMax = currentDistMax >= currentDistMaxLimit;
+        const newDistMin = Math.round(kmToMiles(currentDistMin));
+        const newDistMax = distMinAtMax ? 110 : Math.round(kmToMiles(currentDistMax));
+
+        distanceMinInput.value = newDistMin.toString();
+        distanceMaxInput.value = newDistMax.toString();
+
+        // Convert meters to feet
+        elevationMinInput.max = "9000";
+        elevationMaxInput.max = "9000";
+        elevationMinInput.step = "100";
+        elevationMaxInput.step = "100";
+        elevationMinNumberInput.max = "9000";
+        elevationMaxNumberInput.max = "9000";
+        elevationMinNumberInput.step = "100";
+        elevationMaxNumberInput.step = "100";
+
+        const elevAtMax = currentElevMax >= currentElevMaxLimit;
+        const newElevMin = Math.round(currentElevMin * 3.28084);
+        const newElevMax = elevAtMax ? 9000 : Math.round(currentElevMax * 3.28084);
+
+        elevationMinInput.value = newElevMin.toString();
+        elevationMaxInput.value = newElevMax.toString();
+      }
+
+      currentUnit = unit;
+    }
+
+    syncNumberInputs();
+    updateUnitLabels();
+    updateResetButtonState();
+  }
+
+  function applyFilters() {
+    const { distanceMin, distanceMax, elevationMin, elevationMax } = getFilterValues();
+
+    document.querySelectorAll(".route-card").forEach((card) => {
+      const routeDistance = parseFloat(card.getAttribute("data-distance-miles") || "0");
+      const routeElevation = parseFloat(card.getAttribute("data-elevation-feet") || "0");
+
+      const matchesDistance = routeDistance >= distanceMin && routeDistance <= distanceMax;
+      const matchesElevation = routeElevation >= elevationMin && routeElevation <= elevationMax;
+
+      if (matchesDistance && matchesElevation) {
+        (card as HTMLElement).style.display = "block";
+      } else {
+        (card as HTMLElement).style.display = "none";
+      }
+    });
+  }
+
+  function resetFilters() {
+    const unit = getPreferredUnit();
+
+    if (unit === "km") {
+      distanceMinInput.value = "0";
+      distanceMaxInput.value = "180";
+      elevationMinInput.value = "0";
+      elevationMaxInput.value = "2750";
+    } else {
+      distanceMinInput.value = "0";
+      distanceMaxInput.value = "110";
+      elevationMinInput.value = "0";
+      elevationMaxInput.value = "9000";
+    }
+
+    updateDualRangeTrack(distanceMinInput, distanceMaxInput);
+    updateDualRangeTrack(elevationMinInput, elevationMaxInput);
+    syncNumberInputs();
+    updateResetButtonState();
+    applyFilters();
+  }
+
+  // Event listeners for sliders
+  distanceMinInput.addEventListener("input", () => {
+    enforceMinMax(distanceMinInput, distanceMaxInput);
+    updateDualRangeTrack(distanceMinInput, distanceMaxInput);
+    syncNumberInputs();
+    updateResetButtonState();
+    applyFilters();
+  });
+
+  distanceMaxInput.addEventListener("input", () => {
+    enforceMinMax(distanceMinInput, distanceMaxInput);
+    updateDualRangeTrack(distanceMinInput, distanceMaxInput);
+    syncNumberInputs();
+    updateResetButtonState();
+    applyFilters();
+  });
+
+  elevationMinInput.addEventListener("input", () => {
+    enforceMinMax(elevationMinInput, elevationMaxInput);
+    updateDualRangeTrack(elevationMinInput, elevationMaxInput);
+    syncNumberInputs();
+    updateResetButtonState();
+    applyFilters();
+  });
+
+  elevationMaxInput.addEventListener("input", () => {
+    enforceMinMax(elevationMinInput, elevationMaxInput);
+    updateDualRangeTrack(elevationMinInput, elevationMaxInput);
+    syncNumberInputs();
+    updateResetButtonState();
+    applyFilters();
+  });
+
+  // Event listeners for number inputs
+  distanceMinNumberInput.addEventListener("change", () => {
+    const value = parseFloat(distanceMinNumberInput.value);
+    const max = parseFloat(distanceMinInput.max);
+    if (!isNaN(value) && value >= 0 && value <= max) {
+      distanceMinInput.value = value.toString();
+      enforceMinMax(distanceMinInput, distanceMaxInput);
+      updateDualRangeTrack(distanceMinInput, distanceMaxInput);
+      syncNumberInputs();
+      updateResetButtonState();
+      applyFilters();
+    } else {
+      distanceMinNumberInput.value = distanceMinInput.value;
+    }
+  });
+
+  distanceMaxNumberInput.addEventListener("change", () => {
+    const value = parseFloat(distanceMaxNumberInput.value);
+    const max = parseFloat(distanceMaxInput.max);
+    if (!isNaN(value) && value >= 0 && value <= max) {
+      distanceMaxInput.value = value.toString();
+      enforceMinMax(distanceMinInput, distanceMaxInput);
+      updateDualRangeTrack(distanceMinInput, distanceMaxInput);
+      syncNumberInputs();
+      updateResetButtonState();
+      applyFilters();
+    } else {
+      distanceMaxNumberInput.value = distanceMaxInput.value;
+    }
+  });
+
+  elevationMinNumberInput.addEventListener("change", () => {
+    const value = parseFloat(elevationMinNumberInput.value);
+    const max = parseFloat(elevationMinInput.max);
+    if (!isNaN(value) && value >= 0 && value <= max) {
+      elevationMinInput.value = value.toString();
+      enforceMinMax(elevationMinInput, elevationMaxInput);
+      updateDualRangeTrack(elevationMinInput, elevationMaxInput);
+      syncNumberInputs();
+      updateResetButtonState();
+      applyFilters();
+    } else {
+      elevationMinNumberInput.value = elevationMinInput.value;
+    }
+  });
+
+  elevationMaxNumberInput.addEventListener("change", () => {
+    const value = parseFloat(elevationMaxNumberInput.value);
+    const max = parseFloat(elevationMaxInput.max);
+    if (!isNaN(value) && value >= 0 && value <= max) {
+      elevationMaxInput.value = value.toString();
+      enforceMinMax(elevationMinInput, elevationMaxInput);
+      updateDualRangeTrack(elevationMinInput, elevationMaxInput);
+      syncNumberInputs();
+      updateResetButtonState();
+      applyFilters();
+    } else {
+      elevationMaxNumberInput.value = elevationMaxInput.value;
+    }
+  });
+
+  resetButton.addEventListener("click", resetFilters);
+
+  toggleFiltersBtn.addEventListener("click", toggleFilters);
+
+  // Update filters when unit changes
+  window.addEventListener("unit-change", () => {
+    updateFilterRanges();
+    updateDualRangeTrack(distanceMinInput, distanceMaxInput);
+    updateDualRangeTrack(elevationMinInput, elevationMaxInput);
+    // Only apply filters if expanded
+    if (!filterContent.classList.contains("hidden")) {
+      applyFilters();
+    }
+  });
+
+  // Initialize filters on page load
+  document.addEventListener("astro:page-load", () => {
+    const wasExpanded = localStorage.getItem(FILTER_EXPANDED_KEY) === "true";
+    restoreFilterState();
+    updateFilterRanges();
+    updateDualRangeTrack(distanceMinInput, distanceMaxInput);
+    updateDualRangeTrack(elevationMinInput, elevationMaxInput);
+    syncNumberInputs();
+    updateUnitLabels();
+    updateResetButtonState();
+    // Only apply filters if expanded
+    if (wasExpanded) {
+      applyFilters();
     }
   });
 </script>

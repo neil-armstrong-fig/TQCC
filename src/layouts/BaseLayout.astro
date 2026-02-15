@@ -72,6 +72,7 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
         convertDistanceString,
         formatSpeed,
         formatElevation,
+        convertElevationString,
         convertPaceString,
         type DistanceUnit,
       } from "../lib/units";
@@ -115,6 +116,14 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
           const elevationMeters = parseFloat(el.getAttribute("data-elevation-meters") || "0");
           if (elevationMeters > 0) {
             el.textContent = formatElevation(elevationMeters, unit);
+          }
+        });
+
+        // Update elevation strings from markdown (original string in data attribute)
+        document.querySelectorAll(".elevation-string").forEach((el) => {
+          const originalElevation = el.getAttribute("data-elevation");
+          if (originalElevation) {
+            el.textContent = convertElevationString(originalElevation, unit);
           }
         });
 

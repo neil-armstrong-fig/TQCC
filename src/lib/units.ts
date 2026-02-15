@@ -144,6 +144,53 @@ export function formatElevation(elevationMeters: number, unit: DistanceUnit): st
 }
 
 /**
+ * Convert an elevation string from feet to meters or vice versa
+ * Examples: "1154 feet", "2930 ft"
+ * Always returns in short form: "ft" or "m"
+ */
+export function convertElevationString(elevationStr: string, targetUnit: DistanceUnit): string {
+  // Extract number (handle commas)
+  const numberPattern = /(\d+(?:,\d+)*(?:\.\d+)?)/;
+  const match = elevationStr.match(numberPattern);
+
+  if (!match) return elevationStr;
+
+  const numStr = match[1].replace(/,/g, "");
+  const value = parseFloat(numStr);
+
+  // Determine if current value is in feet or meters
+  const isFeet = elevationStr.toLowerCase().includes("ft") || elevationStr.toLowerCase().includes("feet");
+  const isMeters = elevationStr.toLowerCase().includes("m") && !elevationStr.toLowerCase().includes("mi");
+
+  let displayValue: number;
+  let unit: string;
+
+  if (targetUnit === "km") {
+    // Target is meters
+    if (isFeet) {
+      // Convert from feet to meters
+      displayValue = Math.round(value / 3.28084);
+    } else {
+      // Already in meters
+      displayValue = Math.round(value);
+    }
+    unit = "m";
+  } else {
+    // Target is feet
+    if (isMeters) {
+      // Convert from meters to feet
+      displayValue = Math.round(value * 3.28084);
+    } else {
+      // Already in feet
+      displayValue = Math.round(value);
+    }
+    unit = "ft";
+  }
+
+  return `${displayValue.toLocaleString()} ${unit}`;
+}
+
+/**
  * Convert a pace string from mph to km/h or vice versa
  * Examples: "15-17 mph", "17+ mph", "~16 mph"
  */

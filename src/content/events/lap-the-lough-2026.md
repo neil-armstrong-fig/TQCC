@@ -4,7 +4,8 @@ date: 2026-08-16
 location: "Around Strangford Lough"
 description: "The official Lap The Lough has been cancelled, however we will be running our own club event to allow club members the opportunity to do this great course."
 rideType: "Club Ride"
-distance: "~53 miles"
+distance: "89 miles"
+elevation: "3370ft"
 membershipRequired: true
 ---
 
@@ -17,8 +18,8 @@ While the official Lap The Lough event has been cancelled this year, we're organ
 ## The Route
 
 A complete loop around beautiful Strangford Lough:
-- Approximately 53 miles of scenic riding
-- Relatively flat terrain
+- 89 miles of scenic riding
+- 3,370ft of elevation gain
 - Stunning coastal views throughout
 
 All the usual pace groups will be organized, so riders of all abilities can enjoy this classic route.

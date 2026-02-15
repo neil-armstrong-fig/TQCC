@@ -5,7 +5,7 @@ endDate: 2026-07-26
 location: "Belfast to Dublin to Belfast"
 description: "A nod to the original Maracycle event. Club members will ride from Belfast to Dublin on Saturday, stay overnight, and return Dublin to Belfast on Sunday. Big miles, but big smiles!"
 rideType: "Club Ride"
-distance: "~124 miles over 2 days"
+distance: "~230 miles over 2 days"
 membershipRequired: true
 ---
 
@@ -17,11 +17,13 @@ Paying homage to the legendary Maracycle event of years past.
 
 ### Saturday: Belfast → Dublin
 - Depart Belfast in the morning
-- Ride south to Dublin (~62 miles)
+- Ride south to Dublin (~115 miles)
+- Elevation gain: ~3,524 feet
 - Overnight accommodation in Dublin
 
 ### Sunday: Dublin → Belfast
-- Return journey north (~62 miles)
+- Return journey north (~115 miles)
+- Elevation gain: ~3,724 feet
 - Arrive back in Belfast
 
 ## What to Expect

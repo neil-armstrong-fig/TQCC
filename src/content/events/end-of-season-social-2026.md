@@ -23,6 +23,6 @@ After a fantastic season of rides, events, and adventures together, it's time to
 
 ## Details
 
-Venue, date, and time will be confirmed closer to the event. All members and their families are welcome.
+Venue and date will be confirmed closer to the event. All members and their families are welcome.
 
 See you there for a well-earned celebration! 🎉
