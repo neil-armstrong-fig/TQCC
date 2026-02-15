@@ -156,20 +156,9 @@ collections:
           - "December"
         required: true
       - { label: "Year", name: "year", widget: "number", required: true }
-      - { label: "Date", name: "date", widget: "datetime", required: true, hint: "Used for sorting" }
       - { label: "Hero Image", name: "heroImage", widget: "image", required: true, hint: "Main newsletter image" }
-      - label: "Introduction"
-        name: "introduction"
-        widget: "text"
-        required: true
-        hint: "Opening paragraph for the newsletter"
-      - label: "Events"
-        name: "events"
-        widget: "list"
-        required: true
-        summary: "{{fields.month}} - {{fields.description}}"
-        fields:
-          - { label: "Month", name: "month", widget: "string", required: true }
-          - { label: "Description", name: "description", widget: "string", required: true }
-          - { label: "Date", name: "date", widget: "string", required: true }
-      - { label: "Body", name: "body", widget: "markdown", required: false, hint: "Optional additional content" }
+      - label: "Content"
+        name: "body"
+        widget: "markdown"
+        required: false
+        hint: "Optional newsletter content - supports images, text, and rich formatting"

@@ -1,14 +1,13 @@
 ---
 import type { StravaActivity } from "../../lib/strava";
-import { buildLeaderboard, formatDistance, formatDuration, getCurrentWeekActivities } from "../../lib/strava";
+import { buildLeaderboard, formatDistance, formatDuration } from "../../lib/strava";
 
 interface Props {
   activities: StravaActivity[];
 }
 
 const { activities } = Astro.props;
-const weekActivities = getCurrentWeekActivities(activities);
-const leaderboard = buildLeaderboard(weekActivities, 5);
+const leaderboard = buildLeaderboard(activities, 5);
 ---
 
 {
@@ -22,7 +21,7 @@ const leaderboard = buildLeaderboard(weekActivities, 5);
         >
           <path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z" />
         </svg>
-        <h3 class="text-xl font-bold">This Week's Leaderboard</h3>
+        <h3 class="text-xl font-bold">Recent Leaderboard</h3>
       </div>
       <ol class="space-y-3">
         {leaderboard.map((entry, i) => (

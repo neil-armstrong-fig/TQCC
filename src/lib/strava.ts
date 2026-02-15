@@ -10,7 +10,7 @@ export interface StravaActivity {
   distance: number;
   moving_time: number;
   type: string;
-  start_date: string; // ISO 8601 timestamp
+  total_elevation_gain?: number;
   athlete: {
     id: number;
     firstname: string;
@@ -107,47 +107,27 @@ export function aggregateClubStats(activities: StravaActivity[]): ClubStats {
   );
 }
 
-export function getCurrentWeekActivities(
-  activities: StravaActivity[],
-): StravaActivity[] {
-  const now = new Date();
-  const currentDay = now.getDay(); // 0 = Sunday, 1 = Monday, etc.
-
-  // Calculate Monday of current week (adjust if today is Sunday)
-  const daysFromMonday = currentDay === 0 ? 6 : currentDay - 1;
-  const monday = new Date(now);
-  monday.setDate(now.getDate() - daysFromMonday);
-  monday.setHours(0, 0, 0, 0);
-
-  // Calculate Sunday of current week
-  const sunday = new Date(monday);
-  sunday.setDate(monday.getDate() + 6);
-  sunday.setHours(23, 59, 59, 999);
-
-  return activities.filter((activity) => {
-    const activityDate = new Date(activity.start_date);
-    return activityDate >= monday && activityDate <= sunday;
-  });
-}
-
 export function buildLeaderboard(
   activities: StravaActivity[],
   limit = 5,
 ): LeaderboardEntry[] {
-  const byAthlete = new Map<number, LeaderboardEntry>();
+  const byAthlete = new Map<string, LeaderboardEntry>();
 
   for (const activity of activities) {
+    // Use athlete ID if available, otherwise use name as key
     const athleteId = activity.athlete.id;
     const name = `${activity.athlete.firstname} ${activity.athlete.lastname.charAt(0)}.`;
-    const existing = byAthlete.get(athleteId);
+    const key = athleteId ? String(athleteId) : name;
+
+    const existing = byAthlete.get(key);
     if (existing) {
       existing.totalDistance += activity.distance;
       existing.totalDuration += activity.moving_time;
       existing.activityCount += 1;
     } else {
-      byAthlete.set(athleteId, {
+      byAthlete.set(key, {
         name,
-        athleteId,
+        athleteId: athleteId || 0,
         totalDistance: activity.distance,
         totalDuration: activity.moving_time,
         activityCount: 1,

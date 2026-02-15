@@ -92,16 +92,7 @@ const newsletters = defineCollection({
       "December",
     ]),
     year: z.number(),
-    date: z.coerce.date(),
     heroImage: z.string(),
-    introduction: z.string(),
-    events: z.array(
-      z.object({
-        month: z.string(),
-        description: z.string(),
-        date: z.string(),
-      })
-    ),
   }),
 });
 

@@ -5,15 +5,13 @@ import UpcomingEvents from "../components/home/UpcomingEvents.astro";
 import LatestNews from "../components/home/LatestNews.astro";
 import RideSchedule from "../components/rides/RideSchedule.astro";
 import StravaWidget from "../components/social/StravaWidget.astro";
-import StravaClubStats from "../components/social/StravaClubStats.astro";
-import StravaLeaderboard from "../components/social/StravaLeaderboard.astro";
 import InstagramFeed from "../components/social/InstagramFeed.astro";
 import LatestNewsletter from "../components/home/LatestNewsletter.astro";
 import JsonLd from "../components/seo/JsonLd.astro";
 import { getClubActivities } from "../lib/strava";
 import { getCollection } from "astro:content";
 
-const stravaActivities = await getClubActivities(30);
+const stravaActivities = await getClubActivities(100);
 
 const recentPosts = (await getCollection("posts", ({ data }) => !data.draft))
   .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
@@ -68,12 +66,8 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
   <!-- 7. Strava -->
   <section class="py-16 bg-tqcc-gray-light">
     <div class="max-w-7xl mx-auto px-4">
-      <h2 class="text-3xl font-bold mb-8">Connect With Us</h2>
-      <StravaClubStats activities={stravaActivities} />
-      <div class="grid md:grid-cols-2 gap-6 mt-6">
-        <StravaWidget activities={stravaActivities} />
-        <StravaLeaderboard activities={stravaActivities} />
-      </div>
+      <h2 class="text-3xl font-bold mb-8">Strava</h2>
+      <StravaWidget activities={stravaActivities} />
     </div>
   </section>
 
