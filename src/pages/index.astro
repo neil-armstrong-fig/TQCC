@@ -38,7 +38,10 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
   <!-- 1. Banner -->
   <Hero />
 
-  <!-- 2. Weekly Rides -->
+  <!-- 2. Newsletter -->
+  <LatestNewsletter />
+
+  <!-- 3. Weekly Rides -->
   <section class="py-16 bg-tqcc-gray-light">
     <div class="max-w-7xl mx-auto px-4">
       <div class="flex items-center justify-between mb-8">
@@ -53,9 +56,6 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
       <RideSchedule rides={rides} />
     </div>
   </section>
-
-  <!-- 3. Newsletter -->
-  <LatestNewsletter />
 
   <!-- 4. Upcoming Events -->
   <UpcomingEvents events={upcomingEvents} />

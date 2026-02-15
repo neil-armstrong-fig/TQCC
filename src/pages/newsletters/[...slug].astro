@@ -38,13 +38,91 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
         </div>
 
         <div class="p-4 md:p-8">
+          <button
+            type="button"
+            id="newsletter-image-btn"
+            class="w-full cursor-zoom-in hover:opacity-90 transition-opacity"
+            aria-label="View newsletter in full screen"
+          >
+            <img
+              src={newsletter.data.heroImage.startsWith('/') ? `${baseUrl}${newsletter.data.heroImage}` : newsletter.data.heroImage}
+              alt={`${newsletter.data.month} ${newsletter.data.year} Newsletter`}
+              class="w-full h-auto"
+            />
+          </button>
+          <p class="text-center text-sm text-gray-600 mt-2 md:hidden">
+            Tap to view full screen
+          </p>
+        </div>
+      </div>
+
+      <!-- Full Screen Viewer -->
+      <div
+        id="fullscreen-viewer"
+        class="fixed inset-0 bg-black z-50 hidden items-center justify-center"
+        aria-hidden="true"
+      >
+        <button
+          type="button"
+          id="close-viewer"
+          class="absolute top-4 right-4 z-10 bg-tqcc-yellow text-tqcc-black rounded-full p-3 hover:bg-white transition-colors shadow-lg"
+          aria-label="Close full screen viewer"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+
+        <div class="w-full h-full overflow-auto p-4 md:p-8 flex items-start justify-center">
           <img
+            id="fullscreen-image"
             src={newsletter.data.heroImage.startsWith('/') ? `${baseUrl}${newsletter.data.heroImage}` : newsletter.data.heroImage}
             alt={`${newsletter.data.month} ${newsletter.data.year} Newsletter`}
-            class="w-full h-auto"
+            class="w-full md:w-auto md:max-w-4xl h-auto"
           />
         </div>
       </div>
+
+      <script>
+        const imageBtn = document.getElementById('newsletter-image-btn');
+        const viewer = document.getElementById('fullscreen-viewer');
+        const closeBtn = document.getElementById('close-viewer');
+
+        function openViewer() {
+          if (viewer) {
+            viewer.classList.remove('hidden');
+            viewer.classList.add('flex');
+            viewer.setAttribute('aria-hidden', 'false');
+            document.body.style.overflow = 'hidden';
+          }
+        }
+
+        function closeViewer() {
+          if (viewer) {
+            viewer.classList.add('hidden');
+            viewer.classList.remove('flex');
+            viewer.setAttribute('aria-hidden', 'true');
+            document.body.style.overflow = '';
+          }
+        }
+
+        imageBtn?.addEventListener('click', openViewer);
+        closeBtn?.addEventListener('click', closeViewer);
+
+        // Close when clicking the backdrop (but not the image)
+        viewer?.addEventListener('click', (e) => {
+          if (e.target === viewer || e.target === viewer.querySelector('div')) {
+            closeViewer();
+          }
+        });
+
+        // Close on escape key
+        document.addEventListener('keydown', (e) => {
+          if (e.key === 'Escape') {
+            closeViewer();
+          }
+        });
+      </script>
     </div>
   </section>
 </BaseLayout>

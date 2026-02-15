@@ -2,45 +2,94 @@
 // Unit toggle component for switching between miles and kilometers
 ---
 
-<div class="hidden lg:flex items-center gap-2">
+<div class="flex items-center gap-2">
   <button
-    id="unit-toggle"
-    class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-tqcc-black-light text-white text-sm font-medium hover:bg-tqcc-yellow hover:text-tqcc-black transition-all duration-200"
+    class="unit-toggle-container inline-flex items-center bg-white/10 rounded-full p-1 gap-0.5 cursor-pointer hover:bg-white/15 transition-colors duration-200"
+    role="group"
     aria-label="Toggle distance unit"
-    title="Toggle between miles and kilometers"
   >
-    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-      <path
-        stroke-linecap="round"
-        stroke-linejoin="round"
-        stroke-width="2"
-        d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
-    </svg>
-    <span id="unit-label">miles</span>
+    <div
+      class="unit-toggle-label px-4 py-2 rounded-full text-sm font-medium transition-all duration-200"
+      data-unit="miles"
+    >
+      miles
+    </div>
+    <div
+      class="unit-toggle-label px-4 py-2 rounded-full text-sm font-medium transition-all duration-200"
+      data-unit="km"
+    >
+      km
+    </div>
   </button>
 </div>
 
 <script>
   import { getPreferredUnit, setPreferredUnit, type DistanceUnit } from "../../lib/units";
 
-  function initUnitToggle() {
-    const button = document.getElementById("unit-toggle");
-    const label = document.getElementById("unit-label");
+  function initUnitToggles() {
+    // Find all toggle containers on the page
+    const containers = document.querySelectorAll(".unit-toggle-container");
 
-    if (!button || !label) return;
+    containers.forEach((container) => {
+      const labels = container.querySelectorAll(".unit-toggle-label");
+      const milesLabel = Array.from(labels).find(label => label.getAttribute("data-unit") === "miles");
+      const kmLabel = Array.from(labels).find(label => label.getAttribute("data-unit") === "km");
 
-    // Set initial state
-    const currentUnit = getPreferredUnit();
-    label.textContent = currentUnit;
+      if (!milesLabel || !kmLabel) return;
 
-    // Toggle unit on click
-    button.addEventListener("click", () => {
-      const newUnit: DistanceUnit = label.textContent === "miles" ? "km" : "miles";
-      setPreferredUnit(newUnit);
-      label.textContent = newUnit;
+      // Update label styles based on active unit
+      function updateLabelStyles(activeUnit: DistanceUnit) {
+        const baseClasses = "px-4 py-2 rounded-full text-sm font-medium transition-all duration-200";
+        const activeClasses = "bg-tqcc-yellow text-tqcc-black shadow-lg";
+        const inactiveClasses = "text-white";
+
+        if (activeUnit === "miles") {
+          milesLabel.className = `unit-toggle-label ${baseClasses} ${activeClasses}`;
+          kmLabel.className = `unit-toggle-label ${baseClasses} ${inactiveClasses}`;
+        } else {
+          kmLabel.className = `unit-toggle-label ${baseClasses} ${activeClasses}`;
+          milesLabel.className = `unit-toggle-label ${baseClasses} ${inactiveClasses}`;
+        }
+      }
+
+      // Function to update all toggles on the page
+      function updateAllToggles(unit: DistanceUnit) {
+        const allContainers = document.querySelectorAll(".unit-toggle-container");
+        allContainers.forEach((c) => {
+          const lbls = c.querySelectorAll(".unit-toggle-label");
+          const mLabel = Array.from(lbls).find(label => label.getAttribute("data-unit") === "miles");
+          const kLabel = Array.from(lbls).find(label => label.getAttribute("data-unit") === "km");
+
+          if (!mLabel || !kLabel) return;
+
+          const baseClasses = "px-4 py-2 rounded-full text-sm font-medium transition-all duration-200";
+          const activeClasses = "bg-tqcc-yellow text-tqcc-black shadow-lg";
+          const inactiveClasses = "text-white";
+
+          if (unit === "miles") {
+            mLabel.className = `unit-toggle-label ${baseClasses} ${activeClasses}`;
+            kLabel.className = `unit-toggle-label ${baseClasses} ${inactiveClasses}`;
+          } else {
+            kLabel.className = `unit-toggle-label ${baseClasses} ${activeClasses}`;
+            mLabel.className = `unit-toggle-label ${baseClasses} ${inactiveClasses}`;
+          }
+        });
+      }
+
+      // Set initial state
+      const currentUnit = getPreferredUnit();
+      updateLabelStyles(currentUnit);
+
+      // Add click handler to entire container - clicking anywhere toggles the unit
+      container.addEventListener("click", () => {
+        const current = getPreferredUnit();
+        const newUnit: DistanceUnit = current === "miles" ? "km" : "miles";
+        setPreferredUnit(newUnit);
+        updateAllToggles(newUnit);
+      });
     });
   }
 
   // Initialize on page load
-  document.addEventListener("astro:page-load", initUnitToggle);
+  document.addEventListener("astro:page-load", initUnitToggles);
 </script>
