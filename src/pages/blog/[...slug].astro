@@ -88,14 +88,6 @@ const formattedDate = post.data.date.toLocaleDateString("en-GB", {
     <div class="flex items-center gap-4 mt-12 pt-8 border-t border-gray-200">
       <span class="font-medium text-tqcc-gray">Share:</span>
       <a
-        href={`https://www.facebook.com/sharer/sharer.php?u=${Astro.url}`}
-        target="_blank"
-        rel="noopener noreferrer"
-        class="text-tqcc-gray hover:text-tqcc-black transition-colors"
-      >
-        Facebook
-      </a>
-      <a
         href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.data.title)}&url=${Astro.url}`}
         target="_blank"
         rel="noopener noreferrer"

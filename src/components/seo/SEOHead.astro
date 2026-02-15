@@ -15,7 +15,14 @@ const fullTitle =
   title === "Home"
     ? "Titanic Quarter Cycling Club | Belfast"
     : `${title} | TQCC`;
-const imageURL = image ? new URL(image, Astro.site).toString() : undefined;
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
+// If image starts with /, prepend BASE_URL to handle subdirectory deployments
+// If image starts with http:// or https://, it's already absolute
+// Otherwise, it's a relative path that can be resolved normally
+const imagePath = image
+  ? (image.startsWith('/') ? `${baseUrl}${image}` : image)
+  : undefined;
+const imageURL = imagePath ? new URL(imagePath, Astro.site).toString() : undefined;
 ---
 
 <title>{fullTitle}</title>

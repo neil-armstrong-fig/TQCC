@@ -1,6 +1,8 @@
 ---
 // CMS admin panel — loads Sveltia CMS (drop-in Decap CMS replacement)
 // Non-technical users visit /admin to create and edit content
+const baseUrl = import.meta.env.BASE_URL.endsWith('/') ? import.meta.env.BASE_URL : `${import.meta.env.BASE_URL}/`;
+const configUrl = `${baseUrl}admin/config.yml`;
 ---
 
 <!doctype html>
@@ -10,7 +12,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="robots" content="noindex" />
     <title>TQCC Content Manager</title>
-    <link href="/admin/config.yml" type="text/yaml" rel="cms-config-url" />
+    <link href={configUrl} type="text/yaml" rel="cms-config-url" />
   </head>
   <body>
     <!--
