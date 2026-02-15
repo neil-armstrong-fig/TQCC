@@ -3,6 +3,7 @@ import type { GetStaticPaths } from "astro";
 import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 import BlogCard from "../../components/blog/BlogCard.astro";
+import LatestNewsletter from "../../components/home/LatestNewsletter.astro";
 
 export const getStaticPaths = (async ({ paginate }) => {
   const allPosts = await getCollection("posts", ({ data }) => !data.draft);
@@ -54,4 +55,6 @@ const { page } = Astro.props;
       }
     </div>
   </section>
+
+  <LatestNewsletter />
 </BaseLayout>

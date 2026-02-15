@@ -20,7 +20,9 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
           LATEST NEWSLETTER
         </div>
         <h2 class="text-3xl lg:text-4xl font-bold text-white mb-2">
-          {latestNewsletter.data.month} {latestNewsletter.data.year}
+          <span>{latestNewsletter.data.month}</span>
+          <span class="inline-block w-4"></span>
+          <span>{latestNewsletter.data.year}</span>
         </h2>
       </div>
 
