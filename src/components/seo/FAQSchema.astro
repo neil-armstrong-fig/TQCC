@@ -1,0 +1,61 @@
+---
+// FAQ Schema for cycling club common questions
+const siteUrl = Astro.site?.toString().replace(/\/$/, "") || "https://titanicquartercc.com";
+
+const faqSchema = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Where is Titanic Quarter Cycling Club based?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Titanic Quarter Cycling Club (TQCC) is based in Belfast, Northern Ireland. We're Belfast's community cycling club, offering weekly group rides throughout the Belfast area and beyond."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I join a cycling club in Belfast?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "To join TQCC, you can sign up through Cycling Ireland online and select Titanic Quarter CC as your club. British Cycling members are also welcome. You can try two taster rides before committing to membership - just contact the club first to arrange insurance paperwork."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Do I need to be an experienced cyclist to join?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "No! TQCC welcomes cyclists of all abilities, from complete beginners to experienced racers. We have different group rides for different fitness levels and paces. New riders can start with our Sunday Scone Run or Wednesday Evening Laps - both are relaxed, conversational-pace rides."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What are the benefits of joining TQCC?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "TQCC membership includes access to all club rides and events, discounted club kit, Cycling Ireland affiliation and insurance, social events, end-of-season gatherings, and a supportive community of fellow cyclists in Belfast."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "Can I try riding with the club before joining?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Yes! We welcome potential members to join us for two taster rides before committing to membership. Contact the club before your first taster ride so we can arrange the necessary insurance paperwork and help you choose the best ride for your experience level."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "When does TQCC ride?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "TQCC offers multiple weekly group rides throughout the week including Sunday morning rides, Wednesday evening rides, and other scheduled events. Check our Rides & Events page for the full schedule and ride details."
+      }
+    }
+  ]
+};
+---
+
+<script is:inline type="application/ld+json" set:html={JSON.stringify(faqSchema)} />

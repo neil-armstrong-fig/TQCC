@@ -28,20 +28,37 @@ function buildSchema() {
   });
 
   schemas.push({
-    "@type": "SportsOrganization",
+    "@type": ["SportsOrganization", "LocalBusiness"],
     "@id": `${siteUrl}/#organization`,
     name: "Titanic Quarter Cycling Club",
-    alternateName: "TQCC",
+    alternateName: ["TQCC", "Titanic Quarter CC", "Belfast Cycling Club"],
     url: siteUrl,
     logo: `${siteUrl}${baseUrl}/images/badge.png`,
     foundingDate: "2014-11",
     sport: "Cycling",
+    description: "Belfast's friendliest cycling club offering weekly group rides for all abilities, from beginners to experienced riders. Join our community cycling club in Belfast.",
+    areaServed: {
+      "@type": "City",
+      name: "Belfast",
+      containedIn: {
+        "@type": "Country",
+        name: "Northern Ireland"
+      }
+    },
+    geo: {
+      "@type": "GeoCoordinates",
+      latitude: 54.6098,
+      longitude: -5.9010,
+    },
     address: {
       "@type": "PostalAddress",
       addressLocality: "Belfast",
       addressRegion: "Northern Ireland",
       addressCountry: "GB",
     },
+    priceRange: "££",
+    paymentAccepted: "Online payment",
+    keywords: "cycling club Belfast, bike club Belfast, group cycling, cycling Northern Ireland, join cycling club, community cycling, Belfast cycling",
     sameAs: [
       "https://www.instagram.com/titanicquartercc/",
       "https://www.strava.com/clubs/110633",

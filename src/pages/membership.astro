@@ -1,21 +1,24 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import FAQSchema from "../components/seo/FAQSchema.astro";
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
 ---
 
 <BaseLayout
-  title="Membership"
-  description="Join Titanic Quarter Cycling Club — rides for all abilities, a welcoming community, and the best cycling in Belfast."
+  title="Join Our Cycling Club | Membership"
+  description="Join Titanic Quarter Cycling Club in Belfast. Cycling club memberships for all abilities - beginners to experienced riders. Weekly group rides, social events, and a welcoming cycling community in Belfast, Northern Ireland."
 >
+  <FAQSchema />
   <section class="py-12">
     <div class="max-w-4xl mx-auto px-4">
-      <h1 class="text-4xl font-bold mb-8">Join TQCC</h1>
+      <h1 class="text-4xl font-bold mb-8">Join Belfast's Cycling Club</h1>
 
       <div class="prose prose-lg max-w-none">
         <p class="text-xl text-tqcc-gray leading-relaxed">
-          Whether you're a complete beginner or a seasoned racer, TQCC has a
-          place for you. We're a friendly, inclusive club with rides for all
-          abilities.
+          Looking to join a cycling club in Belfast? Whether you're a complete beginner
+          or a seasoned racer, Titanic Quarter Cycling Club (TQCC) welcomes all abilities.
+          We're Belfast's friendliest cycling club with weekly group rides, social events,
+          and a supportive community of cyclists across Northern Ireland.
         </p>
 
         <h2>How to Join</h2>

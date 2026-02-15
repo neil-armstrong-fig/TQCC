@@ -11,9 +11,11 @@ interface Props {
 const { title, description, image, type = "website", publishDate, noindex } =
   Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+// For homepage and key pages, use the full title passed in for better SEO
+// For other pages, append "| TQCC"
 const fullTitle =
-  title === "Home"
-    ? "Titanic Quarter Cycling Club | Belfast"
+  title.includes("|") || title.includes("Belfast") || title === "Home"
+    ? title
     : `${title} | TQCC`;
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
 // If image starts with /, prepend BASE_URL to handle subdirectory deployments
@@ -27,6 +29,7 @@ const imageURL = imagePath ? new URL(imagePath, Astro.site).toString() : undefin
 
 <title>{fullTitle}</title>
 <meta name="description" content={description} />
+<meta name="keywords" content="cycling club Belfast, bike club Belfast, join cycling club Belfast, cycling club Northern Ireland, group cycling Belfast, TQCC, Titanic Quarter Cycling Club, Belfast cycling, cycling Ireland" />
 <link rel="canonical" href={canonicalURL} />
 
 {noindex && <meta name="robots" content="noindex, nofollow" />}
