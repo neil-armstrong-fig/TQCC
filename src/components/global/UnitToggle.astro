@@ -1,0 +1,46 @@
+---
+// Unit toggle component for switching between miles and kilometers
+---
+
+<div class="flex items-center gap-2">
+  <button
+    id="unit-toggle"
+    class="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-tqcc-black-light text-white text-sm font-medium hover:bg-tqcc-yellow hover:text-tqcc-black transition-all duration-200"
+    aria-label="Toggle distance unit"
+    title="Toggle between miles and kilometers"
+  >
+    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
+    </svg>
+    <span id="unit-label">miles</span>
+  </button>
+</div>
+
+<script>
+  import { getPreferredUnit, setPreferredUnit, type DistanceUnit } from "../../lib/units";
+
+  function initUnitToggle() {
+    const button = document.getElementById("unit-toggle");
+    const label = document.getElementById("unit-label");
+
+    if (!button || !label) return;
+
+    // Set initial state
+    const currentUnit = getPreferredUnit();
+    label.textContent = currentUnit;
+
+    // Toggle unit on click
+    button.addEventListener("click", () => {
+      const newUnit: DistanceUnit = label.textContent === "miles" ? "km" : "miles";
+      setPreferredUnit(newUnit);
+      label.textContent = newUnit;
+    });
+  }
+
+  // Initialize on page load
+  document.addEventListener("astro:page-load", initUnitToggle);
+</script>

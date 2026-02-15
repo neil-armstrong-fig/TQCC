@@ -1,27 +1,14 @@
 const https = require('https');
 
 exports.handler = async (event) => {
-  // Enable CORS
   const headers = {
     'Access-Control-Allow-Origin': '*',
     'Access-Control-Allow-Headers': 'Content-Type',
     'Access-Control-Allow-Methods': 'GET, POST, OPTIONS'
   };
 
-  // Handle preflight
   if (event.httpMethod === 'OPTIONS') {
     return { statusCode: 200, headers, body: '' };
-  }
-
-  // Get OAuth code from query params
-  const { code } = event.queryStringParameters || {};
-
-  if (!code) {
-    return {
-      statusCode: 400,
-      headers,
-      body: JSON.stringify({ error: 'Missing authorization code' })
-    };
   }
 
   const clientId = process.env.OAUTH_GITHUB_CLIENT_ID;
@@ -35,7 +22,23 @@ exports.handler = async (event) => {
     };
   }
 
-  // Exchange code for access token
+  const { code, scope } = event.queryStringParameters || {};
+
+  // Step 1: No code yet — redirect to GitHub's OAuth authorization page
+  if (!code) {
+    const oauthScope = scope || 'repo,user';
+    const siteUrl = process.env.URL || 'https://stirring-baklava-d1133c.netlify.app';
+    const redirectUri = `${siteUrl}/.netlify/functions/oauth-github`;
+    const authUrl = `https://github.com/login/oauth/authorize?client_id=${clientId}&scope=${oauthScope}&redirect_uri=${encodeURIComponent(redirectUri)}`;
+
+    return {
+      statusCode: 302,
+      headers: { ...headers, Location: authUrl },
+      body: ''
+    };
+  }
+
+  // Step 2: GitHub redirected back with a code — exchange it for an access token
   const tokenData = JSON.stringify({
     client_id: clientId,
     client_secret: clientSecret,
@@ -67,26 +70,22 @@ exports.handler = async (event) => {
 
           if (response.error) {
             resolve({
-              statusCode: 401,
-              headers,
-              body: JSON.stringify({ error: response.error })
+              statusCode: 200,
+              headers: { 'Content-Type': 'text/html' },
+              body: getScript('error', { msg: response.error_description || response.error })
             });
           } else {
-            // Return token in the format expected by Sveltia CMS
             resolve({
               statusCode: 200,
-              headers,
-              body: JSON.stringify({
-                token: response.access_token,
-                provider: 'github'
-              })
+              headers: { 'Content-Type': 'text/html' },
+              body: getScript('success', { token: response.access_token, provider: 'github' })
             });
           }
         } catch (error) {
           resolve({
-            statusCode: 500,
-            headers,
-            body: JSON.stringify({ error: 'Failed to parse response' })
+            statusCode: 200,
+            headers: { 'Content-Type': 'text/html' },
+            body: getScript('error', { msg: 'Failed to parse response from GitHub' })
           });
         }
       });
@@ -94,9 +93,9 @@ exports.handler = async (event) => {
 
     req.on('error', (error) => {
       resolve({
-        statusCode: 500,
-        headers,
-        body: JSON.stringify({ error: error.message })
+        statusCode: 200,
+        headers: { 'Content-Type': 'text/html' },
+        body: getScript('error', { msg: error.message })
       });
     });
 
@@ -104,3 +103,21 @@ exports.handler = async (event) => {
     req.end();
   });
 };
+
+// Returns HTML that sends a postMessage back to the CMS popup opener window
+function getScript(status, content) {
+  return `<!DOCTYPE html>
+<html>
+<body>
+<script>
+(function() {
+  function sendMessage(message) {
+    var target = window.opener || window.parent;
+    target.postMessage(message, '*');
+  }
+  sendMessage('authorization:github:${status}:${JSON.stringify(content)}');
+})();
+</script>
+</body>
+</html>`;
+}

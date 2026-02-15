@@ -32,10 +32,13 @@ const hasData = stats.totalActivities > 0;
           <p class="text-sm text-tqcc-gray">Activities</p>
         </div>
         <div class="text-center">
-          <p class="text-2xl font-bold text-tqcc-black">
+          <p
+            class="text-2xl font-bold text-tqcc-black distance-display"
+            data-meters={stats.totalDistance}
+          >
             {Math.round(metersToMiles(stats.totalDistance))}
           </p>
-          <p class="text-sm text-tqcc-gray">Miles</p>
+          <p class="text-sm text-tqcc-gray distance-unit">Miles</p>
         </div>
         <div class="text-center">
           <p class="text-2xl font-bold text-tqcc-black">

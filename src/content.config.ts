@@ -98,4 +98,21 @@ const newsletters = defineCollection({
   }),
 });
 
-export const collections = { posts, events, rides, newsletters };
+const paceGroups = defineCollection({
+  loader: glob({ pattern: "**/*.md", base: "./src/content/pace-groups" }),
+  schema: z.object({
+    name: z.string(),
+    order: z.number().default(0),
+    description: z.string(),
+    routes: z.array(
+      z.object({
+        name: z.string(),
+        stravaUrl: z.string().url(),
+        distance: z.number(),
+        description: z.string().optional(),
+      })
+    ),
+  }),
+});
+
+export const collections = { posts, events, rides, newsletters, paceGroups };

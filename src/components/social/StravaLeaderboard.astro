@@ -57,7 +57,11 @@ const leaderboard = buildLeaderboard(activities, 5);
               </div>
             </div>
             <div class="text-right text-sm">
-              <p class="font-medium">
+              <p
+                class="font-medium distance-display"
+                data-meters={entry.totalDistance}
+                data-keep-decimals="true"
+              >
                 {formatDistance(entry.totalDistance)}
               </p>
               <p class="text-tqcc-gray">

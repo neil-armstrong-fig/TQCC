@@ -174,3 +174,31 @@ collections:
         widget: "markdown"
         required: false
         hint: "Optional newsletter content - supports images, text, and rich formatting"
+
+  - name: "pace-groups"
+    label: "Member Routes"
+    label_singular: "Pace Group"
+    folder: "src/content/pace-groups"
+    create: true
+    slug: "{{slug}}"
+    sortable_fields: ["order", "name"]
+    summary: "{{name}}"
+    fields:
+      - { label: "Group Name", name: "name", widget: "string", required: true, hint: "e.g., C Group, B3 Group, B2 Group" }
+      - { label: "Sort Order", name: "order", widget: "number", default: 0, hint: "Lower numbers appear first" }
+      - { label: "Description", name: "description", widget: "text", required: true, hint: "Brief description of this pace group" }
+      - label: "Routes"
+        name: "routes"
+        widget: "list"
+        required: true
+        summary: "{{fields.name}} - {{fields.distance}} miles"
+        fields:
+          - { label: "Route Name", name: "name", widget: "string", required: true }
+          - { label: "Strava Route URL", name: "stravaUrl", widget: "string", required: true, hint: "Full Strava route URL" }
+          - { label: "Distance (miles)", name: "distance", widget: "number", required: true, min: 0, step: 0.1 }
+          - { label: "Description", name: "description", widget: "text", required: false }
+      - label: "Body"
+        name: "body"
+        widget: "markdown"
+        required: false
+        hint: "Optional additional information about this pace group"

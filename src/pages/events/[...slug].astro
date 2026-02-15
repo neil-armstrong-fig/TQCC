@@ -99,7 +99,11 @@ const formattedTime = event.data.date.toLocaleTimeString("en-GB", {
               <svg class="w-5 h-5 text-tqcc-gray shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
               </svg>
-              <span>Distance: {event.data.distance}</span>
+              <span>
+                Distance: <span class="distance-string" data-distance={event.data.distance}>
+                  {event.data.distance}
+                </span>
+              </span>
             </div>
           )}
           {event.data.pace && (
@@ -107,7 +111,11 @@ const formattedTime = event.data.date.toLocaleTimeString("en-GB", {
               <svg class="w-5 h-5 text-tqcc-gray shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              <span>Pace: {event.data.pace}</span>
+              <span>
+                Pace: <span class="pace-string" data-pace={event.data.pace}>
+                  {event.data.pace}
+                </span>
+              </span>
             </div>
           )}
           {event.data.link && (

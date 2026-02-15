@@ -69,13 +69,17 @@ const sortedDays = dayOrder.filter(day => ridesByDay[day]);
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
                   </svg>
-                  {ride.data.distance}
+                  <span class="distance-string" data-distance={ride.data.distance}>
+                    {ride.data.distance}
+                  </span>
                 </span>
                 <span class="flex items-center gap-1">
                   <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                   </svg>
-                  {ride.data.pace}
+                  <span class="pace-string" data-pace={ride.data.pace}>
+                    {ride.data.pace}
+                  </span>
                 </span>
               </div>
             </div>

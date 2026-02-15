@@ -1,5 +1,6 @@
 ---
 import Navigation from "./Navigation.astro";
+import UnitToggle from "./UnitToggle.astro";
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
 ---
 
@@ -24,6 +25,8 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
     </a>
 
     <Navigation />
+
+    <UnitToggle />
 
     <!-- Mobile menu button -->
     <button

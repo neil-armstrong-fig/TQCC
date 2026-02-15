@@ -65,5 +65,79 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
       <slot />
     </main>
     <Footer />
+    <script>
+      import {
+        getPreferredUnit,
+        formatDistance,
+        convertDistanceString,
+        formatSpeed,
+        formatElevation,
+        convertPaceString,
+        type DistanceUnit,
+      } from "../lib/units";
+
+      function updateDistances() {
+        const unit = getPreferredUnit();
+
+        // Update distance displays from Strava (meters in data attribute)
+        document.querySelectorAll(".distance-display").forEach((el) => {
+          const meters = parseFloat(el.getAttribute("data-meters") || "0");
+          const keepDecimals = el.getAttribute("data-keep-decimals") === "true";
+          if (meters > 0) {
+            el.textContent = formatDistance(meters, unit, keepDecimals);
+          }
+        });
+
+        // Update distance strings from markdown (original string in data attribute)
+        document.querySelectorAll(".distance-string").forEach((el) => {
+          const originalDistance = el.getAttribute("data-distance");
+          if (originalDistance) {
+            el.textContent = convertDistanceString(originalDistance, unit);
+          }
+        });
+
+        // Update distance unit labels
+        document.querySelectorAll(".distance-unit").forEach((el) => {
+          el.textContent = unit === "miles" ? "Miles" : "Kilometers";
+        });
+
+        // Update speed displays
+        document.querySelectorAll(".speed-display").forEach((el) => {
+          const meters = parseFloat(el.getAttribute("data-meters") || "0");
+          const seconds = parseFloat(el.getAttribute("data-seconds") || "0");
+          if (meters > 0 && seconds > 0) {
+            el.textContent = formatSpeed(meters, seconds, unit);
+          }
+        });
+
+        // Update elevation displays
+        document.querySelectorAll(".elevation-display").forEach((el) => {
+          const elevationMeters = parseFloat(el.getAttribute("data-elevation-meters") || "0");
+          if (elevationMeters > 0) {
+            el.textContent = formatElevation(elevationMeters, unit);
+          }
+        });
+
+        // Update pace strings (e.g., "15-17 mph")
+        document.querySelectorAll(".pace-string").forEach((el) => {
+          const originalPace = el.getAttribute("data-pace");
+          if (originalPace) {
+            el.textContent = convertPaceString(originalPace, unit);
+          }
+
+          // Handle pace descriptions (e.g., "Average pace 12-14 mph.")
+          const paceDescription = el.getAttribute("data-pace-description");
+          if (paceDescription) {
+            el.textContent = convertPaceString(paceDescription, unit);
+          }
+        });
+      }
+
+      // Update on page load
+      document.addEventListener("astro:page-load", updateDistances);
+
+      // Update when unit changes
+      window.addEventListener("unit-change", updateDistances);
+    </script>
   </body>
 </html>
