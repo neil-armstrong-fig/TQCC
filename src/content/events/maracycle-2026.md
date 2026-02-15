@@ -6,6 +6,7 @@ location: "Belfast to Dublin to Belfast"
 description: "A nod to the original Maracycle event. Club members will ride from Belfast to Dublin on Saturday, stay overnight, and return Dublin to Belfast on Sunday. Big miles, but big smiles!"
 rideType: "Club Ride"
 distance: "~124 miles over 2 days"
+membershipRequired: true
 ---
 
 The epic Maracycle weekend returns!

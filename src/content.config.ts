@@ -47,6 +47,8 @@ const events = defineCollection({
     pace: z.string().optional(),
     link: z.string().url().optional(),
     image: z.string().optional(),
+    membershipRequired: z.boolean().default(true),
+    externalOrganizer: z.string().optional(),
   }),
 });
 

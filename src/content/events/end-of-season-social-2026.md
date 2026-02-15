@@ -4,6 +4,7 @@ date: 2026-10-26
 location: "TBC"
 description: "Celebrate a great year with the club! Join us for our end of season social gathering."
 rideType: "Social"
+membershipRequired: true
 ---
 
 Time to celebrate an incredible year of cycling!

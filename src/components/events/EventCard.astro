@@ -27,10 +27,20 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
   ]}
 >
   <div class="p-6">
-    <div class="flex items-center gap-2 mb-3">
+    <div class="flex items-center gap-2 mb-3 flex-wrap">
       <span class="bg-tqcc-pink/10 text-tqcc-pink text-xs font-semibold px-2.5 py-0.5 rounded-full">
         {event.data.rideType}
       </span>
+      {!event.data.membershipRequired && (
+        <span class="bg-tqcc-yellow/20 text-tqcc-black text-xs font-semibold px-2.5 py-0.5 rounded-full">
+          Open to All
+        </span>
+      )}
+      {event.data.externalOrganizer && (
+        <span class="bg-tqcc-gray-light text-tqcc-gray text-xs font-medium px-2.5 py-0.5 rounded-full">
+          {event.data.externalOrganizer}
+        </span>
+      )}
       {isPast && (
         <span class="text-xs text-tqcc-gray font-medium">Past Event</span>
       )}

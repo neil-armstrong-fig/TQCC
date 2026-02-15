@@ -5,6 +5,7 @@ endDate: 2026-09-12
 location: "Mallorca, Spain"
 description: "Club trip to Mallorca for a week of cycling in the sunshine."
 rideType: "Social"
+membershipRequired: true
 ---
 
 Pack your bags — we're heading to Mallorca!

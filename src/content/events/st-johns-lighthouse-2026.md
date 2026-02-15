@@ -6,6 +6,7 @@ description: "An annual event from Belfast down to the St Johns Lighthouse near 
 rideType: "Club Ride"
 meetingPoint: "Titanic Quarter"
 distance: "~81 miles"
+membershipRequired: true
 ---
 
 One of our classic annual rides! The St Johns Lighthouse challenge.

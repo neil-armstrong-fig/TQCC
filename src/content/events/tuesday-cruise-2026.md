@@ -4,6 +4,7 @@ date: 2026-04-07
 location: "TBC"
 description: "A special Tuesday evening cruise ride. Details to be confirmed."
 rideType: "Club Ride"
+membershipRequired: true
 ---
 
 Join us for a special Tuesday Cruise!

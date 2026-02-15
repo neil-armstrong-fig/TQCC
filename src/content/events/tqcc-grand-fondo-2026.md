@@ -4,6 +4,7 @@ date: 2026-08-15
 location: "TBC"
 description: "Another nod to the Giro d'Italia origins of the club. This event is much longer and hillier, so hopefully you have built up fitness over the summer!"
 rideType: "Club Ride"
+membershipRequired: true
 ---
 
 The ultimate test of your summer fitness — the TQCC Grand Fondo!

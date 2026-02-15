@@ -5,6 +5,7 @@ location: "Around Strangford Lough"
 description: "The official Lap The Lough has been cancelled, however we will be running our own club event to allow club members the opportunity to do this great course."
 rideType: "Club Ride"
 distance: "~53 miles"
+membershipRequired: true
 ---
 
 Don't worry — TQCC's got you covered!

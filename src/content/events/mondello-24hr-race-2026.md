@@ -4,6 +4,8 @@ date: 2026-06-20
 location: "Mondello Park, Ireland"
 description: "After having great fun, TQCC will again be attending the Mondello 24hr Race. Groups of various ability will mix and join in on the race."
 rideType: "Race"
+membershipRequired: false
+externalOrganizer: "Mondello Park"
 ---
 
 TQCC returns to the famous Mondello 24hr Race!

@@ -5,6 +5,7 @@ location: "TBC"
 description: "The only event open to cyclists not in the club. An evening route roughly 44 miles. All groups and abilities welcome!"
 rideType: "Sportive"
 distance: "~44 miles"
+membershipRequired: false
 ---
 
 Join us for our annual Summer Solstice Sportive — open to everyone!

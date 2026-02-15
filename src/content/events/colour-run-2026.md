@@ -5,6 +5,7 @@ location: "Titanic Quarter, Belfast"
 description: "An annual event to mark the start of the longer evenings after a harsh winter! Each pace group will organise their own route all leaving from Titanic Quarter Belfast, and meeting at The Georgian House in Comber for lunch."
 rideType: "Club Ride"
 meetingPoint: "Titanic Quarter"
+membershipRequired: true
 ---
 
 Spring is here! Join us for the annual Colour Run to celebrate the longer evenings ahead.

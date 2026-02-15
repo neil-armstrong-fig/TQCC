@@ -5,6 +5,7 @@ location: "TBC"
 description: "A nod to the Club's origins, a slight replica of the Giro d'Italia route. There is a short and long version of this route available."
 rideType: "Club Ride"
 distance: "Short and Long options"
+membershipRequired: true
 ---
 
 Celebrating TQCC's Italian heritage with our Big Italian Bike Ride!
