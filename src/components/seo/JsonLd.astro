@@ -1,0 +1,82 @@
+---
+interface Props {
+  type: "Organization" | "BlogPosting" | "Event" | "WebSite";
+  title?: string;
+  description?: string;
+  datePublished?: Date;
+  author?: string;
+  image?: string;
+  location?: string;
+  eventDate?: Date;
+}
+
+const { type, title, description, datePublished, author, image, location, eventDate } =
+  Astro.props;
+const siteUrl = Astro.site?.toString().replace(/\/$/, "") || "https://titanicquartercc.com";
+
+function buildSchema() {
+  const schemas: Record<string, unknown>[] = [];
+
+  schemas.push({
+    "@type": "WebSite",
+    "@id": `${siteUrl}/#website`,
+    url: siteUrl,
+    name: "Titanic Quarter Cycling Club",
+    description: "Belfast's community cycling club since 2014",
+    publisher: { "@id": `${siteUrl}/#organization` },
+  });
+
+  schemas.push({
+    "@type": "SportsOrganization",
+    "@id": `${siteUrl}/#organization`,
+    name: "Titanic Quarter Cycling Club",
+    alternateName: "TQCC",
+    url: siteUrl,
+    logo: `${siteUrl}/images/badge.png`,
+    foundingDate: "2014-11",
+    sport: "Cycling",
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Belfast",
+      addressRegion: "Northern Ireland",
+      addressCountry: "GB",
+    },
+    sameAs: [
+      "https://www.facebook.com/TitanicQuarterCC/",
+      "https://www.instagram.com/titanicquartercc/",
+      "https://www.strava.com/clubs/110633",
+    ],
+  });
+
+  if (type === "BlogPosting" && title) {
+    schemas.push({
+      "@type": "BlogPosting",
+      headline: title,
+      description,
+      datePublished: datePublished?.toISOString(),
+      author: { "@type": "Person", name: author || "TQCC" },
+      publisher: { "@id": `${siteUrl}/#organization` },
+      image: image ? `${siteUrl}${image}` : undefined,
+    });
+  }
+
+  if (type === "Event" && title && eventDate) {
+    schemas.push({
+      "@type": "SportsEvent",
+      name: title,
+      description,
+      startDate: eventDate.toISOString(),
+      location: {
+        "@type": "Place",
+        name: location || "Belfast",
+        address: { addressLocality: "Belfast", addressCountry: "GB" },
+      },
+      organizer: { "@id": `${siteUrl}/#organization` },
+    });
+  }
+
+  return { "@context": "https://schema.org", "@graph": schemas };
+}
+---
+
+<script is:inline type="application/ld+json" set:html={JSON.stringify(buildSchema())} />

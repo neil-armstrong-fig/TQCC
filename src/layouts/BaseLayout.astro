@@ -1,0 +1,69 @@
+---
+import "../styles/global.css";
+import Header from "../components/global/Header.astro";
+import Footer from "../components/global/Footer.astro";
+import SEOHead from "../components/seo/SEOHead.astro";
+import { ClientRouter } from "astro:transitions";
+
+interface Props {
+  title: string;
+  description?: string;
+  image?: string;
+  type?: "website" | "article";
+  publishDate?: Date;
+  noindex?: boolean;
+}
+
+const {
+  title,
+  description = "Titanic Quarter Cycling Club — Belfast's community cycling club since 2014. Group rides, events, and more from the historic Titanic Quarter.",
+  image = "/images/og-default.jpg",
+  type = "website",
+  publishDate,
+  noindex = false,
+} = Astro.props;
+
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="referrer" content="strict-origin-when-cross-origin" />
+    <SEOHead
+      title={title}
+      description={description}
+      image={image}
+      type={type}
+      publishDate={publishDate}
+      noindex={noindex}
+    />
+    <ClientRouter />
+    <link rel="icon" type="image/x-icon" href={`${baseUrl}/favicon.ico`} sizes="48x48" />
+    <link rel="icon" type="image/png" href={`${baseUrl}/favicon-32x32.png`} sizes="32x32" />
+    <link rel="icon" type="image/png" href={`${baseUrl}/favicon-16x16.png`} sizes="16x16" />
+    <link rel="apple-touch-icon" href={`${baseUrl}/apple-touch-icon.png`} sizes="180x180" />
+    <link rel="manifest" href={`${baseUrl}/site.webmanifest`} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body class="min-h-screen flex flex-col bg-white text-tqcc-black font-body">
+    <a
+      href="#main-content"
+      class="sr-only focus:not-sr-only focus:absolute focus:z-50 focus:bg-tqcc-yellow focus:text-tqcc-black focus:px-4 focus:py-2"
+    >
+      Skip to main content
+    </a>
+    <Header />
+    <main id="main-content" class="flex-1">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

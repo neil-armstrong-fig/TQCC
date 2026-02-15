@@ -1,0 +1,185 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { getBocciaEvents } from "../lib/boccia";
+
+const events = await getBocciaEvents();
+
+function formatDate(date: Date): string {
+  return date.toLocaleDateString("en-GB", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  });
+}
+
+function formatDateRange(start: Date, end: Date): string {
+  if (start.toDateString() === end.toDateString()) {
+    return formatDate(start);
+  }
+  if (start.getMonth() === end.getMonth() && start.getFullYear() === end.getFullYear()) {
+    return `${start.getDate()}\u2013${end.getDate()} ${start.toLocaleDateString("en-GB", { month: "long", year: "numeric" })}`;
+  }
+  return `${formatDate(start)} \u2013 ${formatDate(end)}`;
+}
+---
+
+<BaseLayout
+  title="Boccia Sponsorship"
+  description="TQCC proudly sponsors Disability Sport NI's Boccia League — learn about this Paralympic sport and upcoming events in Northern Ireland."
+>
+  <section class="py-12">
+    <div class="max-w-4xl mx-auto px-4">
+      <h1 class="text-4xl font-bold mb-8">Boccia Sponsorship</h1>
+
+      <div class="prose prose-lg max-w-none">
+        <p class="text-xl text-tqcc-gray leading-relaxed">
+          TQCC is a proud sponsor of
+          <a href="https://www.dsni.co.uk/" target="_blank" rel="noopener noreferrer" class="text-tqcc-pink hover:underline">Disability Sport NI</a>'s
+          Boccia League, supporting the growth of Paralympic sport in Northern Ireland.
+        </p>
+
+        <h2>What is Boccia?</h2>
+        <p>
+          Boccia is a Paralympic precision ball sport, similar in concept to bowls
+          or p&eacute;tanque. Players throw, kick, or use a ramp to propel leather
+          balls as close as possible to a white target ball called the
+          <strong>jack</strong>. It has been a Paralympic sport since 1984.
+        </p>
+        <p>
+          The sport is designed for athletes with significant physical disabilities
+          affecting motor function, including cerebral palsy, muscular dystrophy,
+          and spinal injuries. Athletes compete while seated and may use assistive
+          devices such as ramps to deliver the ball. Boccia can be played
+          individually, in pairs, or in teams of three.
+        </p>
+
+        <div class="not-prose grid grid-cols-1 md:grid-cols-3 gap-4 my-8">
+          <div class="bg-tqcc-gray-light p-5 rounded-lg text-center">
+            <span class="text-2xl font-bold text-tqcc-pink">Paralympic</span>
+            <p class="mt-1 text-tqcc-gray text-sm">Sport since 1984</p>
+          </div>
+          <div class="bg-tqcc-gray-light p-5 rounded-lg text-center">
+            <span class="text-2xl font-bold text-tqcc-pink">12 Clubs</span>
+            <p class="mt-1 text-tqcc-gray text-sm">Across Northern Ireland</p>
+          </div>
+          <div class="bg-tqcc-gray-light p-5 rounded-lg text-center">
+            <span class="text-2xl font-bold text-tqcc-pink">Oct&ndash;June</span>
+            <p class="mt-1 text-tqcc-gray text-sm">League season</p>
+          </div>
+        </div>
+
+        <h2>Disability Sport NI &amp; the NI Boccia League</h2>
+        <p>
+          <a href="https://www.dsni.co.uk/" target="_blank" rel="noopener noreferrer" class="text-tqcc-pink hover:underline">Disability Sport NI</a>
+          is the lead development agency for Boccia in Northern Ireland and a member
+          of <a href="https://boccia.uk.com/" target="_blank" rel="noopener noreferrer" class="text-tqcc-pink hover:underline">Boccia UK</a>.
+          They oversee 12 clubs throughout Northern Ireland catering to players who
+          meet Paralympic classification standards, offering both recreational and
+          competitive play.
+        </p>
+        <p>
+          The <strong>Northern Ireland Boccia Pairs Championship</strong> runs from
+          October to June each year, with monthly matches at venues across Northern
+          Ireland. Teams of 2&ndash;4 players with physical disabilities compete
+          throughout the season. There is also a
+          <strong>Northern Ireland Individual Boccia Championship</strong> running
+          alongside the pairs competition.
+        </p>
+        <p>
+          A National Performance Centre operates at Ulster University, Jordanstown,
+          supporting elite athletes through the Boccia UK World Class Athlete
+          Performance Pathway towards international representation.
+        </p>
+
+        <h2>Why TQCC Sponsors Boccia</h2>
+        <p>
+          As a cycling club rooted in community and inclusion, TQCC believes that
+          sport should be accessible to everyone. Our sponsorship of the Disability
+          Sport NI Boccia League reflects our commitment to supporting Paralympic
+          sport in Northern Ireland and helping to break down barriers to
+          participation.
+        </p>
+
+        <div class="not-prose bg-tqcc-yellow/10 border-l-4 border-tqcc-yellow p-6 rounded-r-lg my-8">
+          <h3 class="font-bold text-lg mb-2">Our commitment</h3>
+          <p class="text-tqcc-gray">
+            Through our sponsorship, we aim to support the development and
+            visibility of Boccia in Northern Ireland, helping athletes at all
+            levels &mdash; from local club sessions to international competition.
+          </p>
+        </div>
+      </div>
+
+      <!-- Upcoming Events -->
+      <div class="mt-12">
+        <h2 class="text-2xl font-bold mb-6">Upcoming Boccia Events</h2>
+
+        {events.length > 0 ? (
+          <div class="space-y-4">
+            {events.map((event) => (
+              <a
+                href={event.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="block border border-gray-200 rounded-lg p-6 hover:border-tqcc-pink hover:shadow-md transition-all"
+              >
+                <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+                  <div>
+                    <h3 class="text-lg font-bold">{event.title}</h3>
+                    {event.location && (
+                      <p class="text-tqcc-gray text-sm mt-1">{event.location}</p>
+                    )}
+                    {event.description && (
+                      <p class="text-tqcc-gray text-sm mt-2">{event.description}</p>
+                    )}
+                  </div>
+                  <div class="sm:text-right shrink-0">
+                    <span class="inline-block bg-tqcc-pink/10 text-tqcc-pink font-semibold text-sm px-3 py-1 rounded-full">
+                      {formatDateRange(event.startDate, event.endDate)}
+                    </span>
+                  </div>
+                </div>
+              </a>
+            ))}
+          </div>
+        ) : (
+          <p class="text-tqcc-gray">
+            No upcoming events listed at the moment. Check back soon or visit the
+            <a href="https://boccia.uk.com/calendar" target="_blank" rel="noopener noreferrer" class="text-tqcc-pink hover:underline">Boccia UK calendar</a>
+            for the latest schedule.
+          </p>
+        )}
+
+        <div class="mt-6 text-sm text-tqcc-gray">
+          <p>
+            Events are sourced from the
+            <a href="https://boccia.uk.com/calendar" target="_blank" rel="noopener noreferrer" class="text-tqcc-pink hover:underline">Boccia UK calendar</a>
+            and updated automatically when the site is rebuilt.
+            For the full NI Boccia League fixtures, contact
+            <a href="https://www.dsni.co.uk/performance-sport/boccia/" target="_blank" rel="noopener noreferrer" class="text-tqcc-pink hover:underline">Disability Sport NI</a>
+            directly.
+          </p>
+        </div>
+      </div>
+
+      <!-- Get Involved CTA -->
+      <div class="bg-tqcc-black text-white p-8 rounded-lg mt-12 text-center">
+        <h2 class="text-2xl font-bold text-tqcc-yellow mb-4">
+          Get Involved
+        </h2>
+        <p class="text-white/80 mb-6 max-w-xl mx-auto">
+          Want to learn more about Boccia or find a club near you?
+          Disability Sport NI can help you get started.
+        </p>
+        <a
+          href="https://www.dsni.co.uk/performance-sport/boccia/"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-block bg-tqcc-yellow text-tqcc-black font-bold px-8 py-3 rounded-lg hover:bg-tqcc-yellow-dark transition-colors"
+        >
+          Visit Disability Sport NI &rarr;
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

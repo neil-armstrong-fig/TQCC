@@ -1,0 +1,87 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  rides: CollectionEntry<"rides">[];
+  compact?: boolean;
+}
+
+const { rides, compact = false } = Astro.props;
+
+const difficultyColors: Record<string, string> = {
+  Easy: "bg-green-100 text-green-800",
+  Moderate: "bg-blue-100 text-blue-800",
+  Intermediate: "bg-yellow-100 text-yellow-800",
+  Advanced: "bg-red-100 text-red-800",
+};
+
+// Group rides by day
+const ridesByDay = rides.reduce((acc, ride) => {
+  const day = ride.data.day;
+  if (!acc[day]) {
+    acc[day] = [];
+  }
+  acc[day].push(ride);
+  return acc;
+}, {} as Record<string, CollectionEntry<"rides">[]>);
+
+// Define day order
+const dayOrder = ["Wednesday", "Saturday", "Sunday"];
+const sortedDays = dayOrder.filter(day => ridesByDay[day]);
+---
+
+<div class="space-y-8">
+  {
+    sortedDays.map((day) => (
+      <div>
+        <h3 class="text-2xl font-bold text-tqcc-black mb-4">{day}s</h3>
+        <div class:list={["grid gap-4", compact ? "grid-cols-1" : "grid-cols-1 md:grid-cols-2"]}>
+          {ridesByDay[day].map((ride) => (
+            <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
+              <div class="flex items-start justify-between mb-3">
+                <div>
+                  <h4 class="font-bold text-lg">{ride.data.title}</h4>
+                  <p class="text-tqcc-pink font-semibold">
+                    {ride.data.time || "Morning time - Check WhatsApp for exact time"}
+                  </p>
+                </div>
+                <span
+                  class:list={[
+                    "text-xs font-semibold px-2.5 py-0.5 rounded-full",
+                    difficultyColors[ride.data.difficulty],
+                  ]}
+                >
+                  {ride.data.difficulty}
+                </span>
+              </div>
+
+              <p class="text-sm text-tqcc-gray mb-3">{ride.data.description}</p>
+
+              <div class="flex flex-wrap gap-4 text-sm text-tqcc-gray">
+                <span class="flex items-center gap-1">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                  {ride.data.meetingPoint}
+                </span>
+                <span class="flex items-center gap-1">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                  </svg>
+                  {ride.data.distance}
+                </span>
+                <span class="flex items-center gap-1">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  {ride.data.pace}
+                </span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    ))
+  }
+</div>

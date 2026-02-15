@@ -1,0 +1,72 @@
+@import "tailwindcss";
+
+@theme {
+  --color-tqcc-yellow: #FFD700;
+  --color-tqcc-yellow-light: #FFF3B0;
+  --color-tqcc-yellow-dark: #C7A600;
+  --color-tqcc-black: #1A1A1A;
+  --color-tqcc-black-light: #2D2D2D;
+  --color-tqcc-pink: #E91E8C;
+  --color-tqcc-pink-light: #FF6EB4;
+  --color-tqcc-white: #FAFAFA;
+  --color-tqcc-gray: #6B7280;
+  --color-tqcc-gray-light: #F3F4F6;
+
+  --font-heading: "Inter", system-ui, sans-serif;
+  --font-body: "Inter", system-ui, sans-serif;
+}
+
+/* Prose styling for blog content */
+.prose {
+  max-width: 75ch;
+  line-height: 1.75;
+}
+
+.prose h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+.prose h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-top: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.prose p {
+  margin-bottom: 1.25rem;
+}
+
+.prose a {
+  color: var(--color-tqcc-pink);
+  text-decoration: underline;
+}
+
+.prose a:hover {
+  color: var(--color-tqcc-pink-light);
+}
+
+.prose ul, .prose ol {
+  padding-left: 1.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.prose li {
+  margin-bottom: 0.5rem;
+}
+
+.prose img {
+  border-radius: 0.5rem;
+  margin: 1.5rem 0;
+}
+
+.prose blockquote {
+  border-left: 4px solid var(--color-tqcc-yellow);
+  padding-left: 1rem;
+  font-style: italic;
+  color: var(--color-tqcc-gray);
+  margin: 1.5rem 0;
+}

@@ -1,0 +1,72 @@
+---
+import { getInstagramPosts } from "../../lib/instagram";
+
+interface Props {
+  limit?: number;
+}
+
+const { limit = 12 } = Astro.props;
+const posts = await getInstagramPosts(limit);
+---
+
+<section class="py-12">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="flex items-center justify-between mb-8">
+      <h2 class="text-3xl font-bold">Latest on Instagram</h2>
+      <a
+        href="https://www.instagram.com/titanicquartercc/"
+        class="text-tqcc-pink hover:text-tqcc-pink-light font-medium transition-colors"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        Follow @titanicquartercc &rarr;
+      </a>
+    </div>
+
+    {
+      posts.length > 0 ? (
+        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          {posts.map((post) => (
+            <a
+              href={post.permalink}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="group relative aspect-square overflow-hidden rounded-lg bg-tqcc-gray-light"
+            >
+              <img
+                src={
+                  post.media_type === "VIDEO"
+                    ? post.thumbnail_url
+                    : post.media_url
+                }
+                alt={post.caption?.slice(0, 100) || "Instagram post from TQCC"}
+                class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                loading="lazy"
+              />
+              <div class="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-end">
+                <p class="text-white text-sm p-3 opacity-0 group-hover:opacity-100 transition-opacity line-clamp-2">
+                  {post.caption?.slice(0, 100)}
+                </p>
+              </div>
+            </a>
+          ))}
+        </div>
+      ) : (
+        <div class="bg-tqcc-gray-light rounded-lg p-8 text-center">
+          <p class="text-tqcc-gray">
+            Follow us on{" "}
+            <a
+              href="https://www.instagram.com/titanicquartercc/"
+              class="text-tqcc-pink underline"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              Instagram
+            </a>{" "}
+            for the latest photos and updates.
+          </p>
+        </div>
+      )
+    }
+  </div>
+</section>

@@ -1,0 +1,52 @@
+---
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const allNewsletters = await getCollection("newsletters");
+const newsletters = allNewsletters.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
+---
+
+<BaseLayout
+  title="Newsletter Archive"
+  description="Past newsletters from TQCC with club news and upcoming events"
+>
+  <section class="py-12">
+    <div class="max-w-7xl mx-auto px-4">
+      <h1 class="text-4xl font-bold mb-2">Newsletter Archive</h1>
+      <p class="text-tqcc-gray mb-8">
+        Browse past newsletters from the club
+      </p>
+
+      {
+        newsletters.length > 0 ? (
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {newsletters.map((newsletter) => (
+              <a
+                href={`${baseUrl}/newsletters/${newsletter.id}`}
+                class="group bg-white rounded-lg overflow-hidden shadow-md hover:shadow-xl transition-all"
+              >
+                <div class="relative overflow-hidden">
+                  <img
+                    src={newsletter.data.heroImage.startsWith('/') ? `${baseUrl}${newsletter.data.heroImage}` : newsletter.data.heroImage}
+                    alt={`${newsletter.data.month} ${newsletter.data.year} Newsletter`}
+                    class="w-full h-auto group-hover:scale-105 transition-transform duration-300"
+                  />
+                  <div class="absolute bottom-0 left-0 right-0 bg-tqcc-yellow text-tqcc-black font-bold text-center py-3 text-lg">
+                    {newsletter.data.month.toUpperCase()} {newsletter.data.year}
+                  </div>
+                </div>
+              </a>
+            ))}
+          </div>
+        ) : (
+          <div class="bg-tqcc-gray-light rounded-lg p-8 text-center">
+            <p class="text-tqcc-gray text-lg">
+              No newsletters available yet. Check back soon!
+            </p>
+          </div>
+        )
+      }
+    </div>
+  </section>
+</BaseLayout>

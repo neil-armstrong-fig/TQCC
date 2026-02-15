@@ -1,0 +1,110 @@
+---
+import type { GetStaticPaths } from "astro";
+import { getCollection, render } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import JsonLd from "../../components/seo/JsonLd.astro";
+
+export const getStaticPaths = (async () => {
+  const events = await getCollection("events");
+  return events.map((event) => ({
+    params: { slug: event.id },
+    props: { event },
+  }));
+}) satisfies GetStaticPaths;
+
+const { event } = Astro.props;
+const { Content } = await render(event);
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
+
+const formattedDate = event.data.date.toLocaleDateString("en-GB", {
+  weekday: "long",
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+});
+const formattedTime = event.data.date.toLocaleTimeString("en-GB", {
+  hour: "2-digit",
+  minute: "2-digit",
+});
+---
+
+<BaseLayout title={event.data.title} description={event.data.description}>
+  <JsonLd
+    type="Event"
+    title={event.data.title}
+    description={event.data.description}
+    eventDate={event.data.date}
+    location={event.data.location}
+  />
+
+  <section class="py-12">
+    <div class="max-w-4xl mx-auto px-4">
+      <a
+        href={`${baseUrl}/events`}
+        class="inline-flex items-center text-sm text-tqcc-gray hover:text-tqcc-pink transition-colors mb-8"
+      >
+        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+        Back to Events
+      </a>
+
+      <header class="mb-8">
+        <span class="bg-tqcc-pink/10 text-tqcc-pink text-sm font-semibold px-3 py-1 rounded-full">
+          {event.data.rideType}
+        </span>
+        <h1 class="text-3xl md:text-4xl font-bold mt-4 mb-4">{event.data.title}</h1>
+
+        <div class="bg-tqcc-gray-light rounded-lg p-6 space-y-3">
+          <div class="flex items-center gap-3">
+            <svg class="w-5 h-5 text-tqcc-gray shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            <span>{formattedDate} at {formattedTime}</span>
+          </div>
+          <div class="flex items-center gap-3">
+            <svg class="w-5 h-5 text-tqcc-gray shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+            </svg>
+            <span>{event.data.location}</span>
+          </div>
+          {event.data.meetingPoint && (
+            <div class="flex items-center gap-3">
+              <svg class="w-5 h-5 text-tqcc-gray shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9" />
+              </svg>
+              <span>Meet at: {event.data.meetingPoint}</span>
+            </div>
+          )}
+          {event.data.distance && (
+            <div class="flex items-center gap-3">
+              <svg class="w-5 h-5 text-tqcc-gray shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+              </svg>
+              <span>Distance: {event.data.distance}</span>
+            </div>
+          )}
+          {event.data.pace && (
+            <div class="flex items-center gap-3">
+              <svg class="w-5 h-5 text-tqcc-gray shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span>Pace: {event.data.pace}</span>
+            </div>
+          )}
+          {event.data.link && (
+            <a href={event.data.link} target="_blank" rel="noopener noreferrer"
+              class="inline-block mt-2 text-tqcc-pink hover:text-tqcc-pink-light font-medium transition-colors">
+              External link &rarr;
+            </a>
+          )}
+        </div>
+      </header>
+
+      <div class="prose prose-lg max-w-none">
+        <Content />
+      </div>
+    </div>
+  </section>
+</BaseLayout>

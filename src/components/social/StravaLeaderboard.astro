@@ -1,0 +1,73 @@
+---
+import type { StravaActivity } from "../../lib/strava";
+import { buildLeaderboard, formatDistance, formatDuration, getCurrentWeekActivities } from "../../lib/strava";
+
+interface Props {
+  activities: StravaActivity[];
+}
+
+const { activities } = Astro.props;
+const weekActivities = getCurrentWeekActivities(activities);
+const leaderboard = buildLeaderboard(weekActivities, 5);
+---
+
+{
+  leaderboard.length > 0 && (
+    <div class="bg-white rounded-lg shadow-md p-6">
+      <div class="flex items-center gap-3 mb-6">
+        <svg
+          class="w-6 h-6 text-tqcc-yellow"
+          fill="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path d="M5 16L3 5l5.5 5L12 4l3.5 6L21 5l-2 11H5zm14 3c0 .6-.4 1-1 1H6c-.6 0-1-.4-1-1v-1h14v1z" />
+        </svg>
+        <h3 class="text-xl font-bold">This Week's Leaderboard</h3>
+      </div>
+      <ol class="space-y-3">
+        {leaderboard.map((entry, i) => (
+          <li class="flex items-center justify-between py-2 border-b border-gray-100 last:border-0">
+            <div class="flex items-center gap-3">
+              <span
+                class:list={[
+                  "w-7 h-7 rounded-full flex items-center justify-center text-sm font-bold",
+                  i === 0
+                    ? "bg-tqcc-yellow text-tqcc-black"
+                    : i === 1
+                      ? "bg-gray-300 text-tqcc-black"
+                      : i === 2
+                        ? "bg-amber-600 text-white"
+                        : "bg-gray-100 text-tqcc-gray",
+                ]}
+              >
+                {i + 1}
+              </span>
+              <div>
+                <a
+                  href={`https://www.strava.com/athletes/${entry.athleteId}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="font-medium hover:text-orange-500 transition-colors"
+                >
+                  {entry.name}
+                </a>
+                <p class="text-xs text-tqcc-gray">
+                  {entry.activityCount}{" "}
+                  {entry.activityCount === 1 ? "activity" : "activities"}
+                </p>
+              </div>
+            </div>
+            <div class="text-right text-sm">
+              <p class="font-medium">
+                {formatDistance(entry.totalDistance)}
+              </p>
+              <p class="text-tqcc-gray">
+                {formatDuration(entry.totalDuration)}
+              </p>
+            </div>
+          </li>
+        ))}
+      </ol>
+    </div>
+  )
+}

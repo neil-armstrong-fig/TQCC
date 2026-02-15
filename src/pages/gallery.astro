@@ -1,0 +1,18 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import InstagramFeed from "../components/social/InstagramFeed.astro";
+---
+
+<BaseLayout
+  title="Gallery"
+  description="Photos from TQCC rides, events, and social gatherings"
+>
+  <div class="max-w-7xl mx-auto px-4 pt-12">
+    <h1 class="text-4xl font-bold mb-2">Gallery</h1>
+    <p class="text-tqcc-gray mb-4">
+      Photos from our rides, events, and social gatherings.
+    </p>
+  </div>
+
+  <InstagramFeed limit={16} />
+</BaseLayout>

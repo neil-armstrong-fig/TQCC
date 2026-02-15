@@ -1,0 +1,24 @@
+---
+// CMS admin panel — loads Sveltia CMS (drop-in Decap CMS replacement)
+// Non-technical users visit /admin to create and edit content
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex" />
+    <title>TQCC Content Manager</title>
+    <link href="/admin/config.yml" type="text/yaml" rel="cms-config-url" />
+  </head>
+  <body>
+    <!--
+      Sveltia CMS: modern, lightweight replacement for Decap CMS.
+      Same config format — to switch back to Decap CMS, change to:
+      https://unpkg.com/decap-cms@^3.3/dist/decap-cms.js
+    -->
+    <script is:inline src="https://unpkg.com/@sveltia/cms/dist/sveltia-cms.js"
+    ></script>
+  </body>
+</html>

@@ -1,0 +1,153 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import RideSchedule from "../components/rides/RideSchedule.astro";
+import EventCard from "../components/events/EventCard.astro";
+import { getCollection } from "astro:content";
+import type { CollectionEntry } from "astro:content";
+
+const rides = (await getCollection("rides"))
+  .filter((r) => r.data.active)
+  .sort((a, b) => a.data.order - b.data.order);
+
+const now = new Date();
+const upcomingEvents = (await getCollection("events"))
+  .filter((e) => e.data.date >= now)
+  .sort((a, b) => a.data.date.valueOf() - b.data.date.valueOf());
+
+const pastEvents = (await getCollection("events"))
+  .filter((e) => e.data.date < now)
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 6);
+
+// Group events by month
+function groupByMonth(events: CollectionEntry<"events">[]) {
+  const groups: Record<string, CollectionEntry<"events">[]> = {};
+
+  events.forEach((event) => {
+    const monthYear = event.data.date.toLocaleDateString("en-GB", {
+      month: "long",
+      year: "numeric",
+    });
+
+    if (!groups[monthYear]) {
+      groups[monthYear] = [];
+    }
+    groups[monthYear].push(event);
+  });
+
+  return groups;
+}
+
+const upcomingByMonth = groupByMonth(upcomingEvents);
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
+---
+
+<BaseLayout
+  title="Rides & Events"
+  description="TQCC weekly ride schedule and upcoming cycling events in Belfast"
+>
+  <!-- Weekly Rides -->
+  <section class="py-12 bg-tqcc-gray-light">
+    <div class="max-w-7xl mx-auto px-4">
+      <h1 class="text-4xl font-bold mb-2">Weekly Rides</h1>
+      <p class="text-tqcc-gray mb-8">
+        Our regular group rides throughout the week. All meeting at Titanic
+        Quarter unless stated otherwise.
+      </p>
+      <RideSchedule rides={rides} />
+    </div>
+  </section>
+
+  <!-- About Ride Leaders -->
+  <section class="py-12">
+    <div class="max-w-4xl mx-auto px-4">
+      <h2 class="text-3xl font-bold mb-6">About Our Ride Leaders</h2>
+
+      <div class="prose prose-lg max-w-none">
+        <p class="text-lg text-tqcc-gray leading-relaxed">
+          Every TQCC group ride is led by a volunteer <strong>Ride Leader (RL)</strong> — an experienced club member who plans and guides the ride. Ride Leaders are the backbone of our club, ensuring every ride is safe, enjoyable, and appropriate for the group's ability level.
+        </p>
+
+        <h3 class="text-xl font-bold mt-8 mb-4">What Ride Leaders Do</h3>
+        <p>Before each ride, your Ride Leader will have:</p>
+        <ul class="list-disc pl-6 space-y-2">
+          <li>Planned a route suitable for the group's experience level</li>
+          <li>Considered road conditions, traffic patterns, and the group's target pace</li>
+          <li>Prepared to brief riders on the route, expected pace, and group riding signals</li>
+        </ul>
+
+        <p>
+          At the start of the ride, the RL will explain the route, discuss the planned pace, and review the calls and hand signals we use to communicate on the road. They're there to help new riders feel confident and to ensure everyone knows what to expect.
+        </p>
+
+        <div class="bg-tqcc-yellow/10 border-l-4 border-tqcc-yellow p-6 rounded-r-lg my-8">
+          <h4 class="font-bold text-lg mb-2">Understanding the Risks</h4>
+          <p class="text-tqcc-gray text-base mb-3">
+            While cycling is an outstanding recreational sport, it also involves inherent risks. These include but are not limited to: traveling on or crossing busy roads, winding roads, steep descents, potholes, accidents, unexpected moves by other riders, physical exertion, fatigue, mechanical issues, and interactions with motorists.
+          </p>
+          <p class="text-tqcc-gray text-base">
+            By participating in a TQCC group ride, all riders acknowledge these risks and agree to assume responsibility for their own safety. TQCC officers, committee members, and Ride Leaders are volunteers who organize rides in good faith, and are not liable for any injury or damage resulting from participation in club activities.
+          </p>
+        </div>
+
+        <h3 class="text-xl font-bold mt-8 mb-4">Your Safety is Your Responsibility</h3>
+        <p>
+          Ride Leaders provide guidance and structure, but every rider is ultimately responsible for their own safety. Ride within your abilities, maintain your bike in good working order, and speak up if you're uncomfortable with any aspect of the ride. Our Ride Leaders are here to help, but safe group riding requires the attention and cooperation of everyone on the ride.
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Upcoming Events -->
+  <section class="py-12">
+    <div class="max-w-7xl mx-auto px-4">
+      <h2 class="text-3xl font-bold mb-8">Upcoming Events</h2>
+      {
+        upcomingEvents.length > 0 ? (
+          <div class="space-y-12">
+            {Object.entries(upcomingByMonth).map(([monthYear, events]) => (
+              <div>
+                <h3 class="text-2xl font-bold text-tqcc-black mb-6">{monthYear}</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  {events.map((event) => (
+                    <EventCard event={event} />
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div class="bg-tqcc-gray-light rounded-lg p-8 text-center">
+            <p class="text-tqcc-gray text-lg">
+              No upcoming events scheduled. Check back soon!
+            </p>
+          </div>
+        )
+      }
+    </div>
+  </section>
+
+  <!-- Past Events -->
+  {
+    pastEvents.length > 0 && (
+      <section class="py-12 bg-tqcc-gray-light">
+        <div class="max-w-7xl mx-auto px-4">
+          <h2 class="text-3xl font-bold mb-8">Past Events</h2>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {pastEvents.map((event) => (
+              <EventCard event={event} isPast />
+            ))}
+          </div>
+          <div class="text-center mt-8">
+            <a
+              href={`${baseUrl}/events`}
+              class="text-tqcc-pink hover:text-tqcc-pink-light font-medium transition-colors"
+            >
+              View all events &rarr;
+            </a>
+          </div>
+        </div>
+      </section>
+    )
+  }
+</BaseLayout>

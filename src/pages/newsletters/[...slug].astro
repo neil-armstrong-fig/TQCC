@@ -1,0 +1,50 @@
+---
+import type { GetStaticPaths } from "astro";
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+export const getStaticPaths = (async () => {
+  const newsletters = await getCollection("newsletters");
+  return newsletters.map((newsletter) => ({
+    params: { slug: newsletter.id },
+    props: { newsletter },
+  }));
+}) satisfies GetStaticPaths;
+
+const { newsletter } = Astro.props;
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
+---
+
+<BaseLayout
+  title={`${newsletter.data.month} ${newsletter.data.year} Newsletter`}
+  description={`View the ${newsletter.data.month} ${newsletter.data.year} newsletter from TQCC`}
+>
+  <section class="py-12">
+    <div class="max-w-5xl mx-auto px-4">
+      <a
+        href={`${baseUrl}/newsletters`}
+        class="inline-flex items-center text-sm text-tqcc-gray hover:text-tqcc-pink transition-colors mb-8"
+      >
+        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+        </svg>
+        Back to Newsletters
+      </a>
+
+      <!-- Newsletter Image Display -->
+      <div class="bg-white shadow-2xl rounded-lg overflow-hidden">
+        <div class="bg-tqcc-yellow text-tqcc-black py-4 px-6 text-center">
+          <h1 class="text-2xl font-bold tracking-wide">{newsletter.data.month.toUpperCase()} {newsletter.data.year} NEWSLETTER</h1>
+        </div>
+
+        <div class="p-4 md:p-8">
+          <img
+            src={newsletter.data.heroImage.startsWith('/') ? `${baseUrl}${newsletter.data.heroImage}` : newsletter.data.heroImage}
+            alt={`${newsletter.data.month} ${newsletter.data.year} Newsletter`}
+            class="w-full h-auto"
+          />
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

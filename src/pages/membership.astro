@@ -1,0 +1,161 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
+---
+
+<BaseLayout
+  title="Membership"
+  description="Join Titanic Quarter Cycling Club — rides for all abilities, a welcoming community, and the best cycling in Belfast."
+>
+  <section class="py-12">
+    <div class="max-w-4xl mx-auto px-4">
+      <h1 class="text-4xl font-bold mb-8">Join TQCC</h1>
+
+      <div class="prose prose-lg max-w-none">
+        <p class="text-xl text-tqcc-gray leading-relaxed">
+          Whether you're a complete beginner or a seasoned racer, TQCC has a
+          place for you. We're a friendly, inclusive club with rides for all
+          abilities.
+        </p>
+
+        <h2>How to Join</h2>
+        <p>
+          The easiest way to join TQCC is through <strong>Cycling Ireland</strong>.
+          You can sign up online and select Titanic Quarter CC as your club:
+        </p>
+
+        <div class="not-prose my-8">
+          <a
+            href="https://www.cyclingireland.ie/get-involved/membership/"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-block bg-tqcc-yellow text-tqcc-black font-bold px-8 py-3 rounded-lg hover:bg-tqcc-yellow-dark transition-colors"
+          >
+            Join via Cycling Ireland &rarr;
+          </a>
+        </div>
+
+        <p>
+          <strong>British Cycling members</strong> are also welcome. If you have
+          a British Cycling membership, please <a href={`${baseUrl}/contact`} class="text-tqcc-pink hover:underline">contact the club</a>
+          for details on how to register with us.
+        </p>
+
+        <div class="not-prose bg-tqcc-yellow/10 border-l-4 border-tqcc-yellow p-6 rounded-r-lg my-8">
+          <h3 class="font-bold text-lg mb-2">New to cycling?</h3>
+          <p class="text-tqcc-gray">
+            We recommend starting with our <strong>Sunday Scone Run</strong> or
+            <strong>Wednesday Evening Laps</strong> — both are relaxed,
+            conversational-pace rides perfect for new riders.
+            Check our <a href={`${baseUrl}/rides-events`} class="text-tqcc-pink hover:underline">Rides & Events</a>
+            page for details.
+          </p>
+        </div>
+
+        <h2>Try Before You Join</h2>
+        <p>
+          Not sure if club cycling is for you? No problem! We welcome potential
+          members to join us for <strong>two taster rides</strong> before
+          committing to membership.
+        </p>
+        <p>
+          Since all club members need third party liability insurance (included
+          with your Cycling Ireland licence), you'll just need to sign a simple
+          form before your taster ride. This ensures you're covered by insurance
+          during the group ride, so you can relax and enjoy getting to know the club.
+        </p>
+        <p>
+          Please <a href={`${baseUrl}/contact`} class="text-tqcc-pink hover:underline">contact the club</a> before attending your first taster ride.
+          This allows us to arrange the paperwork in advance and ensure you join a ride that matches your experience level.
+          We'll guide you through the process and help you choose the best ride to start with!
+        </p>
+
+        <h2>Membership Benefits</h2>
+        <ul>
+          <li>Access to all club rides and events</li>
+          <li>Club kit at discounted rates</li>
+          <li>Cycling Ireland affiliation and insurance</li>
+          <li>Social events and end-of-season gatherings</li>
+          <li>A supportive community of fellow cyclists</li>
+        </ul>
+
+        <h2>Ride Etiquette</h2>
+        <p>
+          Safety and respect are at the heart of everything we do. All riders are
+          expected to follow basic group riding etiquette:
+        </p>
+        <ul>
+          <li>Arrive on time with your bike in good working order</li>
+          <li>Wear a helmet at all times</li>
+          <li>Carry spare tubes, pump, and basic tools</li>
+          <li>Ride two abreast where safe, single file on busy roads</li>
+          <li>Call out hazards and signal turns for the group</li>
+          <li>Respect the pace of the group you've joined</li>
+          <li>Be friendly and welcoming to new riders</li>
+        </ul>
+
+        <h2>About Our Ride Leaders</h2>
+        <p>
+          Every TQCC group ride is led by a volunteer <strong>Ride Leader (RL)</strong> — an experienced club member who plans and guides the ride. Ride Leaders are the backbone of our club, ensuring every ride is safe, enjoyable, and appropriate for the group's ability level.
+        </p>
+
+        <h3>What Ride Leaders Do</h3>
+        <p>Before each ride, your Ride Leader will have:</p>
+        <ul>
+          <li>Planned a route suitable for the group's experience level</li>
+          <li>Considered road conditions, traffic patterns, and the group's target pace</li>
+          <li>Prepared to brief riders on the route, expected pace, and group riding signals</li>
+        </ul>
+
+        <p>
+          At the start of the ride, the RL will explain the route, discuss the planned pace, and review the calls and hand signals we use to communicate on the road. They're there to help new riders feel confident and to ensure everyone knows what to expect.
+        </p>
+
+        <div class="not-prose bg-tqcc-yellow/10 border-l-4 border-tqcc-yellow p-6 rounded-r-lg my-8">
+          <h3 class="font-bold text-lg mb-2">Understanding the Risks</h3>
+          <p class="text-tqcc-gray text-base mb-3">
+            While cycling is an outstanding recreational sport, it also involves inherent risks. These include but are not limited to: traveling on or crossing busy roads, winding roads, steep descents, potholes, accidents, unexpected moves by other riders, physical exertion, fatigue, mechanical issues, and interactions with motorists.
+          </p>
+          <p class="text-tqcc-gray text-base">
+            By participating in a TQCC group ride, all riders acknowledge these risks and agree to assume responsibility for their own safety. TQCC officers, committee members, and Ride Leaders are volunteers who organize rides in good faith, and are not liable for any injury or damage resulting from participation in club activities.
+          </p>
+        </div>
+
+        <h3>Your Safety is Your Responsibility</h3>
+        <p>
+          Ride Leaders provide guidance and structure, but every rider is ultimately responsible for their own safety. Ride within your abilities, maintain your bike in good working order, and speak up if you're uncomfortable with any aspect of the ride. Our Ride Leaders are here to help, but safe group riding requires the attention and cooperation of everyone on the ride.
+        </p>
+
+        <h2>What to Bring</h2>
+        <p>
+          For your first ride, you'll need:
+        </p>
+        <ul>
+          <li>A road bike in good working condition</li>
+          <li>Helmet (mandatory)</li>
+          <li>Appropriate clothing for the weather</li>
+          <li>Water bottles</li>
+          <li>Spare tube and basic repair kit</li>
+          <li>Money for a coffee stop!</li>
+        </ul>
+      </div>
+
+      <!-- CTA -->
+      <div class="bg-tqcc-black text-white p-8 rounded-lg mt-12 text-center">
+        <h2 class="text-2xl font-bold text-tqcc-yellow mb-4">
+          Ready to get started?
+        </h2>
+        <p class="text-white/80 mb-6 max-w-xl mx-auto">
+          Get in touch with us to find out more about membership, or just turn
+          up to one of our rides — we'd love to see you there.
+        </p>
+        <a
+          href={`${baseUrl}/contact`}
+          class="inline-block bg-tqcc-yellow text-tqcc-black font-bold px-8 py-3 rounded-lg hover:bg-tqcc-yellow-dark transition-colors"
+        >
+          Contact Us
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

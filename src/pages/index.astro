@@ -1,0 +1,96 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import Hero from "../components/home/Hero.astro";
+import UpcomingEvents from "../components/home/UpcomingEvents.astro";
+import LatestNews from "../components/home/LatestNews.astro";
+import RideSchedule from "../components/rides/RideSchedule.astro";
+import StravaWidget from "../components/social/StravaWidget.astro";
+import StravaClubStats from "../components/social/StravaClubStats.astro";
+import StravaLeaderboard from "../components/social/StravaLeaderboard.astro";
+import InstagramFeed from "../components/social/InstagramFeed.astro";
+import LatestNewsletter from "../components/home/LatestNewsletter.astro";
+import JsonLd from "../components/seo/JsonLd.astro";
+import { getClubActivities } from "../lib/strava";
+import { getCollection } from "astro:content";
+
+const stravaActivities = await getClubActivities(30);
+
+const recentPosts = (await getCollection("posts", ({ data }) => !data.draft))
+  .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+  .slice(0, 3);
+
+const upcomingEvents = (await getCollection("events"))
+  .filter((e) => e.data.date >= new Date())
+  .sort((a, b) => a.data.date.valueOf() - b.data.date.valueOf())
+  .slice(0, 3);
+
+const rides = (await getCollection("rides"))
+  .filter((r) => r.data.active)
+  .sort((a, b) => a.data.order - b.data.order);
+
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
+---
+
+<BaseLayout title="Home">
+  <JsonLd type="Organization" />
+
+  <!-- 1. Banner -->
+  <Hero />
+
+  <!-- 2. Weekly Rides -->
+  <section class="py-16 bg-tqcc-gray-light">
+    <div class="max-w-7xl mx-auto px-4">
+      <div class="flex items-center justify-between mb-8">
+        <h2 class="text-3xl font-bold">Weekly Rides</h2>
+        <a
+          href={`${baseUrl}/rides-events`}
+          class="text-tqcc-pink hover:text-tqcc-pink-light font-medium transition-colors"
+        >
+          Full schedule &rarr;
+        </a>
+      </div>
+      <RideSchedule rides={rides} />
+    </div>
+  </section>
+
+  <!-- 3. Newsletter -->
+  <LatestNewsletter />
+
+  <!-- 4. Upcoming Events -->
+  <UpcomingEvents events={upcomingEvents} />
+
+  <!-- 5. Latest News -->
+  <LatestNews posts={recentPosts} />
+
+  <!-- 6. Latest on Instagram -->
+  <InstagramFeed limit={8} />
+
+  <!-- 7. Strava -->
+  <section class="py-16 bg-tqcc-gray-light">
+    <div class="max-w-7xl mx-auto px-4">
+      <h2 class="text-3xl font-bold mb-8">Connect With Us</h2>
+      <StravaClubStats activities={stravaActivities} />
+      <div class="grid md:grid-cols-2 gap-6 mt-6">
+        <StravaWidget activities={stravaActivities} />
+        <StravaLeaderboard activities={stravaActivities} />
+      </div>
+    </div>
+  </section>
+
+  <!-- Join CTA -->
+  <section class="bg-tqcc-black py-16">
+    <div class="max-w-4xl mx-auto text-center px-4">
+      <h2 class="text-3xl font-bold text-tqcc-yellow mb-4">Ready to Ride?</h2>
+      <p class="text-white text-lg mb-8">
+        Whether you're a seasoned racer or just getting started, there's a place
+        for you at TQCC.
+      </p>
+      <a
+        href={`${baseUrl}/membership`}
+        class="inline-block bg-tqcc-yellow text-tqcc-black font-bold px-8 py-3 rounded-lg hover:bg-tqcc-yellow-dark transition-colors"
+      >
+        Join the Club
+      </a>
+    </div>
+  </section>
+</BaseLayout>

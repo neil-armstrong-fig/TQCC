@@ -1,0 +1,55 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  post: CollectionEntry<"posts">;
+}
+
+const { post } = Astro.props;
+const formattedDate = post.data.date.toLocaleDateString("en-GB", {
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+});
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
+---
+
+<article class="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow">
+  {
+    post.data.image && (
+      <img
+        src={post.data.image.startsWith('/') ? `${baseUrl}${post.data.image}` : post.data.image}
+        alt={post.data.title}
+        class="w-full h-48 object-cover"
+        loading="lazy"
+      />
+    )
+  }
+  <div class="p-6">
+    <div class="flex items-center gap-2 mb-3">
+      <span
+        class="bg-tqcc-yellow/20 text-tqcc-black text-xs font-semibold px-2.5 py-0.5 rounded-full"
+      >
+        {post.data.category}
+      </span>
+      <time class="text-sm text-tqcc-gray" datetime={post.data.date.toISOString()}>
+        {formattedDate}
+      </time>
+    </div>
+    <h3 class="text-lg font-bold mb-2">
+      <a
+        href={`${baseUrl}/blog/${post.id}`}
+        class="hover:text-tqcc-pink transition-colors"
+      >
+        {post.data.title}
+      </a>
+    </h3>
+    <p class="text-tqcc-gray text-sm line-clamp-3">{post.data.excerpt}</p>
+    <a
+      href={`${baseUrl}/blog/${post.id}`}
+      class="inline-block mt-4 text-sm font-medium text-tqcc-pink hover:text-tqcc-pink-light transition-colors"
+    >
+      Read more &rarr;
+    </a>
+  </div>
+</article>

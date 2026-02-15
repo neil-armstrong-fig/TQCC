@@ -1,0 +1,68 @@
+---
+import type { StravaActivity } from "../../lib/strava";
+import { formatDistance, formatDuration } from "../../lib/strava";
+
+interface Props {
+  activities: StravaActivity[];
+}
+
+const { activities } = Astro.props;
+---
+
+<div class="bg-white rounded-lg shadow-md p-6">
+  <div class="flex items-center gap-3 mb-6">
+    <svg class="w-6 h-6 text-orange-500" fill="currentColor" viewBox="0 0 24 24">
+      <path d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066m-7.008-5.599l2.836 5.598h4.172L10.463 0l-7 13.828h4.169" />
+    </svg>
+    <h3 class="text-xl font-bold">Recent Club Activities</h3>
+  </div>
+
+  {
+    activities.length > 0 ? (
+      <ul class="space-y-4">
+        {activities.slice(0, 5).map((activity) => (
+          <li class="flex items-center justify-between py-3 border-b border-gray-100 last:border-0">
+            <div>
+              <a
+                href={`https://www.strava.com/athletes/${activity.athlete.id}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="font-medium hover:text-orange-500 transition-colors"
+              >
+                {activity.athlete.firstname}{" "}
+                {activity.athlete.lastname.charAt(0)}.
+              </a>
+              <a
+                href={`https://www.strava.com/activities/${activity.id}`}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="block text-sm text-tqcc-gray hover:text-orange-500 transition-colors"
+              >
+                {activity.name}
+              </a>
+            </div>
+            <div class="text-right text-sm">
+              <p class="font-medium">{formatDistance(activity.distance)}</p>
+              <p class="text-tqcc-gray">
+                {formatDuration(activity.moving_time)}
+              </p>
+            </div>
+          </li>
+        ))}
+      </ul>
+    ) : (
+      <p class="text-tqcc-gray text-sm">
+        Connect with us on Strava to see club activities.
+      </p>
+    )
+  }
+
+  <a
+    href="https://www.strava.com/clubs/110633"
+    target="_blank"
+    rel="noopener noreferrer"
+    class="block text-center mt-4 text-orange-500 hover:text-orange-600 font-medium transition-colors"
+  >
+    View Club on Strava &rarr;
+  </a>
+</div>

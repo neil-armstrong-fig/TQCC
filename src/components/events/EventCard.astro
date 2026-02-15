@@ -1,0 +1,81 @@
+---
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  event: CollectionEntry<"events">;
+  isPast?: boolean;
+}
+
+const { event, isPast = false } = Astro.props;
+const formattedDate = event.data.date.toLocaleDateString("en-GB", {
+  weekday: "short",
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+});
+const formattedTime = event.data.date.toLocaleTimeString("en-GB", {
+  hour: "2-digit",
+  minute: "2-digit",
+});
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
+---
+
+<article
+  class:list={[
+    "bg-white rounded-lg shadow-md overflow-hidden",
+    isPast ? "opacity-60" : "hover:shadow-lg transition-shadow",
+  ]}
+>
+  <div class="p-6">
+    <div class="flex items-center gap-2 mb-3">
+      <span class="bg-tqcc-pink/10 text-tqcc-pink text-xs font-semibold px-2.5 py-0.5 rounded-full">
+        {event.data.rideType}
+      </span>
+      {isPast && (
+        <span class="text-xs text-tqcc-gray font-medium">Past Event</span>
+      )}
+    </div>
+
+    <h3 class="text-lg font-bold mb-2">
+      <a
+        href={`${baseUrl}/events/${event.id}`}
+        class="hover:text-tqcc-pink transition-colors"
+      >
+        {event.data.title}
+      </a>
+    </h3>
+
+    <div class="space-y-1 text-sm text-tqcc-gray mb-3">
+      <p class="flex items-center gap-2">
+        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        </svg>
+        {formattedDate} at {formattedTime}
+      </p>
+      <p class="flex items-center gap-2">
+        <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+        </svg>
+        {event.data.location}
+      </p>
+      {event.data.distance && (
+        <p class="flex items-center gap-2">
+          <svg class="w-4 h-4 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+          </svg>
+          {event.data.distance}
+        </p>
+      )}
+    </div>
+
+    <p class="text-sm text-tqcc-gray line-clamp-2">{event.data.description}</p>
+
+    <a
+      href={`${baseUrl}/events/${event.id}`}
+      class="inline-block mt-4 text-sm font-medium text-tqcc-pink hover:text-tqcc-pink-light transition-colors"
+    >
+      View details &rarr;
+    </a>
+  </div>
+</article>

@@ -1,0 +1,28 @@
+---
+import type { CollectionEntry } from "astro:content";
+import BlogCard from "../blog/BlogCard.astro";
+
+interface Props {
+  posts: CollectionEntry<"posts">[];
+}
+
+const { posts } = Astro.props;
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
+---
+
+<section class="py-16">
+  <div class="max-w-7xl mx-auto px-4">
+    <div class="flex items-center justify-between mb-8">
+      <h2 class="text-3xl font-bold">Latest News</h2>
+      <a
+        href={`${baseUrl}/blog`}
+        class="text-tqcc-pink hover:text-tqcc-pink-light font-medium transition-colors"
+      >
+        View all &rarr;
+      </a>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+      {posts.map((post) => <BlogCard post={post} />)}
+    </div>
+  </div>
+</section>

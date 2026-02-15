@@ -1,0 +1,57 @@
+---
+import type { GetStaticPaths } from "astro";
+import { getCollection } from "astro:content";
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import BlogCard from "../../components/blog/BlogCard.astro";
+
+export const getStaticPaths = (async ({ paginate }) => {
+  const allPosts = await getCollection("posts", ({ data }) => !data.draft);
+  const sorted = allPosts.sort(
+    (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+  );
+  return paginate(sorted, { pageSize: 9 });
+}) satisfies GetStaticPaths;
+
+const { page } = Astro.props;
+---
+
+<BaseLayout
+  title={page.currentPage === 1 ? "News" : `News — Page ${page.currentPage}`}
+  description="Latest news, race reports, and updates from Titanic Quarter Cycling Club"
+>
+  <section class="py-12">
+    <div class="max-w-7xl mx-auto px-4">
+      <h1 class="text-4xl font-bold mb-2">Club News</h1>
+      <p class="text-tqcc-gray mb-8">
+        Race reports, ride stories, and the latest from TQCC
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {page.data.map((post) => <BlogCard post={post} />)}
+      </div>
+
+      {
+        (page.url.prev || page.url.next) && (
+          <nav class="mt-12 flex justify-center gap-4" aria-label="Blog pagination">
+            {page.url.prev && (
+              <a
+                href={page.url.prev}
+                class="px-6 py-2 bg-tqcc-black text-white rounded-lg hover:bg-tqcc-black-light transition-colors"
+              >
+                &larr; Newer Posts
+              </a>
+            )}
+            {page.url.next && (
+              <a
+                href={page.url.next}
+                class="px-6 py-2 bg-tqcc-black text-white rounded-lg hover:bg-tqcc-black-light transition-colors"
+              >
+                Older Posts &rarr;
+              </a>
+            )}
+          </nav>
+        )
+      }
+    </div>
+  </section>
+</BaseLayout>

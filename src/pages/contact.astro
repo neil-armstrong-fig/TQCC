@@ -1,0 +1,74 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { socialLinks } from "../data/navigation";
+---
+
+<BaseLayout
+  title="Contact"
+  description="Get in touch with Titanic Quarter Cycling Club. We'd love to hear from you."
+>
+  <section class="py-12">
+    <div class="max-w-4xl mx-auto px-4">
+      <h1 class="text-4xl font-bold mb-4">Contact Us</h1>
+      <p class="text-tqcc-gray text-lg mb-10">
+        Have a question about the club, membership, or rides? Get in touch
+        using the details below.
+      </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-10 mb-10">
+        <div>
+          <h2 class="text-2xl font-bold mb-4">Find Us</h2>
+          <p class="text-tqcc-gray mb-2">
+            <strong>Meeting Point:</strong> SPAR Titanic Quarter<br />
+            Titanic Quarter, Belfast, Northern Ireland
+          </p>
+          <p class="text-tqcc-gray">
+            All rides depart from the SPAR in Belfast Titanic Quarter.
+          </p>
+        </div>
+
+        <div class="space-y-8">
+          <div>
+            <h2 class="text-2xl font-bold mb-4">Email</h2>
+            <a
+              href="mailto:info@titanicquartercc.com"
+              class="text-tqcc-pink hover:text-tqcc-pink-light transition-colors text-lg"
+            >
+              info@titanicquartercc.com
+            </a>
+          </div>
+
+          <div>
+            <h2 class="text-2xl font-bold mb-4">Social Media</h2>
+            <div class="space-y-3">
+              {
+                socialLinks.map((link) => (
+                  <a
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="flex items-center gap-3 text-tqcc-gray hover:text-tqcc-pink transition-colors"
+                  >
+                    <span class="font-medium">{link.platform}</span>
+                  </a>
+                ))
+              }
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Map -->
+      <div class="rounded-lg overflow-hidden h-80 bg-tqcc-gray-light">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2311.89!2d-5.9124913!3d54.6044995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x486109aebda60a5f%3A0xa865162525e04631!2sSPAR%20Titanic!5e0!3m2!1sen!2suk!4v1700000000000!5m2!1sen!2suk"
+          width="100%"
+          height="100%"
+          style="border:0"
+          allowfullscreen
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

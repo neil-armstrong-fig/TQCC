@@ -1,0 +1,79 @@
+---
+import Navigation from "./Navigation.astro";
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
+---
+
+<header class="bg-tqcc-black sticky top-0 z-50">
+  <!-- Pink accent stripe (Giro d'Italia homage) -->
+  <div class="h-1 bg-tqcc-pink"></div>
+
+  <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
+    <a href={baseUrl} class="flex items-center gap-3 group">
+      <img
+        src={`${baseUrl}/images/badge.png`}
+        alt="TQCC Badge"
+        width="40"
+        height="40"
+        class="rounded-full"
+      />
+      <span
+        class="text-tqcc-yellow font-bold text-lg hidden sm:inline group-hover:text-tqcc-yellow-light transition-colors"
+      >
+        TQCC
+      </span>
+    </a>
+
+    <Navigation />
+
+    <!-- Mobile menu button -->
+    <button
+      id="mobile-menu-btn"
+      class="lg:hidden text-white p-2"
+      aria-label="Toggle menu"
+      aria-expanded="false"
+    >
+      <svg
+        class="w-6 h-6"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M4 6h16M4 12h16M4 18h16"></path>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Mobile menu -->
+  <nav
+    id="mobile-menu"
+    class="hidden lg:hidden bg-tqcc-black-light border-t border-white/10"
+  >
+    <div class="px-4 py-4 space-y-2">
+      <a href={baseUrl} class="block text-white py-2 hover:text-tqcc-yellow transition-colors">Home</a>
+      <a href={`${baseUrl}/about`} class="block text-white py-2 hover:text-tqcc-yellow transition-colors">About</a>
+      <a href={`${baseUrl}/rides-events`} class="block text-white py-2 hover:text-tqcc-yellow transition-colors">Rides & Events</a>
+      <a href={`${baseUrl}/blog`} class="block text-white py-2 hover:text-tqcc-yellow transition-colors">News</a>
+      <a href={`${baseUrl}/membership`} class="block text-white py-2 hover:text-tqcc-yellow transition-colors">Membership</a>
+      <a href={`${baseUrl}/gallery`} class="block text-white py-2 hover:text-tqcc-yellow transition-colors">Gallery</a>
+      <a href={`${baseUrl}/contact`} class="block text-white py-2 hover:text-tqcc-yellow transition-colors">Contact</a>
+    </div>
+  </nav>
+</header>
+
+<script>
+  document.addEventListener("astro:page-load", () => {
+    const btn = document.getElementById("mobile-menu-btn");
+    const menu = document.getElementById("mobile-menu");
+    if (btn && menu) {
+      btn.addEventListener("click", () => {
+        const expanded = btn.getAttribute("aria-expanded") === "true";
+        btn.setAttribute("aria-expanded", String(!expanded));
+        menu.classList.toggle("hidden");
+      });
+    }
+  });
+</script>

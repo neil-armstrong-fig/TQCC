@@ -1,0 +1,53 @@
+---
+import type { StravaActivity } from "../../lib/strava";
+import { aggregateClubStats, metersToMiles, formatDuration } from "../../lib/strava";
+
+interface Props {
+  activities: StravaActivity[];
+}
+
+const { activities } = Astro.props;
+const stats = aggregateClubStats(activities);
+const hasData = stats.totalActivities > 0;
+---
+
+{
+  hasData && (
+    <div class="bg-white rounded-lg shadow-md p-6">
+      <div class="flex items-center gap-3 mb-6">
+        <svg
+          class="w-6 h-6 text-orange-500"
+          fill="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066m-7.008-5.599l2.836 5.598h4.172L10.463 0l-7 13.828h4.169" />
+        </svg>
+        <h3 class="text-xl font-bold">Club This Week</h3>
+      </div>
+      <div class="grid grid-cols-2 gap-4 sm:grid-cols-4">
+        <div class="text-center">
+          <p class="text-2xl font-bold text-tqcc-black">
+            {stats.totalActivities}
+          </p>
+          <p class="text-sm text-tqcc-gray">Activities</p>
+        </div>
+        <div class="text-center">
+          <p class="text-2xl font-bold text-tqcc-black">
+            {Math.round(metersToMiles(stats.totalDistance))}
+          </p>
+          <p class="text-sm text-tqcc-gray">Miles</p>
+        </div>
+        <div class="text-center">
+          <p class="text-2xl font-bold text-tqcc-black">
+            {formatDuration(stats.totalDuration)}
+          </p>
+          <p class="text-sm text-tqcc-gray">Total Time</p>
+        </div>
+        <div class="text-center">
+          <p class="text-2xl font-bold text-tqcc-black">{stats.rideCount}</p>
+          <p class="text-sm text-tqcc-gray">Rides</p>
+        </div>
+      </div>
+    </div>
+  )
+}

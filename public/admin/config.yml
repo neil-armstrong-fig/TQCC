@@ -1,0 +1,175 @@
+backend:
+  name: github
+  repo: neil-armstrong-fig/TQCC
+  branch: main
+
+publish_mode: editorial_workflow
+
+media_folder: "public/images/uploads"
+public_folder: "/images/uploads"
+
+site_url: https://neil-armstrong-fig.github.io/TQCC
+display_url: https://neil-armstrong-fig.github.io/TQCC
+
+slug:
+  encoding: "ascii"
+  clean_accents: true
+
+collections:
+  - name: "posts"
+    label: "Blog Posts"
+    label_singular: "Blog Post"
+    folder: "src/content/posts"
+    create: true
+    slug: "{{slug}}"
+    sortable_fields: ["date", "title"]
+    summary: "{{title}} — {{date}}"
+    view_filters:
+      - label: "Club News"
+        field: category
+        pattern: "Club News"
+      - label: "Race Reports"
+        field: category
+        pattern: "Race Reports"
+      - label: "Drafts"
+        field: draft
+        pattern: true
+    fields:
+      - { label: "Title", name: "title", widget: "string", required: true }
+      - { label: "Date", name: "date", widget: "datetime", required: true }
+      - { label: "Author", name: "author", widget: "string", default: "TQCC" }
+      - label: "Category"
+        name: "category"
+        widget: "select"
+        options:
+          - "Club News"
+          - "Race Reports"
+          - "Ride Reports"
+          - "Events"
+          - "Youth"
+          - "Boccia"
+          - "General"
+        default: "Club News"
+      - { label: "Featured Image", name: "image", widget: "image", required: false }
+      - label: "Excerpt"
+        name: "excerpt"
+        widget: "text"
+        required: true
+        hint: "A short summary shown on the blog listing page (1-2 sentences)"
+      - { label: "Draft", name: "draft", widget: "boolean", default: false }
+      - { label: "Tags", name: "tags", widget: "list", default: [] }
+      - { label: "Body", name: "body", widget: "markdown" }
+
+  - name: "events"
+    label: "Events"
+    label_singular: "Event"
+    folder: "src/content/events"
+    create: true
+    slug: "{{slug}}"
+    sortable_fields: ["date", "title"]
+    summary: "{{title}} — {{date}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string", required: true }
+      - { label: "Date", name: "date", widget: "datetime", required: true }
+      - { label: "End Date", name: "endDate", widget: "datetime", required: false }
+      - { label: "Location", name: "location", widget: "string", required: true }
+      - { label: "Description", name: "description", widget: "text", required: true }
+      - label: "Ride Type"
+        name: "rideType"
+        widget: "select"
+        options:
+          - "Club Ride"
+          - "Sportive"
+          - "Social"
+          - "Youth Ride"
+          - "Training"
+          - "Race"
+          - "Other"
+        default: "Club Ride"
+      - { label: "Meeting Point", name: "meetingPoint", widget: "string", required: false }
+      - { label: "Distance", name: "distance", widget: "string", required: false }
+      - { label: "Pace", name: "pace", widget: "string", required: false }
+      - { label: "External Link", name: "link", widget: "string", required: false }
+      - { label: "Image", name: "image", widget: "image", required: false }
+      - { label: "Body", name: "body", widget: "markdown" }
+
+  - name: "rides"
+    label: "Regular Rides"
+    label_singular: "Ride"
+    folder: "src/content/rides"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "Title", name: "title", widget: "string", required: true }
+      - label: "Day"
+        name: "day"
+        widget: "select"
+        options:
+          - "Monday"
+          - "Tuesday"
+          - "Wednesday"
+          - "Thursday"
+          - "Friday"
+          - "Saturday"
+          - "Sunday"
+      - { label: "Time", name: "time", widget: "string", required: true, hint: "e.g. 09:00" }
+      - { label: "Meeting Point", name: "meetingPoint", widget: "string", required: true }
+      - { label: "Pace", name: "pace", widget: "string", required: true, hint: "e.g. 15-17 mph" }
+      - { label: "Distance", name: "distance", widget: "string", required: true, hint: "e.g. 50-60 miles" }
+      - { label: "Description", name: "description", widget: "text", required: true }
+      - label: "Difficulty"
+        name: "difficulty"
+        widget: "select"
+        options:
+          - "Easy"
+          - "Moderate"
+          - "Intermediate"
+          - "Advanced"
+      - { label: "Active", name: "active", widget: "boolean", default: true }
+      - { label: "Sort Order", name: "order", widget: "number", default: 0, hint: "Lower numbers appear first" }
+      - { label: "Body", name: "body", widget: "markdown" }
+
+  - name: "newsletters"
+    label: "Newsletters"
+    label_singular: "Newsletter"
+    folder: "src/content/newsletters"
+    create: true
+    slug: "{{year}}-{{month}}"
+    sortable_fields: ["date", "year"]
+    summary: "{{month}} {{year}}"
+    fields:
+      - label: "Month"
+        name: "month"
+        widget: "select"
+        options:
+          - "January"
+          - "February"
+          - "March"
+          - "April"
+          - "May"
+          - "June"
+          - "July"
+          - "August"
+          - "September"
+          - "October"
+          - "November"
+          - "December"
+        required: true
+      - { label: "Year", name: "year", widget: "number", required: true }
+      - { label: "Date", name: "date", widget: "datetime", required: true, hint: "Used for sorting" }
+      - { label: "Hero Image", name: "heroImage", widget: "image", required: true, hint: "Main newsletter image" }
+      - label: "Introduction"
+        name: "introduction"
+        widget: "text"
+        required: true
+        hint: "Opening paragraph for the newsletter"
+      - label: "Events"
+        name: "events"
+        widget: "list"
+        required: true
+        summary: "{{fields.month}} - {{fields.description}}"
+        fields:
+          - { label: "Month", name: "month", widget: "string", required: true }
+          - { label: "Description", name: "description", widget: "string", required: true }
+          - { label: "Date", name: "date", widget: "string", required: true }
+      - { label: "Body", name: "body", widget: "markdown", required: false, hint: "Optional additional content" }

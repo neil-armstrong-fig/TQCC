@@ -1,0 +1,116 @@
+---
+import type { GetStaticPaths } from "astro";
+import { getCollection, render } from "astro:content";
+import BlogPostLayout from "../../layouts/BlogPostLayout.astro";
+import JsonLd from "../../components/seo/JsonLd.astro";
+
+export const getStaticPaths = (async () => {
+  const posts = await getCollection("posts", ({ data }) => !data.draft);
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: { post },
+  }));
+}) satisfies GetStaticPaths;
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
+
+const formattedDate = post.data.date.toLocaleDateString("en-GB", {
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+});
+---
+
+<BlogPostLayout
+  title={post.data.title}
+  description={post.data.excerpt}
+  image={post.data.image}
+  publishDate={post.data.date}
+>
+  <JsonLd
+    type="BlogPosting"
+    title={post.data.title}
+    description={post.data.excerpt}
+    datePublished={post.data.date}
+    author={post.data.author}
+    image={post.data.image}
+  />
+
+  <article>
+    <!-- Back link -->
+    <a
+      href={`${baseUrl}/blog`}
+      class="inline-flex items-center text-sm text-tqcc-gray hover:text-tqcc-pink transition-colors mb-8"
+    >
+      <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+      </svg>
+      Back to News
+    </a>
+
+    <header class="mb-8">
+      {
+        post.data.image && (
+          <img
+            src={post.data.image.startsWith('/') ? `${baseUrl}${post.data.image}` : post.data.image}
+            alt={post.data.title}
+            class="w-full h-64 md:h-96 object-cover rounded-lg mb-6"
+          />
+        )
+      }
+      <div class="flex flex-wrap items-center gap-3 mb-4">
+        <span class="bg-tqcc-yellow/20 text-tqcc-black text-sm font-semibold px-3 py-1 rounded-full">
+          {post.data.category}
+        </span>
+        {
+          post.data.tags.map((tag) => (
+            <span class="text-xs text-tqcc-gray bg-tqcc-gray-light px-2 py-1 rounded-full">
+              {tag}
+            </span>
+          ))
+        }
+      </div>
+      <h1 class="text-3xl md:text-4xl font-bold mb-4">{post.data.title}</h1>
+      <div class="flex items-center gap-4 text-tqcc-gray">
+        <time datetime={post.data.date.toISOString()}>{formattedDate}</time>
+        <span>&middot;</span>
+        <span>by {post.data.author}</span>
+      </div>
+    </header>
+
+    <div class="prose prose-lg max-w-none">
+      <Content />
+    </div>
+
+    <!-- Share buttons -->
+    <div class="flex items-center gap-4 mt-12 pt-8 border-t border-gray-200">
+      <span class="font-medium text-tqcc-gray">Share:</span>
+      <a
+        href={`https://www.facebook.com/sharer/sharer.php?u=${Astro.url}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-tqcc-gray hover:text-tqcc-black transition-colors"
+      >
+        Facebook
+      </a>
+      <a
+        href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(post.data.title)}&url=${Astro.url}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-tqcc-gray hover:text-tqcc-black transition-colors"
+      >
+        X
+      </a>
+      <a
+        href={`https://wa.me/?text=${encodeURIComponent(post.data.title + " " + Astro.url)}`}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-tqcc-gray hover:text-tqcc-black transition-colors"
+      >
+        WhatsApp
+      </a>
+    </div>
+  </article>
+</BlogPostLayout>
