@@ -152,7 +152,7 @@ collections:
     folder: "src/content/newsletters"
     create: true
     slug: "{{year}}-{{month}}"
-    sortable_fields: ["date", "year"]
+    sortable_fields: ["year", "month"]
     summary: "{{month}} {{year}}"
     fields:
       - label: "Month"

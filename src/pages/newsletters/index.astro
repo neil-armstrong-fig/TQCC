@@ -2,8 +2,12 @@
 import { getCollection } from "astro:content";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 
+const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 const allNewsletters = await getCollection("newsletters");
-const newsletters = allNewsletters.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf());
+const newsletters = allNewsletters.sort((a, b) => {
+  if (b.data.year !== a.data.year) return b.data.year - a.data.year;
+  return MONTHS.indexOf(b.data.month) - MONTHS.indexOf(a.data.month);
+});
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
 ---
 
