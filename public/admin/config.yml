@@ -18,50 +18,6 @@ slug:
   clean_accents: true
 
 collections:
-  - name: "posts"
-    label: "Blog Posts"
-    label_singular: "Blog Post"
-    folder: "src/content/posts"
-    create: true
-    slug: "{{slug}}"
-    sortable_fields: ["date", "title"]
-    summary: "{{title}} — {{date}}"
-    view_filters:
-      - label: "Club News"
-        field: category
-        pattern: "Club News"
-      - label: "Race Reports"
-        field: category
-        pattern: "Race Reports"
-      - label: "Drafts"
-        field: draft
-        pattern: true
-    fields:
-      - { label: "Title", name: "title", widget: "string", required: true }
-      - { label: "Date", name: "date", widget: "datetime", required: true }
-      - { label: "Author", name: "author", widget: "string", default: "TQCC" }
-      - label: "Category"
-        name: "category"
-        widget: "select"
-        options:
-          - "Club News"
-          - "Race Reports"
-          - "Ride Reports"
-          - "Events"
-          - "Youth"
-          - "Boccia"
-          - "General"
-        default: "Club News"
-      - { label: "Featured Image", name: "image", widget: "image", required: false }
-      - label: "Excerpt"
-        name: "excerpt"
-        widget: "text"
-        required: true
-        hint: "A short summary shown on the blog listing page (1-2 sentences)"
-      - { label: "Draft", name: "draft", widget: "boolean", default: false }
-      - { label: "Tags", name: "tags", widget: "list", default: [] }
-      - { label: "Body", name: "body", widget: "markdown" }
-
   - name: "events"
     label: "Events"
     label_singular: "Event"
@@ -98,6 +54,7 @@ collections:
       - { label: "Pace", name: "pace", widget: "string", required: false }
       - { label: "External Link", name: "link", widget: "string", required: false }
       - { label: "Image", name: "image", widget: "image", required: false }
+      - { label: "Custom Page URL", name: "pageUrl", widget: "string", required: false, hint: "Internal path to a dedicated page for this event (e.g. /sportive). The event listing will link here instead of the default event detail page." }
       - label: "Membership Required"
         name: "membershipRequired"
         widget: "boolean"

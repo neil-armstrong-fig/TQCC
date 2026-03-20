@@ -1,28 +1,6 @@
 import { defineCollection, z } from "astro:content";
 import { glob } from "astro/loaders";
 
-const posts = defineCollection({
-  loader: glob({ pattern: "**/*.md", base: "./src/content/posts" }),
-  schema: z.object({
-    title: z.string(),
-    date: z.coerce.date(),
-    author: z.string().default("TQCC"),
-    category: z.enum([
-      "Club News",
-      "Race Reports",
-      "Ride Reports",
-      "Events",
-      "Youth",
-      "Boccia",
-      "General",
-    ]),
-    image: z.string().optional(),
-    excerpt: z.string(),
-    draft: z.boolean().default(false),
-    tags: z.array(z.string()).default([]),
-  }),
-});
-
 const events = defineCollection({
   loader: glob({ pattern: "**/*.md", base: "./src/content/events" }),
   schema: z.object({
@@ -48,6 +26,7 @@ const events = defineCollection({
     pace: z.string().optional(),
     link: z.string().url().optional(),
     image: z.string().optional(),
+    pageUrl: z.string().optional(),
     membershipRequired: z.boolean().default(true),
     externalOrganizer: z.string().optional(),
   }),
@@ -117,4 +96,4 @@ const paceGroups = defineCollection({
   }),
 });
 
-export const collections = { posts, events, rides, newsletters, paceGroups };
+export const collections = { events, rides, newsletters, paceGroups };

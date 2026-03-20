@@ -8,7 +8,6 @@ export const mainNavigation: NavItem[] = [
   { label: "About", href: "/about" },
   { label: "Boccia", href: "/boccia" },
   { label: "Rides & Events", href: "/rides-events" },
-  { label: "News", href: "/blog" },
   { label: "Membership", href: "/membership" },
   { label: "Gallery", href: "/gallery" },
   { label: "Contact", href: "/contact" },

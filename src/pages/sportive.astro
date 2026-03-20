@@ -1,11 +1,19 @@
 ---
+import { getCollection, render } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
+
+const events = await getCollection("events");
+const event = events.find((e) => e.id === "summer-solstice-sportive-2026")!;
+const { Content } = await render(event);
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
+
+const eventDate = event.data.date.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
+const eventTime = event.data.date.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
 ---
 
 <BaseLayout
   title="Summer Solstice Sportive | TQCC"
-  description="The TQCC Summer Solstice Sportive — an evening cycle open to all abilities and non-members. ~44 miles through the hills of Belfast and beyond, finishing with hot food and a BBQ."
+  description={event.data.description}
 >
   <!-- Hero -->
   <section class="bg-tqcc-black text-white py-16">
@@ -19,30 +27,21 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
     </div>
   </section>
 
-  <!-- Sportive poster -->
-  <div class="max-w-4xl mx-auto px-4 py-8">
-    <img
-      src={`${baseUrl}/images/sportive.jpeg`}
-      alt="Summer Solstice Sportive 2026 poster"
-      class="w-full rounded-lg shadow-lg"
-    />
-  </div>
-
   <section class="py-12">
     <div class="max-w-4xl mx-auto px-4">
 
       <!-- Key details cards -->
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
         <div class="text-center p-5 bg-tqcc-gray-light rounded-lg">
-          <span class="text-2xl font-bold text-tqcc-yellow">12 Jun</span>
+          <span class="text-2xl font-bold text-tqcc-yellow">{eventDate}</span>
           <p class="mt-1 text-sm text-tqcc-gray">2026 Date</p>
         </div>
         <div class="text-center p-5 bg-tqcc-gray-light rounded-lg">
-          <span class="text-2xl font-bold text-tqcc-yellow">~44 mi</span>
+          <span class="distance-string text-2xl font-bold text-tqcc-yellow" data-distance={event.data.distance}>{event.data.distance}</span>
           <p class="mt-1 text-sm text-tqcc-gray">Distance</p>
         </div>
         <div class="text-center p-5 bg-tqcc-gray-light rounded-lg">
-          <span class="text-2xl font-bold text-tqcc-yellow">6:30pm</span>
+          <span class="text-2xl font-bold text-tqcc-yellow">{eventTime}</span>
           <p class="mt-1 text-sm text-tqcc-gray">Ride Out</p>
         </div>
         <div class="text-center p-5 bg-tqcc-gray-light rounded-lg">
@@ -51,53 +50,19 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
         </div>
       </div>
 
+      <!-- Sportive poster -->
+      {event.data.image && (
+        <div class="mb-12">
+          <img
+            src={`${baseUrl}${event.data.image}`}
+            alt="Summer Solstice Sportive 2026 poster"
+            class="w-full rounded-lg shadow-lg"
+          />
+        </div>
+      )}
+
       <div class="prose prose-lg max-w-none">
-
-        <h2>About the Event</h2>
-        <p>
-          The TQCC Summer Solstice Sportive is our flagship annual event — and the only TQCC ride
-          open to cyclists outside the club. Whether you're a seasoned racer or a leisure rider,
-          you're welcome to join us for an evening route through some of Belfast's finest roads,
-          making the most of the long summer daylight.
-        </p>
-        <p>
-          The route takes in the rolling hills of the greater Belfast area, covering approximately
-          44 miles before returning to the finish for hot food and a BBQ. Multiple pace groups
-          ensure the event is accessible to all abilities.
-        </p>
-
-        <h2>Schedule</h2>
-        <ul>
-          <li><strong>5:30 pm – 6:00 pm</strong> — Sign-on</li>
-          <li><strong>6:15 pm</strong> — Route briefing</li>
-          <li><strong>6:30 pm</strong> — Ride out</li>
-          <li><strong>From 8:30 pm</strong> — Hot food service begins</li>
-        </ul>
-
-        <h2>Start &amp; Finish</h2>
-        <p>
-          <strong>Harlequins Rugby Club</strong><br />
-          45a Deramore Park, Belfast<br />
-          Showers, changing facilities, and parking available on site.
-        </p>
-
-        <h2>Registration</h2>
-        <p>
-          Registration opens closer to the event date via <strong>EntryCentral</strong>.
-          No one-day cycling licence is required to take part.
-          Keep an eye on our social media for registration announcements.
-        </p>
-
-        <h2>In Memory of Philip Corr</h2>
-        <p>
-          The Solstice Sportive is held in memory of <strong>Philip Corr</strong>, a founding member
-          of Titanic Quarter Cycling Club who passed away while cycling in April 2019. Phil was one
-          of the people who helped bring TQCC to life and his spirit lives on in this event every year.
-        </p>
-        <p>
-          Proceeds from the sportive support <strong>Disability Sport NI</strong>.
-        </p>
-
+        <Content />
       </div>
 
       <!-- CTA -->
