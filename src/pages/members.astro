@@ -417,21 +417,26 @@ const sortedGroups = paceGroups.sort((a, b) => a.data.order - b.data.order);
     }
   });
 
+  function isValidHash(hash: string): boolean {
+    return hash === EXPECTED_HASH_1 || hash === EXPECTED_HASH_2;
+  }
+
   function unlock() {
     gate.classList.add("hidden");
     content.classList.remove("hidden");
   }
 
   // Check if already authenticated this session
-  if (sessionStorage.getItem(STORAGE_KEY) === "true") {
+  const storedHash = sessionStorage.getItem(STORAGE_KEY);
+  if (storedHash && isValidHash(storedHash)) {
     unlock();
   }
 
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     const hash = await hashPassword(input.value.trim().toLowerCase());
-    if (hash === EXPECTED_HASH_1 || hash === EXPECTED_HASH_2) {
-      sessionStorage.setItem(STORAGE_KEY, "true");
+    if (isValidHash(hash)) {
+      sessionStorage.setItem(STORAGE_KEY, hash);
       unlock();
     } else {
       error.classList.remove("hidden");

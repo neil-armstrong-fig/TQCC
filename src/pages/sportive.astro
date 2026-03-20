@@ -1,0 +1,111 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
+---
+
+<BaseLayout
+  title="Summer Solstice Sportive | TQCC"
+  description="The TQCC Summer Solstice Sportive — an evening cycle open to all abilities and non-members. ~44 miles through the hills of Belfast and beyond, finishing with hot food and a BBQ."
+>
+  <!-- Hero -->
+  <section class="bg-tqcc-black text-white py-16">
+    <div class="max-w-4xl mx-auto px-4 text-center">
+      <p class="text-tqcc-pink font-semibold uppercase tracking-widest mb-3">Annual Event</p>
+      <h1 class="text-4xl sm:text-5xl font-extrabold text-tqcc-yellow mb-4">Summer Solstice Sportive</h1>
+      <p class="text-xl text-white/80 max-w-2xl mx-auto leading-relaxed">
+        An evening sportive open to all abilities — TQCC members and non-members welcome.
+        Celebrating the longest days of the year with great roads, great people, and hot food at the finish.
+      </p>
+    </div>
+  </section>
+
+  <section class="py-12">
+    <div class="max-w-4xl mx-auto px-4">
+
+      <!-- Key details cards -->
+      <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
+        <div class="text-center p-5 bg-tqcc-gray-light rounded-lg">
+          <span class="text-2xl font-bold text-tqcc-yellow">12 Jun</span>
+          <p class="mt-1 text-sm text-tqcc-gray">2026 Date</p>
+        </div>
+        <div class="text-center p-5 bg-tqcc-gray-light rounded-lg">
+          <span class="text-2xl font-bold text-tqcc-yellow">~44 mi</span>
+          <p class="mt-1 text-sm text-tqcc-gray">Distance</p>
+        </div>
+        <div class="text-center p-5 bg-tqcc-gray-light rounded-lg">
+          <span class="text-2xl font-bold text-tqcc-yellow">6:30pm</span>
+          <p class="mt-1 text-sm text-tqcc-gray">Ride Out</p>
+        </div>
+        <div class="text-center p-5 bg-tqcc-gray-light rounded-lg">
+          <span class="text-2xl font-bold text-tqcc-pink">All</span>
+          <p class="mt-1 text-sm text-tqcc-gray">Abilities Welcome</p>
+        </div>
+      </div>
+
+      <div class="prose prose-lg max-w-none">
+
+        <h2>About the Event</h2>
+        <p>
+          The TQCC Summer Solstice Sportive is our flagship annual event — and the only TQCC ride
+          open to cyclists outside the club. Whether you're a seasoned racer or a leisure rider,
+          you're welcome to join us for an evening route through some of Belfast's finest roads,
+          making the most of the long summer daylight.
+        </p>
+        <p>
+          The route takes in the rolling hills of the greater Belfast area, covering approximately
+          44 miles before returning to the finish for hot food and a BBQ. Multiple pace groups
+          ensure the event is accessible to all abilities.
+        </p>
+
+        <h2>Schedule</h2>
+        <ul>
+          <li><strong>5:30 pm – 6:00 pm</strong> — Sign-on</li>
+          <li><strong>6:15 pm</strong> — Route briefing</li>
+          <li><strong>6:30 pm</strong> — Ride out</li>
+          <li><strong>From 8:30 pm</strong> — Hot food service begins</li>
+        </ul>
+
+        <h2>Start &amp; Finish</h2>
+        <p>
+          <strong>Harlequins Rugby Club</strong><br />
+          45a Deramore Park, Belfast<br />
+          Showers, changing facilities, and parking available on site.
+        </p>
+
+        <h2>Registration</h2>
+        <p>
+          Registration opens closer to the event date via <strong>EntryCentral</strong>.
+          No one-day cycling licence is required to take part.
+          Keep an eye on our social media for registration announcements.
+        </p>
+
+        <h2>In Memory of Philip Corr</h2>
+        <p>
+          The Solstice Sportive is held in memory of <strong>Philip Corr</strong>, a founding member
+          of Titanic Quarter Cycling Club who passed away while cycling in April 2019. Phil was one
+          of the people who helped bring TQCC to life and his spirit lives on in this event every year.
+        </p>
+        <p>
+          Proceeds from the sportive support <strong>Disability Sport NI</strong>.
+        </p>
+
+      </div>
+
+      <!-- CTA -->
+      <div class="mt-12 bg-tqcc-black text-white p-8 rounded-lg text-center">
+        <h2 class="text-2xl font-bold text-tqcc-yellow mb-3">Registration Coming Soon</h2>
+        <p class="text-white/80 mb-6">
+          Registration details for the 2026 Solstice Sportive will be announced in spring 2026.
+          Follow us on social media to be the first to know.
+        </p>
+        <a
+          href={`${baseUrl}/contact`}
+          class="inline-block bg-tqcc-yellow text-tqcc-black font-bold px-8 py-3 rounded-lg hover:bg-tqcc-yellow-dark transition-colors"
+        >
+          Get in Touch
+        </a>
+      </div>
+
+    </div>
+  </section>
+</BaseLayout>

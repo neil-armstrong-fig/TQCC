@@ -42,7 +42,7 @@ const sortedDays = dayOrder.filter(day => ridesByDay[day]);
                 <div>
                   <h4 class="font-bold text-lg">{ride.data.title}</h4>
                   <p class="text-tqcc-pink font-semibold">
-                    {ride.data.time || "Morning time - Check WhatsApp for exact time"}
+                    {ride.data.time || <a href="https://www.strava.com/clubs/110633" target="_blank" rel="noopener noreferrer" class="underline hover:text-tqcc-pink/80">Check Strava for details</a>}
                   </p>
                 </div>
                 <span

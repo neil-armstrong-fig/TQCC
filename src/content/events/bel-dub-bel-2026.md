@@ -1,19 +1,17 @@
 ---
-title: "Maracycle 2026"
+title: "Belfast - Dublin - Belfast Cycle 2026"
 date: 2026-07-25
 endDate: 2026-07-26
 location: "Belfast to Dublin to Belfast"
-description: "A nod to the original Maracycle event. Club members will ride from Belfast to Dublin on Saturday, stay overnight, and return Dublin to Belfast on Sunday. Big miles, but big smiles!"
+description: "Club members will ride from Belfast to Dublin on Saturday, stay overnight, and return Dublin to Belfast on Sunday. Big miles, but big smiles!"
 rideType: "Club Ride"
 distance: "~230 miles over 2 days"
 membershipRequired: true
 ---
 
-The epic Maracycle weekend returns!
+The epic Belfast - Dublin - Belfast Cycle weekend returns!
 
 ## The Challenge
-
-Paying homage to the legendary Maracycle event of years past.
 
 ### Saturday: Belfast → Dublin
 - Depart Belfast in the morning

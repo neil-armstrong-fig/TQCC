@@ -1,5 +1,5 @@
 ---
-title: "Wednesday Anti-Social Evening Hilly"
+title: "Wednesday Fast Hilly"
 day: "Wednesday"
 time: "18:30"
 meetingPoint: "SPAR Titanic Quarter, Belfast"

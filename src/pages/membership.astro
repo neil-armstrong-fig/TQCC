@@ -72,7 +72,7 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
         </div>
 
         <p class="text-sm text-tqcc-gray">
-          <strong>British Cycling members</strong> are also welcome — please <a href={`${baseUrl}/contact`} class="text-tqcc-pink hover:underline">contact the club</a> for registration details.
+          <strong>British Cycling and UK Cycling members</strong> are also welcome — please <a href={`${baseUrl}/contact`} class="text-tqcc-pink hover:underline">contact the club</a> for registration details.
         </p>
 
         <h3 class="flex items-center gap-3">
@@ -112,6 +112,54 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
             conversational-pace rides perfect for new riders.
             Check our <a href={`${baseUrl}/rides-events`} class="text-tqcc-pink hover:underline">Rides & Events</a>
             page for details.
+          </p>
+        </div>
+
+        <div class="not-prose my-10">
+          <h2 class="text-2xl font-bold mb-2">Ride Groups</h2>
+          <p class="text-tqcc-gray mb-6">
+            Our rides are organised into ability groups so everyone rides at a pace that suits them. Choose the group that best reflects your current fitness and experience — you're not locked in, and many riders naturally progress through the groups over time.
+          </p>
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+
+            <div class="border-t-4 border-tqcc-yellow rounded-b-lg bg-tqcc-yellow/10 p-4">
+              <div class="text-3xl font-black text-tqcc-yellow-dark mb-1">A</div>
+              <div class="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-1">Fast / Tempo</div>
+              <div class="text-lg font-bold text-tqcc-black mb-3">17–18 mph+</div>
+              <p class="text-sm text-tqcc-gray leading-relaxed">Requires vigorous riding with excellent group handling abilities. Not suitable for inexperienced group cyclists. Weekend rides typically span 60–70 miles, sometimes longer.</p>
+            </div>
+
+            <div class="border-t-4 border-tqcc-pink rounded-b-lg bg-tqcc-pink/10 p-4">
+              <div class="text-3xl font-black text-tqcc-pink mb-1">B1</div>
+              <div class="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-1">Quite Fast</div>
+              <div class="text-lg font-bold text-tqcc-black mb-3">16–17 mph</div>
+              <p class="text-sm text-tqcc-gray leading-relaxed">Brisk to vigorous pacing with above-average group skills. Similar to A but a touch slower. Prior group riding experience is essential. Typical weekend distances are 50–60 miles.</p>
+            </div>
+
+            <div class="border-t-4 border-tqcc-pink rounded-b-lg bg-tqcc-pink/10 p-4">
+              <div class="text-3xl font-black text-tqcc-pink mb-1">B2</div>
+              <div class="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-1">Brisk</div>
+              <div class="text-lg font-bold text-tqcc-black mb-3">~15 mph</div>
+              <p class="text-sm text-tqcc-gray leading-relaxed">Good bike handling and solid group riding skills required. Slightly slower than B1 and ideal for riders building their fitness and confidence. Weekend rides are often around 50 miles.</p>
+            </div>
+
+            <div class="border-t-4 border-tqcc-pink rounded-b-lg bg-tqcc-pink/10 p-4">
+              <div class="text-3xl font-black text-tqcc-pink mb-1">B3</div>
+              <div class="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-1">Steady</div>
+              <div class="text-lg font-bold text-tqcc-black mb-3">13–15 mph</div>
+              <p class="text-sm text-tqcc-gray leading-relaxed">A stepping stone between C and B2. Riders should be comfortable in a group environment and ready to push their pace. A great fit for those progressing from C. Weekend rides are typically around 40 miles.</p>
+            </div>
+
+            <div class="border-t-4 border-tqcc-black rounded-b-lg bg-tqcc-black/5 p-4">
+              <div class="text-3xl font-black text-tqcc-black mb-1">C</div>
+              <div class="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-1">Moderate</div>
+              <div class="text-lg font-bold text-tqcc-black mb-3">12–14 mph</div>
+              <p class="text-sm text-tqcc-gray leading-relaxed">Focused on general fitness and developing group riding skills. The ideal entry point for those new to club cycling. Riders capable of 25–30 miles at a comfortable pace will feel right at home here.</p>
+            </div>
+
+          </div>
+          <p class="text-sm text-tqcc-gray mt-4">
+            Speeds are rolling averages, not targets — choose based on your ability, not your ambition. If you're unsure which group suits you, start in C or B3 and work your way up.
           </p>
         </div>
 
