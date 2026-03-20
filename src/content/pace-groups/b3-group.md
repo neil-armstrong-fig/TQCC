@@ -1,7 +1,7 @@
 ---
 name: "Group B3"
 order: 4
-description: "Moderate pace group for developing group riding skills at a comfortable pace. 12-14 mph."
+description: "Moderate pace group for developing group riding skills at a comfortable pace. 14-15 mph."
 routes:
   - name: "TQCC Social Hilly"
     stravaUrl: "https://www.strava.com/routes/3226473389240062188"

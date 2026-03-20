@@ -1,7 +1,7 @@
 ---
 name: "Group B2"
 order: 3
-description: "Brisk pace group for riders developing their group riding skills. ~15 mph."
+description: "Brisk pace group for riders developing their group riding skills. 15-16 mph."
 routes:
   - name: "B2 Fodder"
     stravaUrl: "https://www.strava.com/routes/3307709403490759708"
