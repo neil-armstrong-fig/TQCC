@@ -8,8 +8,8 @@ const isNetlify = process.env.NETLIFY === "true";
 export default defineConfig({
   site: isNetlify
     ? "https://stirring-baklava-d1133c.netlify.app"
-    : "https://neil-armstrong-fig.github.io",
-  base: isNetlify ? "/" : "/TQCC",
+    : "https://www.titanicquartercc.com",
+  base: "/",
   vite: {
     plugins: [tailwindcss()],
   },
