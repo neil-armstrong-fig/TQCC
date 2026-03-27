@@ -22,3 +22,13 @@ The site has a unit preference system (`src/lib/units.ts`) with a central update
 - Distances embedded inside markdown body content rendered via `<Content />` cannot be auto-converted — avoid hardcoding distances in markdown body text, or phrase them without units where possible.
 - The data attribute always stores the **original miles/mph value** as a string; the JS converts it on page load and on toggle.
 - Always use miles (not km) in content files and data attributes, as miles is the default unit.
+
+## Sitemap
+
+The sitemap is generated automatically by `@astrojs/sitemap` at build time (configured in `astro.config.mjs`).
+
+**Keep the `filter` exclusion list up to date.** Whenever a new page is added, decide whether it should be publicly indexed:
+- Public pages (rides, events, about, membership, etc.) — no action needed, included by default.
+- Password-gated or admin pages — add a `!page.includes("/your-path")` condition to the `filter` in `astro.config.mjs`.
+
+Currently excluded: `/admin`, `/members` (and all sub-paths).

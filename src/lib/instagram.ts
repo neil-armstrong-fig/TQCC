@@ -1,3 +1,6 @@
+const DEV_CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+let _postsCache: { data: InstagramPost[]; fetchedAt: number } | null = null;
+
 interface InstagramPost {
   id: string;
   caption?: string;
@@ -22,6 +25,10 @@ export async function getInstagramPosts(
     return [];
   }
 
+  if (_postsCache && Date.now() - _postsCache.fetchedAt < DEV_CACHE_TTL) {
+    return _postsCache.data.slice(0, limit);
+  }
+
   try {
     const fields =
       "id,caption,media_type,media_url,thumbnail_url,permalink,timestamp";
@@ -35,7 +42,8 @@ export async function getInstagramPosts(
     }
 
     const data: InstagramResponse = await response.json();
-    return data.data;
+    _postsCache = { data: data.data, fetchedAt: Date.now() };
+    return data.data.slice(0, limit);
   } catch (error) {
     console.error("Failed to fetch Instagram posts:", error);
     return [];

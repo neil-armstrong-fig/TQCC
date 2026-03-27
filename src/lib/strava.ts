@@ -16,6 +16,11 @@ export interface StravaActivity {
   };
 }
 
+const DEV_CACHE_TTL = 5 * 60 * 1000; // 5 minutes
+
+let _tokenCache: { token: string; expiresAt: number } | null = null;
+let _activitiesCache: { data: StravaActivity[]; fetchedAt: number } | null = null;
+
 async function getAccessToken(): Promise<string | null> {
   const clientId = import.meta.env.STRAVA_CLIENT_ID;
   const clientSecret = import.meta.env.STRAVA_CLIENT_SECRET;
@@ -23,6 +28,10 @@ async function getAccessToken(): Promise<string | null> {
 
   if (!clientId || !clientSecret || !refreshToken) {
     return null;
+  }
+
+  if (_tokenCache && Date.now() < _tokenCache.expiresAt) {
+    return _tokenCache.token;
   }
 
   try {
@@ -43,6 +52,7 @@ async function getAccessToken(): Promise<string | null> {
     }
 
     const data: StravaTokenResponse = await response.json();
+    _tokenCache = { token: data.access_token, expiresAt: Date.now() + DEV_CACHE_TTL };
     return data.access_token;
   } catch (error) {
     console.error("Failed to refresh Strava token:", error);
@@ -55,6 +65,10 @@ export async function getClubActivities(
 ): Promise<StravaActivity[]> {
   const clubId = import.meta.env.STRAVA_CLUB_ID;
   if (!clubId) return [];
+
+  if (_activitiesCache && Date.now() - _activitiesCache.fetchedAt < DEV_CACHE_TTL) {
+    return _activitiesCache.data.slice(0, limit);
+  }
 
   const accessToken = await getAccessToken();
   if (!accessToken) return [];
@@ -70,7 +84,9 @@ export async function getClubActivities(
       return [];
     }
 
-    return await response.json();
+    const data: StravaActivity[] = await response.json();
+    _activitiesCache = { data, fetchedAt: Date.now() };
+    return data;
   } catch (error) {
     console.error("Failed to fetch Strava activities:", error);
     return [];

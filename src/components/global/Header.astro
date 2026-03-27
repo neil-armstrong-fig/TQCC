@@ -9,7 +9,7 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
   <div class="h-1 bg-tqcc-pink"></div>
 
   <div class="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
-    <a href={baseUrl} class="flex items-center gap-3 group">
+    <a href={baseUrl || "/"} data-astro-prefetch class="flex items-center gap-3 group">
       <img
         src={`${baseUrl}/images/badge.png`}
         alt="TQCC Badge"
@@ -58,7 +58,7 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
     class="hidden lg:hidden bg-tqcc-black-light border-t border-white/10"
   >
     <div class="px-4 py-4 space-y-2">
-      <a href={baseUrl} class="block text-white py-2 hover:text-tqcc-yellow transition-colors">Home</a>
+      <a href={baseUrl || "/"} class="block text-white py-2 hover:text-tqcc-yellow transition-colors">Home</a>
       <a href={`${baseUrl}/about`} class="block text-white py-2 hover:text-tqcc-yellow transition-colors">About</a>
       <a href={`${baseUrl}/rides-events`} class="block text-white py-2 hover:text-tqcc-yellow transition-colors">Rides & Events</a>
 <a href={`${baseUrl}/membership`} class="block text-white py-2 hover:text-tqcc-yellow transition-colors">Membership</a>

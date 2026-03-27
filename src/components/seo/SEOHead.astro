@@ -11,12 +11,8 @@ interface Props {
 const { title, description, image, type = "website", publishDate, noindex } =
   Astro.props;
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
-// For homepage and key pages, use the full title passed in for better SEO
-// For other pages, append "| TQCC"
 const fullTitle =
-  title.includes("|") || title.includes("Belfast") || title === "Home"
-    ? title
-    : `${title} | TQCC`;
+  title.endsWith("| TQCC") || title.startsWith("TQCC") ? title : `${title} | TQCC`;
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
 // If image starts with /, prepend BASE_URL to handle subdirectory deployments
 // If image starts with http:// or https://, it's already absolute

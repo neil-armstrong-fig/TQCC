@@ -10,8 +10,20 @@ export default defineConfig({
     ? "https://stirring-baklava-d1133c.netlify.app"
     : "https://www.titanicquartercc.com",
   base: "/",
+  prefetch: {
+    prefetchAll: false,
+    defaultStrategy: "hover",
+  },
   vite: {
     plugins: [tailwindcss()],
   },
-  integrations: [sitemap()],
+  integrations: [
+    sitemap({
+      // Exclude password-gated and admin pages — keep this list updated
+      // when new pages are added that shouldn't be publicly indexed.
+      filter: (page) =>
+        !page.includes("/admin") &&
+        !page.includes("/members"),
+    }),
+  ],
 });
