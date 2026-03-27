@@ -27,6 +27,16 @@ const CURATED_CAFES: Cafe[] = [
     website: "https://getactiveabc.com/facility/oxfordisland/",
     town: "Craigavon",
   },
+  {
+    id: -2,
+    name: "Fodder",
+    lat: 54.35939650625592,
+    lon: -5.708678369656502,
+    openingHours: "Mo-Tu 09:00-16:00; Th-Fr 09:00-16:00; Sa 09:00-16:00; Su 10:00-16:00; We off",
+    phone: "",
+    website: "http://www.fodderni.com/",
+    town: "Downpatrick",
+  },
 ];
 
 /**

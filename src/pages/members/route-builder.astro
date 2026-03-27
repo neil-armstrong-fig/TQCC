@@ -81,6 +81,10 @@ const towns = await fetchNorthernIrelandTowns();
               <span>Show cafes on map</span>
             </label>
             <span id="cafeMapCount" class="text-xs text-gray-400"></span>
+            <button id="btnClearRoute"
+              class="hidden ml-auto px-3 py-1 text-sm border border-red-400 text-red-400 rounded-lg hover:bg-red-400 hover:text-white transition-colors cursor-pointer">
+              Clear Route
+            </button>
           </div>
 
           <!-- Controls -->
@@ -210,14 +214,14 @@ const towns = await fetchNorthernIrelandTowns();
                       <circle cx="60" cy="60" r="56" fill="none" stroke="#d1d5db" stroke-width="1.5" />
                       <!-- Compass segments (clickable) -->
                       <g id="compassSegments">
-                        <path class="compass-seg" data-dir="N" d="M60,60 L60,8 A52,52 0 0,1 96.8,23.2 Z" />
-                        <path class="compass-seg" data-dir="NE" d="M60,60 L96.8,23.2 A52,52 0 0,1 112,60 Z" />
-                        <path class="compass-seg" data-dir="E" d="M60,60 L112,60 A52,52 0 0,1 96.8,96.8 Z" />
-                        <path class="compass-seg" data-dir="SE" d="M60,60 L96.8,96.8 A52,52 0 0,1 60,112 Z" />
-                        <path class="compass-seg" data-dir="S" d="M60,60 L60,112 A52,52 0 0,1 23.2,96.8 Z" />
-                        <path class="compass-seg" data-dir="SW" d="M60,60 L23.2,96.8 A52,52 0 0,1 8,60 Z" />
-                        <path class="compass-seg" data-dir="W" d="M60,60 L8,60 A52,52 0 0,1 23.2,23.2 Z" />
-                        <path class="compass-seg" data-dir="NW" d="M60,60 L23.2,23.2 A52,52 0 0,1 60,8 Z" />
+                        <path class="compass-seg" data-dir="N"  d="M60,60 L40.1,12.0 A52,52 0 0,1 79.9,12.0 Z" />
+                        <path class="compass-seg" data-dir="NE" d="M60,60 L79.9,12.0 A52,52 0 0,1 108.0,40.1 Z" />
+                        <path class="compass-seg" data-dir="E"  d="M60,60 L108.0,40.1 A52,52 0 0,1 108.0,79.9 Z" />
+                        <path class="compass-seg" data-dir="SE" d="M60,60 L108.0,79.9 A52,52 0 0,1 79.9,108.0 Z" />
+                        <path class="compass-seg" data-dir="S"  d="M60,60 L79.9,108.0 A52,52 0 0,1 40.1,108.0 Z" />
+                        <path class="compass-seg" data-dir="SW" d="M60,60 L40.1,108.0 A52,52 0 0,1 12.0,79.9 Z" />
+                        <path class="compass-seg" data-dir="W"  d="M60,60 L12.0,79.9 A52,52 0 0,1 12.0,40.1 Z" />
+                        <path class="compass-seg" data-dir="NW" d="M60,60 L12.0,40.1 A52,52 0 0,1 40.1,12.0 Z" />
                       </g>
                       <!-- Center dot (Any) -->
                       <circle class="compass-seg compass-center" data-dir="any" cx="60" cy="60" r="14" />
@@ -237,7 +241,7 @@ const towns = await fetchNorthernIrelandTowns();
                   <!-- Dropdown -->
                   <div class="flex-1">
                     <select id="directionSelect" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-tqcc-yellow text-sm">
-                      <option value="any" selected>Any direction</option>
+                      <option value="any" selected>No preference</option>
                       <option value="N">North</option>
                       <option value="NE">North-East</option>
                       <option value="E">East</option>
@@ -330,10 +334,6 @@ const towns = await fetchNorthernIrelandTowns();
                 class="hidden px-6 py-3 border-2 border-[#FC4C02] text-[#FC4C02] font-bold rounded-lg hover:bg-[#FC4C02] hover:text-white transition-colors text-center">
                 Open Strava Routes
               </a>
-              <button id="btnClearRoute"
-                class="hidden px-6 py-3 border-2 border-red-400 text-red-400 font-bold rounded-lg hover:bg-red-400 hover:text-white transition-colors cursor-pointer">
-                Clear Route
-              </button>
             </div>
 
             <!-- Strava instructions (shown after route generated) -->
@@ -420,6 +420,12 @@ const towns = await fetchNorthernIrelandTowns();
   }
   .compass-seg.active-dir {
     fill: var(--color-tqcc-yellow);
+  }
+  .start-preset.active-dir {
+    border-color: var(--color-tqcc-yellow);
+    background-color: var(--color-tqcc-yellow);
+    color: var(--color-tqcc-black);
+    font-weight: 600;
   }
   .compass-seg.wind-recommended {
     stroke: #3b82f6;
@@ -642,6 +648,7 @@ const towns = await fetchNorthernIrelandTowns();
 
     const stop: Stop = { id, lat, lon, name, marker };
     stops.push(stop);
+    if (stops.length === 1) setDirectionFromFirstStop();
     renderStopsList();
     if (map) map.flyTo([lat, lon], Math.max(map.getZoom(), 13), { duration: 0.5 });
   }
@@ -652,6 +659,9 @@ const towns = await fetchNorthernIrelandTowns();
     const stop = stops[idx];
     if (stop.marker) map.removeLayer(stop.marker);
     stops.splice(idx, 1);
+    if (stops.length > 0) setDirectionFromFirstStop();
+    else if (windData) setDirection(windData.recommendedDir);
+    else setDirection("any");
     renderStopsList();
   }
 
@@ -672,6 +682,8 @@ const towns = await fetchNorthernIrelandTowns();
   function clearAllStops() {
     stops.forEach((s) => { if (s.marker) map.removeLayer(s.marker); });
     stops = [];
+    if (windData) setDirection(windData.recommendedDir);
+    else setDirection("any");
     renderStopsList();
   }
 
@@ -827,6 +839,20 @@ const towns = await fetchNorthernIrelandTowns();
   function setWindDirection() {
     if (!windData) return;
     setDirection(windData.recommendedDir);
+  }
+
+  // Set the starting direction toward the first stop (N/NE/E/SE/S/SW/W/NW)
+  function setDirectionFromFirstStop() {
+    if (stops.length === 0) return;
+    const startLat = parseFloat((document.getElementById("startLat") as HTMLInputElement).value);
+    const startLon = parseFloat((document.getElementById("startLon") as HTMLInputElement).value);
+    const { lat, lon } = stops[0];
+    const dLat = lat - startLat;
+    const dLon = lon - startLon;
+    const bearingDeg = (Math.atan2(dLon, dLat) * 180 / Math.PI + 360) % 360;
+    const dirs = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
+    const dir = dirs[Math.round(bearingDeg / 45) % 8];
+    setDirection(dir);
   }
 
   function setDirection(dir: string) {
@@ -1252,7 +1278,7 @@ const towns = await fetchNorthernIrelandTowns();
   // Simple approach: place a single turnaround point at half the target distance
   // in the chosen direction. BRouter routes out and back, and user-added stops
   // create any route variety needed.
-  function generateWaypoints(lat: number, lon: number, distanceKm: number, direction: string): [number, number][] {
+  function generateWaypoints(lat: number, lon: number, distanceKm: number, direction: string, angleJitterRad = 0): [number, number][] {
     // Half the target distance as straight-line reach (roads add ~30% over straight line)
     const reachKm = (distanceKm / 2) * 0.7;
     const reachLat = reachKm / 111.32;
@@ -1264,9 +1290,10 @@ const towns = await fetchNorthernIrelandTowns();
       any: null,
     };
 
-    const angle = direction !== "any" && dirAngles[direction] !== null
+    const baseAngle = direction !== "any" && dirAngles[direction] !== null
       ? dirAngles[direction]!
       : Math.random() * 2 * Math.PI;
+    const angle = baseAngle + angleJitterRad;
 
     // Single turnaround point
     const turnLat = lat + reachLat * Math.sin(angle);
@@ -1276,19 +1303,23 @@ const towns = await fetchNorthernIrelandTowns();
   }
 
   // ── Build waypoint list for BRouter ──
-  // Start → stops (in order) → turnaround → stops (reverse) → start
   function buildWaypoints(turnaround: [number, number][], startLon: number, startLat: number): [number, number][] {
     const start: [number, number] = [startLon, startLat];
-    const turn = turnaround[0]; // Single turnaround point
+    const turn = turnaround[0]; // Single generated turnaround point
 
     if (stops.length === 0) {
       return [start, turn, start];
     }
 
-    // Stops are visited in order on the way out, and the route returns via BRouter's
-    // chosen roads back to start. We place stops between start and turnaround.
-    const stopCoords: [number, number][] = stops.map((s) => [s.lon, s.lat]);
-    return [start, ...stopCoords, turn, start];
+    // Distribute stops evenly around the loop so the cafe lands in the middle.
+    // For N stops: floor(N/2) on the outbound leg, the rest on the return leg.
+    //   1 stop  → [start, turn, stop, start]          (stop at midpoint)
+    //   2 stops → [start, stop1, turn, stop2, start]  (one each leg)
+    //   4 stops → [start, s1, s2, turn, s3, s4, start]
+    const half = Math.floor(stops.length / 2);
+    const outbound: [number, number][] = stops.slice(0, half).map((s) => [s.lon, s.lat]);
+    const returning: [number, number][] = stops.slice(half).map((s) => [s.lon, s.lat]);
+    return [start, ...outbound, turn, ...returning, start];
   }
 
   // ── Route Generation ──
@@ -1324,34 +1355,54 @@ const towns = await fetchNorthernIrelandTowns();
 
     try {
     // Generate turnaround point and build waypoint list
+    // Retry with progressively shorter reach if BRouter returns "not mapped" for a waypoint
     status.textContent = "Calculating route...";
-    const turnaround = generateWaypoints(lat, lon, distKm, selectedDirection);
-    const allWaypoints = buildWaypoints(turnaround, lon, lat);
-
-    // Clear old waypoint markers
-    generatedWaypointMarkers.forEach((m: any) => map.removeLayer(m));
-    generatedWaypointMarkers = [];
-
-    // Request route from BRouter
-    status.textContent = "Requesting route from BRouter...";
-    const lonlats = allWaypoints.map((w) => `${w[0].toFixed(6)},${w[1].toFixed(6)}`).join("|");
     const profileParams = profileToBRouterParams(selectedProfile);
-    const url = `https://brouter.de/brouter?lonlats=${lonlats}&profile=${profileParams.profile}&alternativeidx=0&format=geojson${profileParams.extra}`;
 
-    const resp = await fetch(url);
-    if (!resp.ok) {
-      const errText = await resp.text();
-      throw new Error(`BRouter returned ${resp.status}: ${errText}`);
+    let geojson: any = null;
+    let finalWaypoints: [number, number][] = [];
+    // Each attempt scales down the turnaround reach; later attempts also jitter the angle
+    // slightly to escape unmapped terrain (e.g. lakes, off-road areas).
+    const reachScales = [1.0, 0.85, 0.7, 0.55, 0.4];
+    const angleJitter = [0, 0, 0, 15, -15]; // degrees to add on each attempt
+    for (let attempt = 0; attempt < reachScales.length; attempt++) {
+      const scaledDist = distKm * reachScales[attempt];
+      const jitter = (angleJitter[attempt] ?? 0) * (Math.PI / 180);
+      const turnaround = generateWaypoints(lat, lon, scaledDist, selectedDirection, jitter);
+      const allWaypoints = buildWaypoints(turnaround, lon, lat);
+
+      if (attempt === 0) {
+        // Clear old waypoint markers on first attempt only
+        generatedWaypointMarkers.forEach((m: any) => map.removeLayer(m));
+        generatedWaypointMarkers = [];
+      }
+
+      status.textContent = attempt === 0
+        ? "Requesting route from BRouter..."
+        : `Retrying with adjusted waypoints (attempt ${attempt + 1})...`;
+
+      const lonlats = allWaypoints.map((w) => `${w[0].toFixed(6)},${w[1].toFixed(6)}`).join("|");
+      const url = `https://brouter.de/brouter?lonlats=${lonlats}&profile=${profileParams.profile}&alternativeidx=0&format=geojson${profileParams.extra}`;
+
+      const resp = await fetch(url);
+      if (!resp.ok) {
+        const errText = await resp.text();
+        if (errText.includes("not mapped in existing datafile") && attempt < reachScales.length - 1) {
+          continue; // retry with shorter reach / adjusted angle
+        }
+        throw new Error("No routable road found in that direction. Try a different direction or shorter distance.");
+      }
+      geojson = await resp.json();
+      finalWaypoints = allWaypoints;
+      break;
     }
-    const geojson = await resp.json();
-    const finalWaypoints = allWaypoints;
 
-      if (!geojson) throw new Error("No route returned from BRouter. Try a different direction or shorter distance.");
+      if (!geojson) throw new Error("No routable road found in that direction. Try a different direction or shorter distance.");
 
       const feature = geojson.features[0];
       const coords: [number, number, number][] = feature.geometry.coordinates;
       const trackLength: number = feature.properties["track-length"];
-      const totalAscent: number = feature.properties["filtered ascent"] || feature.properties["plain-ascent"] || 0;
+      const totalAscent: number = Number(feature.properties["filtered ascent"] ?? feature.properties["plain-ascent"] ?? 0);
 
       // Store the final waypoints for re-routing after deletion
       lastBRouterWaypoints = [...finalWaypoints];
@@ -1490,7 +1541,7 @@ const towns = await fetchNorthernIrelandTowns();
       const feature = geojson.features[0];
       const coords: [number, number, number][] = feature.geometry.coordinates;
       const trackLength: number = feature.properties["track-length"];
-      const totalAscent: number = feature.properties["filtered ascent"] || feature.properties["plain-ascent"] || 0;
+      const totalAscent: number = Number(feature.properties["filtered ascent"] ?? feature.properties["plain-ascent"] ?? 0);
 
       if (routeLayer) map.removeLayer(routeLayer);
       const latLngs = coords.map((c) => [c[1], c[0]]);
