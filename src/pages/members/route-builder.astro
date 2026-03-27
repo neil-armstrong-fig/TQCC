@@ -1,0 +1,1817 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+import { fetchNorthernIrelandCafes } from "../../lib/cafes";
+import { fetchNorthernIrelandTowns } from "../../lib/towns";
+
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
+const cafes = await fetchNorthernIrelandCafes();
+const towns = await fetchNorthernIrelandTowns();
+---
+
+<BaseLayout
+  title="Route Builder"
+  description="Generate cycling loop routes on quiet roads for group rides."
+  noindex={true}
+>
+  <section class="py-4">
+    <div class="max-w-7xl mx-auto px-2 sm:px-4">
+      <!-- Password gate (same as members page) -->
+      <div id="password-gate" class="text-center py-20">
+        <h1 class="text-4xl font-bold mb-4">Route Builder</h1>
+        <p class="text-tqcc-gray mb-8">
+          Enter the club password to access this page.
+        </p>
+        <form id="password-form" class="max-w-sm mx-auto">
+          <div class="relative">
+            <input
+              type="password"
+              id="password-input"
+              placeholder="Password"
+              class="w-full px-4 py-3 pr-12 border border-gray-300 rounded-lg text-center text-lg focus:outline-none focus:ring-2 focus:ring-tqcc-yellow"
+            />
+            <button
+              type="button"
+              id="toggle-password"
+              class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 focus:outline-none"
+              aria-label="Toggle password visibility"
+            >
+              <svg id="eye-open" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+              </svg>
+              <svg id="eye-closed" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" />
+              </svg>
+            </button>
+          </div>
+          <button
+            type="submit"
+            class="mt-4 w-full bg-tqcc-yellow text-tqcc-black font-bold px-6 py-3 rounded-lg hover:bg-tqcc-yellow-dark transition-colors"
+          >
+            Enter
+          </button>
+          <p id="error-message" class="mt-3 text-red-500 text-sm hidden">
+            Incorrect password. Please try again.
+          </p>
+        </form>
+      </div>
+
+      <!-- Protected content -->
+      <div id="members-content" class="hidden">
+        <div class="flex items-center justify-between mb-6">
+          <div>
+            <h1 class="text-4xl font-bold">Route Builder</h1>
+            <p class="text-tqcc-gray mt-2">Generate loop routes on quiet roads for group rides</p>
+          </div>
+          <a
+            href={`${baseUrl}/members`}
+            class="text-sm text-tqcc-pink hover:text-tqcc-pink-light transition-colors"
+          >
+            &larr; Back to Members
+          </a>
+        </div>
+
+        <!-- Route Builder App -->
+        <div class="border border-gray-200 rounded-lg overflow-hidden bg-white shadow-sm">
+          <!-- Map -->
+          <div id="route-map" class="w-full relative" style="height: 60vh; min-height: 400px;"></div>
+          <div class="px-4 py-2 bg-gray-50 border-b border-gray-200 flex items-center gap-3">
+            <label class="flex items-center gap-2 cursor-pointer text-sm">
+              <input type="checkbox" id="toggleCafesOnMap" class="accent-tqcc-pink w-4 h-4 cursor-pointer" />
+              <span>Show cafes on map</span>
+            </label>
+            <span id="cafeMapCount" class="text-xs text-gray-400"></span>
+          </div>
+
+          <!-- Controls -->
+          <div class="p-6 space-y-6">
+
+            <!-- Starting Location -->
+            <div>
+              <h3 class="text-sm font-semibold uppercase tracking-wide text-tqcc-gray mb-3">Starting Location</h3>
+              <div class="flex flex-wrap gap-2 mb-3">
+                <button class="start-preset px-3 py-1.5 text-sm border border-gray-300 rounded-lg hover:border-tqcc-yellow transition-colors cursor-pointer"
+                  data-name="The Big Fish" data-lat="54.6015" data-lon="-5.9218">The Big Fish</button>
+                <button class="start-preset px-3 py-1.5 text-sm border border-gray-300 rounded-lg hover:border-tqcc-yellow transition-colors cursor-pointer"
+                  data-name="Titanic Quarter Spar" data-lat="54.6045" data-lon="-5.9125">TQ Spar</button>
+                <button class="start-preset px-3 py-1.5 text-sm border border-gray-300 rounded-lg hover:border-tqcc-yellow transition-colors cursor-pointer"
+                  data-name="SD Bells" data-lat="54.5948" data-lon="-5.8552">SD Bells</button>
+              </div>
+              <input type="hidden" id="startName" value="Titanic Quarter Spar" />
+              <input type="hidden" id="startLat" value="54.6045" />
+              <input type="hidden" id="startLon" value="-5.9125" />
+            </div>
+
+            <hr class="border-gray-200" />
+
+            <!-- Map Click Mode -->
+            <div>
+              <h3 class="text-sm font-semibold uppercase tracking-wide text-tqcc-gray mb-3">Map Click Mode</h3>
+              <div class="grid grid-cols-3 gap-2">
+                <button id="modeNone" class="map-mode-btn px-3 py-1.5 text-xs border-2 rounded-lg transition-all cursor-pointer text-center font-semibold border-gray-300 text-gray-500 active-map-mode" data-mode="none">Off</button>
+                <button id="modeStart" class="map-mode-btn px-3 py-1.5 text-xs border-2 rounded-lg transition-all cursor-pointer text-center font-semibold border-tqcc-yellow text-tqcc-yellow" data-mode="start">Set Start</button>
+                <button id="modeStop" class="map-mode-btn px-3 py-1.5 text-xs border-2 rounded-lg transition-all cursor-pointer text-center font-semibold border-tqcc-pink text-tqcc-pink" data-mode="stop">Add Stop</button>
+              </div>
+              <p id="mapModeHint" class="text-xs text-gray-400 mt-1">Map clicks disabled</p>
+            </div>
+
+            <hr class="border-gray-200" />
+
+            <!-- Stops / Via-Points -->
+            <div>
+              <h3 class="text-sm font-semibold uppercase tracking-wide text-tqcc-gray mb-3">
+                Stops
+                <span class="text-xs font-normal normal-case tracking-normal text-gray-400 ml-1">(towns, cafes, scenic points)</span>
+              </h3>
+              <div id="stopsList" class="space-y-2 mb-3">
+                <p class="text-sm text-gray-400" id="noStopsMsg">No stops added yet</p>
+              </div>
+
+              <!-- Town Search -->
+              <div class="mb-3">
+                <label for="townSearch" class="block text-sm font-medium mb-1">Search for a town</label>
+                <div class="relative">
+                  <input type="text" id="townSearch" placeholder="e.g. Downpatrick, Antrim, Lurgan..."
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-tqcc-yellow text-sm" />
+                  <div id="townResults" class="hidden absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-48 overflow-y-auto">
+                  </div>
+                </div>
+              </div>
+
+              <!-- Cafe Search -->
+              <div class="mb-3">
+                <label for="cafeSearch" class="block text-sm font-medium mb-1">Search for a cafe</label>
+                <div class="relative">
+                  <input type="text" id="cafeSearch" placeholder="e.g. Fodder, The Shed, Eden..."
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-tqcc-pink text-sm" />
+                  <div id="cafeResults" class="hidden absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-lg shadow-lg max-h-48 overflow-y-auto">
+                  </div>
+                </div>
+                <p class="text-xs text-gray-400 mt-1">{cafes.length} cafes &middot; {towns.length} towns loaded</p>
+              </div>
+
+              <div class="flex flex-wrap gap-2">
+                <button id="btnClearStops"
+                  class="px-4 py-2 text-sm border border-red-300 text-red-400 rounded-lg hover:bg-red-500 hover:text-white hover:border-red-500 transition-colors cursor-pointer hidden">
+                  Clear All Stops
+                </button>
+              </div>
+            </div>
+
+            <hr class="border-gray-200" />
+
+            <!-- Wind & Ride Day -->
+            <div>
+              <h3 class="text-sm font-semibold uppercase tracking-wide text-tqcc-gray mb-3">Wind &amp; Ride Day</h3>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label for="rideDay" class="block text-sm font-medium mb-1">Ride Day</label>
+                  <select id="rideDay"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-tqcc-yellow text-sm">
+                  </select>
+                </div>
+                <div>
+                  <label for="rideTime" class="block text-sm font-medium mb-1">Start Time</label>
+                  <input type="time" id="rideTime" value="09:00"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-tqcc-yellow text-sm" />
+                </div>
+              </div>
+              <div id="windInfo" class="mt-3 hidden">
+                <div class="flex items-center gap-3 bg-blue-50 border border-blue-200 rounded-lg p-3">
+                  <div id="windArrow" class="flex-shrink-0" style="width:40px;height:40px;">
+                    <svg viewBox="0 0 40 40" width="40" height="40">
+                      <circle cx="20" cy="20" r="18" fill="#dbeafe" stroke="#93c5fd" stroke-width="1.5"/>
+                      <polygon id="windArrowHead" points="20,4 26,28 20,23 14,28" fill="#2563eb" stroke="#1d4ed8" stroke-width="0.5"/>
+                    </svg>
+                  </div>
+                  <div class="text-sm">
+                    <p><strong id="windSummary">-</strong></p>
+                    <p class="text-gray-500" id="windDetail">-</p>
+                  </div>
+                  <button id="btnUseWind"
+                    class="ml-auto px-3 py-1.5 text-xs bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors cursor-pointer whitespace-nowrap">
+                    Set Optimal Direction
+                  </button>
+                </div>
+              </div>
+              <button id="btnFetchWind"
+                class="mt-3 px-4 py-2 text-sm border border-gray-300 rounded-lg hover:border-tqcc-yellow transition-colors cursor-pointer">
+                Check Wind Forecast
+              </button>
+
+              <!-- Preferred Starting Direction -->
+              <div class="mt-4">
+                <label class="block text-sm font-medium mb-2">Preferred Starting Direction <span id="directionHint" class="text-xs font-normal text-gray-400"></span></label>
+                <div class="flex items-center gap-4">
+                  <!-- Compass -->
+                  <div class="compass-container relative flex-shrink-0" style="width:120px;height:120px;">
+                    <svg viewBox="0 0 120 120" class="w-full h-full">
+                      <!-- Outer ring -->
+                      <circle cx="60" cy="60" r="56" fill="none" stroke="#d1d5db" stroke-width="1.5" />
+                      <!-- Compass segments (clickable) -->
+                      <g id="compassSegments">
+                        <path class="compass-seg" data-dir="N" d="M60,60 L60,8 A52,52 0 0,1 96.8,23.2 Z" />
+                        <path class="compass-seg" data-dir="NE" d="M60,60 L96.8,23.2 A52,52 0 0,1 112,60 Z" />
+                        <path class="compass-seg" data-dir="E" d="M60,60 L112,60 A52,52 0 0,1 96.8,96.8 Z" />
+                        <path class="compass-seg" data-dir="SE" d="M60,60 L96.8,96.8 A52,52 0 0,1 60,112 Z" />
+                        <path class="compass-seg" data-dir="S" d="M60,60 L60,112 A52,52 0 0,1 23.2,96.8 Z" />
+                        <path class="compass-seg" data-dir="SW" d="M60,60 L23.2,96.8 A52,52 0 0,1 8,60 Z" />
+                        <path class="compass-seg" data-dir="W" d="M60,60 L8,60 A52,52 0 0,1 23.2,23.2 Z" />
+                        <path class="compass-seg" data-dir="NW" d="M60,60 L23.2,23.2 A52,52 0 0,1 60,8 Z" />
+                      </g>
+                      <!-- Center dot (Any) -->
+                      <circle class="compass-seg compass-center" data-dir="any" cx="60" cy="60" r="14" />
+                      <!-- Direction labels (centered on each segment at r=38 from center) -->
+                      <text x="60" y="22" text-anchor="middle" dominant-baseline="central" class="compass-label">N</text>
+                      <text x="87" y="33" text-anchor="middle" dominant-baseline="central" class="compass-label">NE</text>
+                      <text x="98" y="60" text-anchor="middle" dominant-baseline="central" class="compass-label">E</text>
+                      <text x="87" y="87" text-anchor="middle" dominant-baseline="central" class="compass-label">SE</text>
+                      <text x="60" y="98" text-anchor="middle" dominant-baseline="central" class="compass-label">S</text>
+                      <text x="33" y="87" text-anchor="middle" dominant-baseline="central" class="compass-label">SW</text>
+                      <text x="22" y="60" text-anchor="middle" dominant-baseline="central" class="compass-label">W</text>
+                      <text x="33" y="33" text-anchor="middle" dominant-baseline="central" class="compass-label">NW</text>
+                      <!-- Compass needle indicator -->
+                      <line id="compassNeedle" x1="60" y1="60" x2="60" y2="16" stroke="#E91E8C" stroke-width="2.5" stroke-linecap="round" class="hidden" />
+                    </svg>
+                  </div>
+                  <!-- Dropdown -->
+                  <div class="flex-1">
+                    <select id="directionSelect" class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-tqcc-yellow text-sm">
+                      <option value="any" selected>Any direction</option>
+                      <option value="N">North</option>
+                      <option value="NE">North-East</option>
+                      <option value="E">East</option>
+                      <option value="SE">South-East</option>
+                      <option value="S">South</option>
+                      <option value="SW">South-West</option>
+                      <option value="W">West</option>
+                      <option value="NW">North-West</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <hr class="border-gray-200" />
+
+            <!-- Route Preferences -->
+            <div>
+              <h3 class="text-sm font-semibold uppercase tracking-wide text-tqcc-gray mb-3">Route Preferences</h3>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <!-- Distance -->
+                <div>
+                  <label for="distance" class="block text-sm font-medium mb-1">Target Distance</label>
+                  <div class="flex items-center gap-3">
+                    <input type="range" id="distance" min="5" max="322" value="40" step="1"
+                      class="flex-1 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-tqcc-yellow" />
+                    <div class="flex items-center gap-1">
+                      <input type="number" id="distanceNumber" min="5" max="322" value="40" step="1"
+                        class="w-16 px-2 py-1 border border-gray-300 rounded-lg text-sm text-center focus:outline-none focus:ring-2 focus:ring-tqcc-yellow" />
+                      <span id="distUnitLabel" class="text-xs text-tqcc-pink font-semibold">km</span>
+                    </div>
+                  </div>
+                </div>
+
+                <!-- Road Avoidance -->
+                <div>
+                  <label for="difficulty" class="block text-sm font-medium mb-1">Road Avoidance</label>
+                  <input type="range" id="difficulty" min="1" max="3" value="2" step="1"
+                    class="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-tqcc-yellow" />
+                  <div class="flex justify-between text-xs text-gray-400 mt-1">
+                    <span>Some main roads</span>
+                    <span id="diffLabel" class="font-semibold text-tqcc-pink">Low traffic</span>
+                    <span>Very quiet</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <hr class="border-gray-200" />
+
+            <!-- Routing Profile -->
+            <div>
+              <h3 class="text-sm font-semibold uppercase tracking-wide text-tqcc-gray mb-3">Route Type</h3>
+              <p class="text-xs text-gray-400 mb-2">All routes avoid main roads and prioritise quiet, safe roads</p>
+              <div class="grid grid-cols-3 gap-2">
+                <button class="profile-btn px-3 py-2 text-sm border-2 rounded-lg transition-all cursor-pointer text-center font-semibold border-tqcc-yellow bg-tqcc-yellow text-tqcc-black active-profile" data-profile="flat">Flat</button>
+                <button class="profile-btn px-3 py-2 text-sm border-2 rounded-lg transition-all cursor-pointer text-center font-semibold border-tqcc-pink bg-tqcc-pink text-white" data-profile="mixed">Mixed</button>
+                <button class="profile-btn px-3 py-2 text-sm border-2 rounded-lg transition-all cursor-pointer text-center font-semibold border-tqcc-black bg-tqcc-black text-white" data-profile="hilly">Hilly</button>
+              </div>
+            </div>
+
+            <hr class="border-gray-200" />
+
+            <!-- Rider Info -->
+            <div>
+              <h3 class="text-sm font-semibold uppercase tracking-wide text-tqcc-gray mb-3">Rider Info</h3>
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label for="avgSpeed" class="block text-sm font-medium mb-1">
+                    Avg Speed (<span id="speedUnitLabel" class="pace-string" data-pace="mph">mph</span>)
+                  </label>
+                  <input type="number" id="avgSpeed" value="15" min="5" max="30"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-tqcc-yellow text-sm" />
+                </div>
+              </div>
+            </div>
+
+            <!-- Actions -->
+            <div class="flex flex-wrap gap-3">
+              <button id="btnGenerate"
+                class="flex-1 bg-tqcc-yellow text-tqcc-black font-bold px-6 py-3 rounded-lg hover:bg-tqcc-yellow-dark transition-colors cursor-pointer">
+                Generate Route
+              </button>
+              <button id="btnDownload" disabled
+                class="px-6 py-3 border-2 border-tqcc-yellow text-tqcc-yellow font-bold rounded-lg hover:bg-tqcc-yellow hover:text-tqcc-black transition-colors cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed disabled:hover:bg-transparent disabled:hover:text-tqcc-yellow">
+                Download GPX
+              </button>
+              <a id="btnStrava" href="https://www.strava.com/routes/new" target="_blank" rel="noopener noreferrer"
+                class="hidden px-6 py-3 border-2 border-[#FC4C02] text-[#FC4C02] font-bold rounded-lg hover:bg-[#FC4C02] hover:text-white transition-colors text-center">
+                Open Strava Routes
+              </a>
+              <button id="btnClearRoute"
+                class="hidden px-6 py-3 border-2 border-red-400 text-red-400 font-bold rounded-lg hover:bg-red-400 hover:text-white transition-colors cursor-pointer">
+                Clear Route
+              </button>
+            </div>
+
+            <!-- Strava instructions (shown after route generated) -->
+            <div id="stravaInstructions" class="hidden">
+              <details class="border border-gray-200 rounded-lg bg-gray-50">
+                <summary class="p-3 cursor-pointer text-sm font-semibold text-tqcc-gray hover:text-tqcc-black">
+                  How to import into Strava
+                </summary>
+                <div class="px-4 pb-4 text-sm text-tqcc-gray space-y-3">
+                  <div>
+                    <p class="font-semibold mb-1">On desktop:</p>
+                    <ol class="list-decimal list-inside space-y-1">
+                      <li>Click <strong>Download GPX</strong> above to save the file</li>
+                      <li>Click <strong>Open Strava Routes</strong> (or go to strava.com/routes/new)</li>
+                      <li>In the Strava route builder, click the <strong>upload icon</strong> (top-right of the map toolbar)</li>
+                      <li>Select the downloaded GPX file</li>
+                      <li>Click <strong>Save</strong> to add it to your routes</li>
+                    </ol>
+                  </div>
+                  <div>
+                    <p class="font-semibold mb-1">On phone:</p>
+                    <ol class="list-decimal list-inside space-y-1">
+                      <li>Tap <strong>Download GPX</strong> &mdash; the file saves to your Downloads folder</li>
+                      <li>Open the <strong>Strava app</strong> and go to <strong>Maps</strong> tab</li>
+                      <li>Tap <strong>Routes</strong> (bottom of the screen), then the <strong>+</strong> icon</li>
+                      <li>Tap <strong>Import GPX/TCX</strong> (or use the upload icon at the top)</li>
+                      <li>Browse to your Downloads and select the GPX file</li>
+                    </ol>
+                    <p class="text-xs text-gray-400 mt-1">Note: GPX import in the Strava mobile app requires a Strava subscription. Free users can upload via the desktop site on their phone's browser instead.</p>
+                  </div>
+                </div>
+              </details>
+            </div>
+
+            <!-- Status -->
+            <div id="status" class="text-sm min-h-[1.5rem]"></div>
+
+            <!-- Route Info (hidden until route generated) -->
+            <div id="routeInfo" class="hidden border border-gray-200 rounded-lg p-4 bg-gray-50">
+              <h3 class="text-sm font-semibold uppercase tracking-wide text-tqcc-gray mb-3">Route Details</h3>
+              <div class="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm">
+                <div>
+                  <span class="text-gray-400">Distance</span>
+                  <p class="font-bold text-lg" id="statDist">-</p>
+                </div>
+                <div>
+                  <span class="text-gray-400">Est. Time</span>
+                  <p class="font-bold text-lg" id="statTime">-</p>
+                </div>
+                <div>
+                  <span class="text-gray-400">Ascent</span>
+                  <p class="font-bold text-lg" id="statAscent">-</p>
+                </div>
+                <div>
+                  <span class="text-gray-400">Profile</span>
+                  <p class="font-bold text-lg" id="statProfile">-</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cafe data embedded at build time, refreshed daily via cron -->
+  <script is:inline define:vars={{ cafes, towns }}>
+    window.__niCafes = cafes;
+    window.__niTowns = towns;
+  </script>
+</BaseLayout>
+
+<style>
+  /* Compass */
+  .compass-seg {
+    fill: #f3f4f6;
+    stroke: #d1d5db;
+    stroke-width: 0.5;
+    cursor: pointer;
+    transition: fill 0.15s;
+  }
+  .compass-seg:hover {
+    fill: #fef3c7;
+  }
+  .compass-seg.active-dir {
+    fill: var(--color-tqcc-yellow);
+  }
+  .compass-seg.wind-recommended {
+    stroke: #3b82f6;
+    stroke-width: 2;
+  }
+  .compass-center {
+    fill: #e5e7eb;
+    stroke: #9ca3af;
+  }
+  .compass-center:hover {
+    fill: #d1d5db;
+  }
+  .compass-center.active-dir {
+    fill: var(--color-tqcc-yellow);
+    stroke: var(--color-tqcc-black);
+  }
+  .compass-label {
+    font-size: 9px;
+    font-weight: 600;
+    fill: #6b7280;
+    pointer-events: none;
+    user-select: none;
+  }
+  .profile-btn:not(.active-profile) {
+    opacity: 0.4;
+  }
+  .map-mode-btn:not(.active-map-mode) {
+    opacity: 0.4;
+  }
+  .map-mode-btn.active-map-mode {
+    opacity: 1;
+    font-weight: 700;
+  }
+  #modeNone.active-map-mode {
+    background-color: var(--color-gray-200, #e5e7eb);
+    border-color: var(--color-gray-400, #9ca3af);
+    color: var(--color-gray-700, #374151);
+  }
+  #modeStart.active-map-mode {
+    background-color: var(--color-tqcc-yellow);
+    color: var(--color-tqcc-black);
+  }
+  #modeStop.active-map-mode {
+    background-color: var(--color-tqcc-pink);
+    color: #fff;
+  }
+  .active-config {
+    background-color: var(--color-tqcc-yellow-light) !important;
+    border-color: var(--color-tqcc-yellow) !important;
+    font-weight: 600;
+  }
+  .wind-recommended {
+    box-shadow: 0 0 0 2px #3b82f6;
+  }
+  /* Map click mode cursors — crosshair for placing points */
+  .map-mode-start,
+  .map-mode-start :global(.leaflet-container),
+  .map-mode-start :global(.leaflet-grab),
+  .map-mode-stop,
+  .map-mode-stop :global(.leaflet-container),
+  .map-mode-stop :global(.leaflet-grab) {
+    cursor: crosshair !important;
+  }
+
+  /* Override Leaflet z-index to stay below site header */
+  #route-map :global(.leaflet-pane) { z-index: 1; }
+  #route-map :global(.leaflet-top),
+  #route-map :global(.leaflet-bottom) { z-index: 2; }
+
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--color-tqcc-yellow);
+    border: 2px solid var(--color-tqcc-black);
+    cursor: pointer;
+  }
+  input[type="range"]::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: var(--color-tqcc-yellow);
+    border: 2px solid var(--color-tqcc-black);
+    cursor: pointer;
+  }
+</style>
+
+<script>
+  import { initMembersAuth } from "../../lib/members-auth";
+  initMembersAuth(() =>
+    window.dispatchEvent(new CustomEvent("route-builder-unlocked")),
+  );
+</script>
+
+<!-- Route builder app script -->
+<script>
+  import { getPreferredUnit, milesToKm, kmToMiles } from "../../lib/units";
+
+  // ── State ──
+  let L: any;
+  let map: any;
+  let routeLayer: any;
+  let startMarker: any;
+  let generatedWaypointMarkers: any[] = [];
+  let lastBRouterWaypoints: [number, number][] = []; // [lon, lat] pairs sent to BRouter
+  let cafeMarkers: any[] = [];
+  let lastGPX: string | null = null;
+  let selectedProfile = "flat";
+  let selectedDirection = "any";
+  let mapClickMode: "none" | "start" | "stop" = "none";
+  let mapInitialized = false;
+  // (no extra state needed for town/cafe search — both use build-time data)
+
+  // Custom stops (coffee stops, via-points)
+  interface Stop {
+    id: string;
+    lat: number;
+    lon: number;
+    name: string;
+    marker?: any;
+  }
+  let stops: Stop[] = [];
+
+  // Wind data
+  let windData: { direction: number; speed: number; gustSpeed: number; recommendedDir: string } | null = null;
+
+  // ── Leaflet Loading ──
+  async function loadLeaflet(): Promise<any> {
+    if ((window as any).L) return (window as any).L;
+    if (!document.querySelector('link[href*="leaflet"]')) {
+      const link = document.createElement("link");
+      link.rel = "stylesheet";
+      link.href = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css";
+      document.head.appendChild(link);
+    }
+    return new Promise((resolve) => {
+      const script = document.createElement("script");
+      script.src = "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js";
+      script.onload = () => resolve((window as any).L);
+      document.head.appendChild(script);
+    });
+  }
+
+  // ── Map Init ──
+  async function initMap() {
+    if (mapInitialized) return;
+    const mapEl = document.getElementById("route-map");
+    if (!mapEl) return;
+
+    L = await loadLeaflet();
+    map = L.map("route-map").setView([54.6015, -5.9217], 13);
+    L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+      attribution: "&copy; OpenStreetMap contributors | Routing by BRouter",
+      maxZoom: 19,
+    }).addTo(map);
+
+    const startIcon = L.divIcon({
+      html: '<div style="background:#FFD700;width:16px;height:16px;border-radius:50%;border:3px solid #1A1A1A;box-shadow:0 2px 6px rgba(0,0,0,0.4);"></div>',
+      iconSize: [16, 16],
+      iconAnchor: [8, 8],
+      className: "",
+    });
+
+    startMarker = L.marker([54.6045, -5.9125], { icon: startIcon, draggable: true })
+      .addTo(map)
+      .bindPopup("Titanic Quarter Spar");
+
+    startMarker.on("dragend", () => {
+      const pos = startMarker.getLatLng();
+      (document.getElementById("startLat") as HTMLInputElement).value = pos.lat.toFixed(4);
+      (document.getElementById("startLon") as HTMLInputElement).value = pos.lng.toFixed(4);
+      highlightActivePreset();
+      debouncedPersist();
+    });
+
+    map.on("click", (e: any) => {
+      if (mapClickMode === "start") {
+        (document.getElementById("startLat") as HTMLInputElement).value = e.latlng.lat.toFixed(4);
+        (document.getElementById("startLon") as HTMLInputElement).value = e.latlng.lng.toFixed(4);
+        (document.getElementById("startName") as HTMLInputElement).value = "Custom";
+        startMarker.setLatLng(e.latlng);
+        startMarker.setPopupContent(`Custom (${e.latlng.lat.toFixed(4)}, ${e.latlng.lng.toFixed(4)})`);
+        highlightActivePreset();
+        debouncedPersist();
+      } else if (mapClickMode === "stop") {
+        addStop(e.latlng.lat, e.latlng.lng, `Stop ${stops.length + 1}`);
+        map.flyTo(e.latlng, map.getZoom());
+      }
+    });
+
+    mapInitialized = true;
+  }
+
+  // ── Stops Management ──
+  function addStop(lat: number, lon: number, name: string) {
+    const id = Date.now().toString() + Math.random().toString(36).slice(2, 6);
+    const stopIcon = L.divIcon({
+      html: `<div style="background:#E91E8C;width:12px;height:12px;border-radius:50%;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,0.3);"></div>`,
+      iconSize: [12, 12],
+      iconAnchor: [6, 6],
+      className: "",
+    });
+    const marker = L.marker([lat, lon], { icon: stopIcon, draggable: true }).addTo(map);
+    marker.bindPopup(`<div class="text-center"><strong>${name}</strong><br/><button data-remove-stop-map="${id}" style="color:#ef4444;font-size:12px;cursor:pointer;margin-top:4px;border:none;background:none;text-decoration:underline;">Remove stop</button></div>`);
+    marker.on("popupopen", () => {
+      marker.getPopup()?.getElement()?.querySelector(`[data-remove-stop-map="${id}"]`)
+        ?.addEventListener("click", () => removeStop(id));
+    });
+    marker.on("dragend", () => {
+      const stop = stops.find((s) => s.id === id);
+      if (stop) {
+        const pos = marker.getLatLng();
+        stop.lat = pos.lat;
+        stop.lon = pos.lng;
+        renderStopsList();
+      }
+    });
+
+    const stop: Stop = { id, lat, lon, name, marker };
+    stops.push(stop);
+    renderStopsList();
+    if (map) map.flyTo([lat, lon], Math.max(map.getZoom(), 13), { duration: 0.5 });
+  }
+
+  function removeStop(id: string) {
+    const idx = stops.findIndex((s) => s.id === id);
+    if (idx === -1) return;
+    const stop = stops[idx];
+    if (stop.marker) map.removeLayer(stop.marker);
+    stops.splice(idx, 1);
+    renderStopsList();
+  }
+
+  function moveStopUp(id: string) {
+    const idx = stops.findIndex((s) => s.id === id);
+    if (idx <= 0) return;
+    [stops[idx - 1], stops[idx]] = [stops[idx], stops[idx - 1]];
+    renderStopsList();
+  }
+
+  function moveStopDown(id: string) {
+    const idx = stops.findIndex((s) => s.id === id);
+    if (idx === -1 || idx >= stops.length - 1) return;
+    [stops[idx], stops[idx + 1]] = [stops[idx + 1], stops[idx]];
+    renderStopsList();
+  }
+
+  function clearAllStops() {
+    stops.forEach((s) => { if (s.marker) map.removeLayer(s.marker); });
+    stops = [];
+    renderStopsList();
+  }
+
+  function renderStopsList() {
+    const list = document.getElementById("stopsList")!;
+    const clearBtn = document.getElementById("btnClearStops");
+    if (clearBtn) clearBtn.classList.toggle("hidden", stops.length === 0);
+    debouncedPersist();
+    if (stops.length === 0) {
+      list.innerHTML = '<p class="text-sm text-gray-400" id="noStopsMsg">No stops added yet</p>';
+      return;
+    }
+    list.innerHTML = stops
+      .map(
+        (s, i) => `
+      <div class="flex items-center gap-2 bg-gray-50 border border-gray-200 rounded-lg px-3 py-2 text-sm">
+        <span class="font-semibold text-tqcc-pink w-5 text-center">${i + 1}</span>
+        <input type="text" value="${s.name}" data-stop-id="${s.id}" class="stop-name-input flex-1 bg-transparent border-none focus:outline-none text-sm" />
+        <span class="text-xs text-gray-400">${s.lat.toFixed(4)}, ${s.lon.toFixed(4)}</span>
+        <button data-move-up="${s.id}" class="text-gray-400 hover:text-tqcc-black text-xs cursor-pointer" title="Move up">&uarr;</button>
+        <button data-move-down="${s.id}" class="text-gray-400 hover:text-tqcc-black text-xs cursor-pointer" title="Move down">&darr;</button>
+        <button data-remove-stop="${s.id}" class="text-red-400 hover:text-red-600 font-bold cursor-pointer" title="Remove">&times;</button>
+      </div>`
+      )
+      .join("");
+
+    // Attach events
+    list.querySelectorAll("[data-remove-stop]").forEach((btn) => {
+      btn.addEventListener("click", () => removeStop((btn as HTMLElement).dataset.removeStop!));
+    });
+    list.querySelectorAll("[data-move-up]").forEach((btn) => {
+      btn.addEventListener("click", () => moveStopUp((btn as HTMLElement).dataset.moveUp!));
+    });
+    list.querySelectorAll("[data-move-down]").forEach((btn) => {
+      btn.addEventListener("click", () => moveStopDown((btn as HTMLElement).dataset.moveDown!));
+    });
+    list.querySelectorAll(".stop-name-input").forEach((input) => {
+      input.addEventListener("change", (e) => {
+        const el = e.target as HTMLInputElement;
+        const stop = stops.find((s) => s.id === el.dataset.stopId);
+        if (stop) {
+          stop.name = el.value;
+          if (stop.marker) stop.marker.setPopupContent(el.value);
+        }
+      });
+    });
+  }
+
+  // ── Wind Forecast (Open-Meteo) ──
+  async function fetchWind() {
+    const lat = parseFloat((document.getElementById("startLat") as HTMLInputElement).value);
+    const lon = parseFloat((document.getElementById("startLon") as HTMLInputElement).value);
+    const daySelect = document.getElementById("rideDay") as HTMLSelectElement;
+    const timeInput = document.getElementById("rideTime") as HTMLInputElement;
+    const date = daySelect.value;
+    const [startHour, startMinute] = timeInput.value.split(":").map(Number);
+
+    const btn = document.getElementById("btnFetchWind") as HTMLButtonElement;
+    btn.textContent = "Checking...";
+    btn.disabled = true;
+
+    try {
+      const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=wind_speed_10m,wind_direction_10m,wind_gusts_10m&start_date=${date}&end_date=${date}&timezone=auto&wind_speed_unit=mph`;
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`Weather API returned ${resp.status}`);
+      const data = await resp.json();
+
+      // Get wind averaged over ride window (start hour to start hour + 3)
+      const times: string[] = data.hourly.time;
+      const speeds: number[] = data.hourly.wind_speed_10m;
+      const directions: number[] = data.hourly.wind_direction_10m;
+      const gusts: number[] = data.hourly.wind_gusts_10m;
+
+      // Find indices for ride window
+      let totalSpeed = 0, totalDir = 0, totalGust = 0, count = 0;
+      let dirSin = 0, dirCos = 0; // circular average for direction
+      for (let h = startHour; h <= Math.min(startHour + 3, 23); h++) {
+        const idx = times.findIndex((t: string) => t.endsWith(`T${h.toString().padStart(2, "0")}:00`));
+        if (idx !== -1) {
+          totalSpeed += speeds[idx];
+          totalGust += gusts[idx];
+          dirSin += Math.sin((directions[idx] * Math.PI) / 180);
+          dirCos += Math.cos((directions[idx] * Math.PI) / 180);
+          count++;
+        }
+      }
+
+      if (count === 0) throw new Error("No forecast data for selected time");
+
+      const avgSpeed = totalSpeed / count;
+      const avgGust = totalGust / count;
+      const avgDir = ((Math.atan2(dirSin / count, dirCos / count) * 180) / Math.PI + 360) % 360;
+
+      // Wind comes FROM this direction, so we want to ride INTO the wind first (outbound),
+      // then have tailwind coming back. The optimal ride direction is the direction
+      // the wind is coming FROM (so you ride into it while fresh, tailwind on return).
+      const windFromDir = avgDir; // degrees, 0=N means wind from North
+      const optimalRideDir = degreesToCompass(windFromDir);
+
+      windData = {
+        direction: avgDir,
+        speed: avgSpeed,
+        gustSpeed: avgGust,
+        recommendedDir: optimalRideDir,
+      };
+
+      // Update UI
+      const windInfo = document.getElementById("windInfo")!;
+      windInfo.classList.remove("hidden");
+
+      const arrowHead = document.getElementById("windArrowHead")!;
+      // Arrow points in the direction wind is blowing TO (FROM + 180)
+      // SVG arrow points up (North/0deg) by default, so rotate by wind_from + 180
+      arrowHead.setAttribute("transform", `rotate(${avgDir + 180} 20 20)`);
+
+      const compassFrom = degreesToCompass(avgDir);
+      const unit = getPreferredUnit();
+      const speedDisplay = unit === "km"
+        ? `${(avgSpeed * 1.609344).toFixed(0)} km/h`
+        : `${avgSpeed.toFixed(0)} mph`;
+      const gustDisplay = unit === "km"
+        ? `${(avgGust * 1.609344).toFixed(0)} km/h`
+        : `${avgGust.toFixed(0)} mph`;
+
+      document.getElementById("windSummary")!.textContent =
+        `Wind from ${compassFrom} at ${speedDisplay} (gusts ${gustDisplay})`;
+      document.getElementById("windDetail")!.textContent =
+        `Ride ${optimalRideDir} first for headwind out, tailwind home`;
+
+      // Highlight the recommended direction on compass
+      document.querySelectorAll(".compass-seg").forEach((b) => {
+        b.classList.remove("wind-recommended");
+      });
+      const recSeg = document.querySelector(`.compass-seg[data-dir="${optimalRideDir}"]`);
+      if (recSeg) recSeg.classList.add("wind-recommended");
+
+    } catch (err: any) {
+      const windInfo = document.getElementById("windInfo")!;
+      windInfo.classList.remove("hidden");
+      document.getElementById("windSummary")!.textContent = `Could not fetch wind: ${err.message}`;
+      document.getElementById("windDetail")!.textContent = "";
+    } finally {
+      btn.textContent = "Check Wind Forecast";
+      btn.disabled = false;
+    }
+  }
+
+  function degreesToCompass(deg: number): string {
+    const dirs = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
+    return dirs[Math.round(deg / 45) % 8];
+  }
+
+  function setWindDirection() {
+    if (!windData) return;
+    setDirection(windData.recommendedDir);
+  }
+
+  function setDirection(dir: string) {
+    selectedDirection = dir;
+    document.querySelectorAll(".compass-seg").forEach((seg) => {
+      seg.classList.toggle("active-dir", (seg as SVGElement).dataset.dir === dir);
+    });
+    (document.getElementById("directionSelect") as HTMLSelectElement).value = dir;
+    updateCompassNeedle(dir);
+  }
+
+  function updateCompassNeedle(dir: string) {
+    const needle = document.getElementById("compassNeedle");
+    if (!needle) return;
+    if (dir === "any") {
+      needle.classList.add("hidden");
+      return;
+    }
+    needle.classList.remove("hidden");
+    const angles: Record<string, number> = {
+      N: 0, NE: 45, E: 90, SE: 135, S: 180, SW: 225, W: 270, NW: 315,
+    };
+    const deg = angles[dir] ?? 0;
+    needle.setAttribute("transform", `rotate(${deg}, 60, 60)`);
+  }
+
+  // Auto-fetch wind and set direction in one step
+  async function fetchWindAndSetDirection() {
+    await fetchWind();
+    setWindDirection();
+  }
+
+  // ── Profile → BRouter mapping ──
+  // Our UI profiles (flat/mixed/hilly) map to BRouter trekking-family profiles
+  // with parameter overrides to control elevation preference.
+  function profileToBRouterParams(profile: string): { profile: string; extra: string } {
+    // Use `fastbike` for all profiles — it's the most road-oriented BRouter profile
+    // and avoids cycle paths/greenways better than fastbike-lowtraffic.
+    // Boolean profile overrides (like ignore_cycleroutes) cause 500 on the public API.
+    switch (profile) {
+      case "flat":
+        return { profile: "fastbike", extra: "&profile:uphillcost=300&profile:downhillcost=200" };
+      case "hilly":
+        return { profile: "fastbike", extra: "&profile:uphillcost=60&profile:downhillcost=40" };
+      case "mixed":
+      default:
+        return { profile: "fastbike", extra: "" };
+    }
+  }
+
+  // ── Town Search (Nominatim) ──
+  function setupTownSearch() {
+    const input = document.getElementById("townSearch") as HTMLInputElement;
+    const results = document.getElementById("townResults")!;
+    if (!input) return;
+
+    input.addEventListener("input", () => {
+      const q = input.value.trim();
+      if (q.length < 1) { results.classList.add("hidden"); return; }
+      searchTowns(q);
+    });
+
+    // Close dropdown on outside click
+    document.addEventListener("click", (e) => {
+      if (!results.contains(e.target as Node) && e.target !== input) {
+        results.classList.add("hidden");
+      }
+    });
+  }
+
+  function searchTowns(query: string) {
+    const results = document.getElementById("townResults")!;
+    const towns: any[] = (window as any).__niTowns || [];
+    const q = query.toLowerCase();
+
+    const matches = towns
+      .filter((t: any) => t.name.toLowerCase().includes(q))
+      .slice(0, 10);
+
+    if (matches.length === 0) {
+      results.innerHTML = '<div class="px-3 py-2 text-sm text-gray-400">No towns found</div>';
+      results.classList.remove("hidden");
+      return;
+    }
+
+    const typeLabels: Record<string, string> = { city: "City", town: "Town", village: "Village" };
+    results.innerHTML = matches.map((t: any) => `
+      <button class="town-result w-full text-left px-3 py-2 text-sm hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-0"
+        data-lat="${t.lat}" data-lon="${t.lon}" data-name="${escapeHtml(t.name)}">
+        <span class="font-medium">${escapeHtml(t.name)}</span>
+        <span class="text-xs text-gray-400 ml-1">${typeLabels[t.type] || t.type}</span>
+      </button>
+    `).join("");
+
+    results.querySelectorAll(".town-result").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const el = btn as HTMLElement;
+        addStop(parseFloat(el.dataset.lat!), parseFloat(el.dataset.lon!), el.dataset.name!);
+        (document.getElementById("townSearch") as HTMLInputElement).value = "";
+        results.classList.add("hidden");
+      });
+    });
+
+    results.classList.remove("hidden");
+  }
+
+  // ── Cafe Search (from build-time data) ──
+  function setupCafeSearch() {
+    const input = document.getElementById("cafeSearch") as HTMLInputElement;
+    const results = document.getElementById("cafeResults")!;
+    if (!input) return;
+
+    input.addEventListener("input", () => {
+      const q = input.value.trim().toLowerCase();
+      if (q.length < 1) { results.classList.add("hidden"); return; }
+      searchCafes(q);
+    });
+
+    document.addEventListener("click", (e) => {
+      if (!results.contains(e.target as Node) && e.target !== input) {
+        results.classList.add("hidden");
+      }
+    });
+  }
+
+  function getRideDateForCafes(): Date {
+    const daySelect = document.getElementById("rideDay") as HTMLSelectElement;
+    const timeInput = document.getElementById("rideTime") as HTMLInputElement;
+    const rideDate = new Date(daySelect.value);
+    const [rideHour, rideMinute] = timeInput.value.split(":").map(Number);
+    rideDate.setHours(rideHour + 1, rideMinute + 30, 0, 0);
+    return rideDate;
+  }
+
+  function searchCafes(query: string) {
+    const results = document.getElementById("cafeResults")!;
+    const cafes: any[] = (window as any).__niCafes || [];
+    const rideDate = getRideDateForCafes();
+
+    const matches = cafes
+      .filter((c: any) => c.name.toLowerCase().includes(query) || (c.town && c.town.toLowerCase().includes(query)))
+      .map((c: any) => {
+        const isOpen = c.openingHours ? checkOpenSimple(c.openingHours, rideDate) : null;
+        return { ...c, isOpen };
+      })
+      // Sort: open first, then unknown, then closed
+      .sort((a: any, b: any) => {
+        const order = (v: boolean | null) => v === true ? 0 : v === null ? 1 : 2;
+        return order(a.isOpen) - order(b.isOpen);
+      })
+      .slice(0, 12);
+
+    if (matches.length === 0) {
+      results.innerHTML = '<div class="px-3 py-2 text-sm text-gray-400">No cafes found</div>';
+      results.classList.remove("hidden");
+      return;
+    }
+
+    results.innerHTML = matches.map((cafe: any) => {
+      const openBadge = cafe.isOpen === true ? '<span class="text-green-600 text-xs font-semibold">Open</span>'
+        : cafe.isOpen === false ? '<span class="text-red-500 text-xs font-semibold">Closed</span>'
+        : '';
+      const townText = cafe.town ? `<span class="text-xs text-gray-400">${escapeHtml(cafe.town)}</span>` : '';
+      return `
+        <button class="cafe-result w-full text-left px-3 py-2 text-sm hover:bg-gray-50 cursor-pointer border-b border-gray-100 last:border-0${cafe.isOpen === false ? ' opacity-50' : ''}"
+          data-lat="${cafe.lat}" data-lon="${cafe.lon}" data-name="${escapeHtml(cafe.name)}">
+          <div class="flex items-center justify-between gap-2">
+            <span class="font-medium">${escapeHtml(cafe.name)}</span>
+            ${openBadge}
+          </div>
+          <div class="flex items-center gap-2">
+            ${townText}
+            ${cafe.openingHours ? `<span class="text-xs text-gray-300">${escapeHtml(cafe.openingHours)}</span>` : ""}
+          </div>
+        </button>`;
+    }).join("");
+
+    results.querySelectorAll(".cafe-result").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const el = btn as HTMLElement;
+        addStop(parseFloat(el.dataset.lat!), parseFloat(el.dataset.lon!), el.dataset.name!);
+        (document.getElementById("cafeSearch") as HTMLInputElement).value = "";
+        results.classList.add("hidden");
+      });
+    });
+
+    results.classList.remove("hidden");
+  }
+
+  // ── Cafe Map Toggle ──
+  function clearCafeMarkers() {
+    cafeMarkers.forEach((m) => map.removeLayer(m));
+    cafeMarkers = [];
+    const countEl = document.getElementById("cafeMapCount");
+    if (countEl) countEl.textContent = "";
+  }
+
+  function showAllCafesOnMap() {
+    clearCafeMarkers();
+
+    const cafes: any[] = (window as any).__niCafes || [];
+    if (cafes.length === 0) return;
+
+    const rideDate = getRideDateForCafes();
+
+    const cafeIcon = L.divIcon({
+      html: '<div style="background:#fff;width:24px;height:24px;border-radius:50%;border:2px solid #E91E8C;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 1px 4px rgba(0,0,0,0.3);">&#9749;</div>',
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      className: "",
+    });
+
+    const cafeIconClosed = L.divIcon({
+      html: '<div style="background:#f3f4f6;width:24px;height:24px;border-radius:50%;border:2px solid #9ca3af;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:0 1px 4px rgba(0,0,0,0.2);opacity:0.6;">&#9749;</div>',
+      iconSize: [24, 24],
+      iconAnchor: [12, 12],
+      className: "",
+    });
+
+    let openCount = 0;
+
+    for (const cafe of cafes) {
+      let isOpen: boolean | null = null;
+      if (cafe.openingHours) {
+        isOpen = checkOpenSimple(cafe.openingHours, rideDate);
+      }
+
+      const statusText = isOpen === true ? '<span style="color:#16a34a;font-weight:600;">Open</span>'
+        : isOpen === false ? '<span style="color:#dc2626;font-weight:600;">Closed</span>'
+        : '<span style="color:#9ca3af;">Hours unknown</span>';
+
+      if (isOpen === true) openCount++;
+
+      const icon = isOpen === false ? cafeIconClosed : cafeIcon;
+      const marker = L.marker([cafe.lat, cafe.lon], { icon }).addTo(map);
+
+      const townLine = cafe.town ? `<span style="font-size:11px;color:#6b7280;">${escapeHtml(cafe.town)}</span><br/>` : '';
+      const popupHtml = `
+        <div style="min-width:160px;">
+          <strong>${escapeHtml(cafe.name)}</strong><br/>
+          ${townLine}
+          ${statusText}<br/>
+          ${cafe.openingHours ? `<span style="font-size:11px;color:#6b7280;">${escapeHtml(cafe.openingHours)}</span><br/>` : ""}
+          ${cafe.phone ? `<span style="font-size:11px;color:#6b7280;">${escapeHtml(cafe.phone)}</span><br/>` : ""}
+          <button onclick="window.__addCafeAsStop(${cafe.lat}, ${cafe.lon}, '${escapeHtml(cafe.name).replace(/'/g, "\\'")}')"
+            style="margin-top:6px;padding:4px 10px;background:#E91E8C;color:white;border:none;border-radius:6px;font-size:12px;cursor:pointer;">
+            Add as Stop
+          </button>
+        </div>`;
+      marker.bindPopup(popupHtml);
+      cafeMarkers.push(marker);
+    }
+
+    const countEl = document.getElementById("cafeMapCount");
+    if (countEl) countEl.textContent = `${cafes.length} cafes${openCount > 0 ? `, ${openCount} likely open` : ""}`;
+  }
+
+  function haversineKm(lat1: number, lon1: number, lat2: number, lon2: number): number {
+    const R = 6371;
+    const dLat = ((lat2 - lat1) * Math.PI) / 180;
+    const dLon = ((lon2 - lon1) * Math.PI) / 180;
+    const a = Math.sin(dLat / 2) ** 2 + Math.cos((lat1 * Math.PI) / 180) * Math.cos((lat2 * Math.PI) / 180) * Math.sin(dLon / 2) ** 2;
+    return R * 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+  }
+
+  // Simple opening_hours checker (handles common patterns without external lib)
+  function checkOpenSimple(oh: string, date: Date): boolean | null {
+    try {
+      const dayNames = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"];
+      const dayAbbr = dayNames[date.getDay()];
+      const timeStr = `${date.getHours().toString().padStart(2, "0")}:${date.getMinutes().toString().padStart(2, "0")}`;
+      const currentMinutes = date.getHours() * 60 + date.getMinutes();
+
+      // Handle "24/7"
+      if (oh.trim() === "24/7") return true;
+
+      // Split by semicolons for multiple rules
+      const rules = oh.split(";").map((r) => r.trim());
+
+      for (const rule of rules) {
+        // Skip "off" or "closed" standalone
+        if (rule === "off" || rule === "closed") continue;
+
+        // Try to match patterns like "Mo-Fr 07:00-18:00" or "Sa,Su 08:00-16:00" or "Mo-Su 09:00-17:00"
+        const match = rule.match(/^([A-Za-z, -]+?)\s+(\d{2}:\d{2})\s*-\s*(\d{2}:\d{2})(?:\s*(off|closed))?$/);
+        if (!match) continue;
+
+        const dayPart = match[1];
+        const openTime = match[2];
+        const closeTime = match[3];
+        const isClosed = match[4] === "off" || match[4] === "closed";
+
+        // Check if current day matches
+        if (!dayMatchesSimple(dayPart, dayAbbr)) continue;
+
+        // Check time
+        const openMin = parseTime(openTime);
+        const closeMin = parseTime(closeTime);
+
+        if (isClosed) {
+          if (currentMinutes >= openMin && currentMinutes < closeMin) return false;
+        } else {
+          if (closeMin > openMin) {
+            if (currentMinutes >= openMin && currentMinutes < closeMin) return true;
+          } else {
+            // Wraps midnight
+            if (currentMinutes >= openMin || currentMinutes < closeMin) return true;
+          }
+        }
+      }
+
+      // If we found rules but none matched the day/time
+      if (rules.length > 0 && rules.some((r) => r.match(/\d{2}:\d{2}/))) return false;
+
+      return null; // Can't determine
+    } catch {
+      return null;
+    }
+  }
+
+  function dayMatchesSimple(dayPart: string, target: string): boolean {
+    const allDays = ["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"];
+    const segments = dayPart.split(",").map((s) => s.trim());
+
+    for (const seg of segments) {
+      if (seg.includes("-")) {
+        const [start, end] = seg.split("-").map((d) => d.trim());
+        const si = allDays.indexOf(start);
+        const ei = allDays.indexOf(end);
+        const ti = allDays.indexOf(target);
+        if (si === -1 || ei === -1 || ti === -1) continue;
+        if (si <= ei) {
+          if (ti >= si && ti <= ei) return true;
+        } else {
+          if (ti >= si || ti <= ei) return true;
+        }
+      } else {
+        if (seg === target) return true;
+      }
+    }
+    return false;
+  }
+
+  function parseTime(t: string): number {
+    const [h, m] = t.split(":").map(Number);
+    return h * 60 + m;
+  }
+
+  function escapeHtml(str: string): string {
+    return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+  }
+
+  // Global function for popup buttons
+  (window as any).__addCafeAsStop = (lat: number, lon: number, name: string) => {
+    // Check if already added
+    const existing = stops.find((s) => Math.abs(s.lat - lat) < 0.0001 && Math.abs(s.lon - lon) < 0.0001);
+    if (existing) {
+      alert(`${name} is already in your stops list.`);
+      return;
+    }
+    addStop(lat, lon, name);
+    map.closePopup();
+  };
+
+  // ── Ride Day Picker ──
+  function populateRideDays() {
+    const select = document.getElementById("rideDay") as HTMLSelectElement;
+    const dayNames = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    const today = new Date();
+    select.innerHTML = "";
+    for (let i = 0; i < 7; i++) {
+      const d = new Date(today);
+      d.setDate(today.getDate() + i);
+      const iso = d.toISOString().split("T")[0];
+      const label = i === 0 ? `Today (${dayNames[d.getDay()]})` : i === 1 ? `Tomorrow (${dayNames[d.getDay()]})` : `${dayNames[d.getDay()]} ${d.getDate()}/${d.getMonth() + 1}`;
+      const opt = document.createElement("option");
+      opt.value = iso;
+      opt.textContent = label;
+      select.appendChild(opt);
+    }
+  }
+
+  // ── Distance Label ──
+  // Keep slider and number input in sync. The slider always stores km internally.
+  function updateDistanceLabel(source?: "slider" | "number") {
+    const slider = document.getElementById("distance") as HTMLInputElement;
+    const numInput = document.getElementById("distanceNumber") as HTMLInputElement;
+    const unitLabel = document.getElementById("distUnitLabel");
+    const unit = getPreferredUnit();
+
+    if (source === "number") {
+      // User typed in the number input - value is in display unit, convert to km for slider
+      const val = parseFloat(numInput.value) || 5;
+      const km = unit === "km" ? val : Math.round(val * 1.609344);
+      slider.value = String(Math.max(5, Math.min(322, km)));
+    } else {
+      // Slider changed or unit toggled - update number input in display unit
+      const km = parseInt(slider.value);
+      if (unit === "km") {
+        numInput.value = String(km);
+      } else {
+        numInput.value = String(Math.round(kmToMiles(km)));
+      }
+    }
+
+    if (unitLabel) unitLabel.textContent = unit === "km" ? "km" : "mi";
+
+    // Update number input max in display unit
+    if (unit === "km") {
+      numInput.max = "322";
+    } else {
+      numInput.max = "200";
+    }
+  }
+
+  function updateSpeedLabel() {
+    const unit = getPreferredUnit();
+    const label = document.getElementById("speedUnitLabel");
+    if (label) label.textContent = unit === "km" ? "km/h" : "mph";
+  }
+
+  // ── Waypoint Generation ──
+  // Simple approach: place a single turnaround point at half the target distance
+  // in the chosen direction. BRouter routes out and back, and user-added stops
+  // create any route variety needed.
+  function generateWaypoints(lat: number, lon: number, distanceKm: number, direction: string): [number, number][] {
+    // Half the target distance as straight-line reach (roads add ~30% over straight line)
+    const reachKm = (distanceKm / 2) * 0.7;
+    const reachLat = reachKm / 111.32;
+    const reachLon = reachKm / (111.32 * Math.cos((lat * Math.PI) / 180));
+
+    const dirAngles: Record<string, number | null> = {
+      N: Math.PI / 2, NE: Math.PI / 4, E: 0, SE: -Math.PI / 4,
+      S: -Math.PI / 2, SW: (-Math.PI * 3) / 4, W: Math.PI, NW: (Math.PI * 3) / 4,
+      any: null,
+    };
+
+    const angle = direction !== "any" && dirAngles[direction] !== null
+      ? dirAngles[direction]!
+      : Math.random() * 2 * Math.PI;
+
+    // Single turnaround point
+    const turnLat = lat + reachLat * Math.sin(angle);
+    const turnLon = lon + reachLon * Math.cos(angle);
+
+    return [[turnLon, turnLat]];
+  }
+
+  // ── Build waypoint list for BRouter ──
+  // Start → stops (in order) → turnaround → stops (reverse) → start
+  function buildWaypoints(turnaround: [number, number][], startLon: number, startLat: number): [number, number][] {
+    const start: [number, number] = [startLon, startLat];
+    const turn = turnaround[0]; // Single turnaround point
+
+    if (stops.length === 0) {
+      return [start, turn, start];
+    }
+
+    // Stops are visited in order on the way out, and the route returns via BRouter's
+    // chosen roads back to start. We place stops between start and turnaround.
+    const stopCoords: [number, number][] = stops.map((s) => [s.lon, s.lat]);
+    return [start, ...stopCoords, turn, start];
+  }
+
+  // ── Route Generation ──
+  async function generateRoute() {
+    const btn = document.getElementById("btnGenerate") as HTMLButtonElement;
+    const status = document.getElementById("status")!;
+    btn.disabled = true;
+    btn.classList.add("opacity-50");
+    status.className = "text-sm min-h-[1.5rem] text-tqcc-gray";
+    status.textContent = "Calculating waypoints and requesting route...";
+
+    // Countdown timer in the button — re-enables after 10s if stalled
+    let countdown = 10;
+    btn.textContent = `Generating... (${countdown}s)`;
+    const countdownInterval = setInterval(() => {
+      countdown--;
+      if (countdown > 0) {
+        btn.textContent = `Generating... (${countdown}s)`;
+      } else {
+        clearInterval(countdownInterval);
+        btn.disabled = false;
+        btn.classList.remove("opacity-50");
+        btn.textContent = "Retry";
+      }
+    }, 1000);
+
+    const lat = parseFloat((document.getElementById("startLat") as HTMLInputElement).value);
+    const lon = parseFloat((document.getElementById("startLon") as HTMLInputElement).value);
+    const distKm = parseInt((document.getElementById("distance") as HTMLInputElement).value);
+    const avgSpeedInput = parseFloat((document.getElementById("avgSpeed") as HTMLInputElement).value);
+    const unit = getPreferredUnit();
+    const avgSpeedKmh = unit === "km" ? avgSpeedInput : avgSpeedInput * 1.609344;
+
+    try {
+    // Generate turnaround point and build waypoint list
+    status.textContent = "Calculating route...";
+    const turnaround = generateWaypoints(lat, lon, distKm, selectedDirection);
+    const allWaypoints = buildWaypoints(turnaround, lon, lat);
+
+    // Clear old waypoint markers
+    generatedWaypointMarkers.forEach((m: any) => map.removeLayer(m));
+    generatedWaypointMarkers = [];
+
+    // Request route from BRouter
+    status.textContent = "Requesting route from BRouter...";
+    const lonlats = allWaypoints.map((w) => `${w[0].toFixed(6)},${w[1].toFixed(6)}`).join("|");
+    const profileParams = profileToBRouterParams(selectedProfile);
+    const url = `https://brouter.de/brouter?lonlats=${lonlats}&profile=${profileParams.profile}&alternativeidx=0&format=geojson${profileParams.extra}`;
+
+    const resp = await fetch(url);
+    if (!resp.ok) {
+      const errText = await resp.text();
+      throw new Error(`BRouter returned ${resp.status}: ${errText}`);
+    }
+    const geojson = await resp.json();
+    const finalWaypoints = allWaypoints;
+
+      if (!geojson) throw new Error("No route returned from BRouter. Try a different direction or shorter distance.");
+
+      const feature = geojson.features[0];
+      const coords: [number, number, number][] = feature.geometry.coordinates;
+      const trackLength: number = feature.properties["track-length"];
+      const totalAscent: number = feature.properties["filtered ascent"] || feature.properties["plain-ascent"] || 0;
+
+      // Store the final waypoints for re-routing after deletion
+      lastBRouterWaypoints = [...finalWaypoints];
+
+      // Draw route
+      if (routeLayer) map.removeLayer(routeLayer);
+      const latLngs = coords.map((c) => [c[1], c[0]]);
+      routeLayer = L.polyline(latLngs, { color: "#E91E8C", weight: 4, opacity: 0.85 }).addTo(map);
+      map.fitBounds(routeLayer.getBounds().pad(0.1));
+      startMarker.setLatLng([lat, lon]);
+
+      // Make waypoint markers deletable (click to remove and re-route)
+      addDeletableWaypointMarkers(finalWaypoints);
+
+      // Show clear route button
+      document.getElementById("btnClearRoute")?.classList.remove("hidden");
+
+      // Stats
+      const distActualKm = trackLength / 1000;
+      const estMinutes = (distActualKm / avgSpeedKmh) * 60;
+      const hours = Math.floor(estMinutes / 60);
+      const mins = Math.round(estMinutes % 60);
+
+      const displayUnit = getPreferredUnit();
+      const distDisplay = displayUnit === "km"
+        ? `${distActualKm.toFixed(1)} km`
+        : `${(distActualKm * 0.621371).toFixed(1)} mi`;
+      const ascentDisplay = displayUnit === "km"
+        ? `${Math.round(totalAscent)} m`
+        : `${Math.round(totalAscent * 3.28084)} ft`;
+      const targetDisplay = displayUnit === "km"
+        ? `${distKm} km`
+        : `${Math.round(kmToMiles(distKm))} mi`;
+      const speedDisplay = displayUnit === "km"
+        ? `${avgSpeedKmh.toFixed(0)} km/h`
+        : `${avgSpeedInput} mph`;
+
+      document.getElementById("statDist")!.textContent = distDisplay;
+      document.getElementById("statTime")!.textContent = `${hours}h ${mins}m @ ${speedDisplay}`;
+      document.getElementById("statAscent")!.textContent = ascentDisplay;
+      const profileLabels: Record<string, string> = { "flat": "Flat", "mixed": "Mixed", "hilly": "Hilly" };
+      document.getElementById("statProfile")!.textContent = profileLabels[selectedProfile] || selectedProfile;
+      document.getElementById("routeInfo")!.classList.remove("hidden");
+
+      // Generate GPX
+      lastGPX = generateGPXString(coords, {
+        name: `${(document.getElementById("startName") as HTMLInputElement).value} - ${distDisplay} Loop`,
+        distance: distDisplay,
+        profile: selectedProfile,
+      });
+
+      (document.getElementById("btnDownload") as HTMLButtonElement).disabled = false;
+      document.getElementById("btnStrava")?.classList.remove("hidden");
+      document.getElementById("stravaInstructions")?.classList.remove("hidden");
+      status.className = "text-sm min-h-[1.5rem] text-green-600 font-semibold";
+      const stopsNote = stops.length > 0 ? ` via ${stops.length} stop(s)` : "";
+      status.textContent = `Route generated: ${distDisplay}${stopsNote} (target was ${targetDisplay})`;
+    } catch (err: any) {
+      status.className = "text-sm min-h-[1.5rem] text-red-500 font-semibold";
+      status.textContent = `Error: ${err.message}`;
+    } finally {
+      clearInterval(countdownInterval);
+      btn.disabled = false;
+      btn.classList.remove("opacity-50");
+      btn.textContent = "Generate Route";
+    }
+  }
+
+  function addDeletableWaypointMarkers(wps: [number, number][]) {
+    generatedWaypointMarkers.forEach((m: any) => map.removeLayer(m));
+    generatedWaypointMarkers = [];
+    const delIcon = L.divIcon({
+      html: '<div style="background:#9ca3af;width:10px;height:10px;border-radius:50%;border:2px solid #fff;cursor:pointer;transition:background 0.15s;"></div>',
+      iconSize: [10, 10],
+      iconAnchor: [5, 5],
+      className: "",
+    });
+    // Skip first and last waypoints (start/end point — same location for loops)
+    wps.forEach((wp, idx) => {
+      if (idx === 0 || idx === wps.length - 1) return;
+      const m = L.marker([wp[1], wp[0]], { icon: delIcon }).addTo(map);
+      m.bindTooltip("Click to remove this waypoint", { direction: "top", offset: [0, -6] });
+      m.on("mouseover", () => {
+        m.getElement()?.querySelector("div")?.style.setProperty("background", "#ef4444");
+      });
+      m.on("mouseout", () => {
+        m.getElement()?.querySelector("div")?.style.setProperty("background", "#9ca3af");
+      });
+      m.on("click", () => {
+        // Remove this waypoint and re-route
+        const wpIdx = lastBRouterWaypoints.findIndex((w) => w[0] === wp[0] && w[1] === wp[1]);
+        if (wpIdx > 0 && wpIdx < lastBRouterWaypoints.length - 1) {
+          lastBRouterWaypoints.splice(wpIdx, 1);
+          map.removeLayer(m);
+          generatedWaypointMarkers = generatedWaypointMarkers.filter((gm) => gm !== m);
+          reroute(lastBRouterWaypoints);
+        }
+      });
+      generatedWaypointMarkers.push(m);
+    });
+  }
+
+  function clearRoute() {
+    if (routeLayer) { map.removeLayer(routeLayer); routeLayer = null; }
+    generatedWaypointMarkers.forEach((m: any) => map.removeLayer(m));
+    generatedWaypointMarkers = [];
+    lastBRouterWaypoints = [];
+    lastGPX = null;
+    document.getElementById("routeInfo")?.classList.add("hidden");
+    (document.getElementById("btnDownload") as HTMLButtonElement).disabled = true;
+    document.getElementById("btnStrava")?.classList.add("hidden");
+    document.getElementById("stravaInstructions")?.classList.add("hidden");
+    document.getElementById("btnClearRoute")?.classList.add("hidden");
+    const status = document.getElementById("status")!;
+    status.className = "text-sm min-h-[1.5rem]";
+    status.textContent = "";
+  }
+
+  async function reroute(waypoints: [number, number][]) {
+    if (waypoints.length < 2) { clearRoute(); return; }
+    const status = document.getElementById("status")!;
+    const btn = document.getElementById("btnGenerate") as HTMLButtonElement;
+    btn.disabled = true;
+    btn.classList.add("opacity-50");
+    btn.textContent = "Re-routing...";
+    status.className = "text-sm min-h-[1.5rem] text-gray-500";
+    status.textContent = "Re-routing after waypoint change...";
+
+    try {
+      const lonlats = waypoints.map((w) => `${w[0].toFixed(6)},${w[1].toFixed(6)}`).join("|");
+      const profileParams = profileToBRouterParams(selectedProfile);
+      const url = `https://brouter.de/brouter?lonlats=${lonlats}&profile=${profileParams.profile}&alternativeidx=0&format=geojson${profileParams.extra}`;
+      const resp = await fetch(url);
+      if (!resp.ok) throw new Error(`BRouter returned ${resp.status}`);
+      const geojson = await resp.json();
+      const feature = geojson.features[0];
+      const coords: [number, number, number][] = feature.geometry.coordinates;
+      const trackLength: number = feature.properties["track-length"];
+      const totalAscent: number = feature.properties["filtered ascent"] || feature.properties["plain-ascent"] || 0;
+
+      if (routeLayer) map.removeLayer(routeLayer);
+      const latLngs = coords.map((c) => [c[1], c[0]]);
+      routeLayer = L.polyline(latLngs, { color: "#E91E8C", weight: 4, opacity: 0.85 }).addTo(map);
+      map.fitBounds(routeLayer.getBounds().pad(0.1));
+
+      lastBRouterWaypoints = [...waypoints];
+      addDeletableWaypointMarkers(waypoints);
+
+      const avgSpeedInput = parseFloat((document.getElementById("avgSpeed") as HTMLInputElement).value) || 15;
+      const avgSpeedKmh = milesToKm(avgSpeedInput);
+      const distActualKm = trackLength / 1000;
+      const estMinutes = (distActualKm / avgSpeedKmh) * 60;
+      const hours = Math.floor(estMinutes / 60);
+      const mins = Math.round(estMinutes % 60);
+      const displayUnit = getPreferredUnit();
+      const distDisplay = displayUnit === "km"
+        ? `${distActualKm.toFixed(1)} km`
+        : `${(distActualKm * 0.621371).toFixed(1)} mi`;
+      const ascentDisplay = displayUnit === "km"
+        ? `${Math.round(totalAscent)} m`
+        : `${Math.round(totalAscent * 3.28084)} ft`;
+      const speedDisplay = displayUnit === "km"
+        ? `${avgSpeedKmh.toFixed(0)} km/h`
+        : `${avgSpeedInput} mph`;
+
+      document.getElementById("statDist")!.textContent = distDisplay;
+      document.getElementById("statTime")!.textContent = `${hours}h ${mins}m @ ${speedDisplay}`;
+      document.getElementById("statAscent")!.textContent = ascentDisplay;
+      document.getElementById("routeInfo")!.classList.remove("hidden");
+
+      lastGPX = generateGPXString(coords, {
+        name: `${(document.getElementById("startName") as HTMLInputElement).value} - ${distDisplay} Loop`,
+        distance: distDisplay,
+        profile: selectedProfile,
+      });
+      (document.getElementById("btnDownload") as HTMLButtonElement).disabled = false;
+
+      status.className = "text-sm min-h-[1.5rem] text-green-600 font-semibold";
+      status.textContent = `Route updated: ${distDisplay}`;
+    } catch (err: any) {
+      status.className = "text-sm min-h-[1.5rem] text-red-500 font-semibold";
+      status.textContent = `Re-route failed: ${err.message}`;
+    } finally {
+      btn.disabled = false;
+      btn.classList.remove("opacity-50");
+      btn.textContent = "Generate Route";
+    }
+  }
+
+  // ── GPX Generation ──
+  function generateGPXString(coordinates: [number, number, number][], meta: { name: string; distance: string; profile: string }) {
+    const now = new Date().toISOString();
+    const escapeXml = (str: string) =>
+      str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+
+    let gpx = `<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="TQCC Route Builder"
+  xmlns="http://www.topografix.com/GPX/1/1"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd">
+  <metadata>
+    <name>${escapeXml(meta.name)}</name>
+    <desc>Generated cycling route - ${escapeXml(meta.distance)} loop using ${escapeXml(meta.profile)} profile</desc>
+    <time>${now}</time>
+  </metadata>\n`;
+
+    // Add stops as waypoints in GPX
+    for (const stop of stops) {
+      gpx += `  <wpt lat="${stop.lat.toFixed(7)}" lon="${stop.lon.toFixed(7)}"><name>${escapeXml(stop.name)}</name></wpt>\n`;
+    }
+
+    gpx += `  <trk>
+    <name>${escapeXml(meta.name)}</name>
+    <type>Cycling</type>
+    <trkseg>\n`;
+
+    for (const coord of coordinates) {
+      gpx += `      <trkpt lat="${coord[1].toFixed(7)}" lon="${coord[0].toFixed(7)}"><ele>${(coord[2] || 0).toFixed(1)}</ele></trkpt>\n`;
+    }
+
+    gpx += `    </trkseg>\n  </trk>\n</gpx>`;
+    return gpx;
+  }
+
+  function downloadGPX() {
+    if (!lastGPX) return;
+    const name = (document.getElementById("startName") as HTMLInputElement).value.replace(/[^a-zA-Z0-9]/g, "_");
+    const dist = (document.getElementById("distance") as HTMLInputElement).value;
+    const blob = new Blob([lastGPX], { type: "application/gpx+xml" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `tqcc_route_${name}_${dist}km.gpx`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+
+  // ── Auto-Persist State to localStorage ──
+  const STATE_KEY = "tqcc-route-state";
+
+  function getState(): Record<string, any> {
+    try { return JSON.parse(localStorage.getItem(STATE_KEY) || "{}"); }
+    catch { return {}; }
+  }
+
+  function persistState() {
+    const state: Record<string, any> = {
+      startName: (document.getElementById("startName") as HTMLInputElement).value,
+      startLat: parseFloat((document.getElementById("startLat") as HTMLInputElement).value),
+      startLon: parseFloat((document.getElementById("startLon") as HTMLInputElement).value),
+      distance: parseInt((document.getElementById("distance") as HTMLInputElement).value),
+      difficulty: (document.getElementById("difficulty") as HTMLInputElement).value,
+      profile: selectedProfile,
+      direction: selectedDirection,
+      avgSpeed: parseFloat((document.getElementById("avgSpeed") as HTMLInputElement).value),
+      rideTime: (document.getElementById("rideTime") as HTMLInputElement).value,
+    };
+    localStorage.setItem(STATE_KEY, JSON.stringify(state));
+  }
+
+  function restoreState() {
+    const state = getState();
+    if (!state.startName) return; // Nothing saved yet
+
+    (document.getElementById("startName") as HTMLInputElement).value = state.startName || "Titanic Quarter Spar";
+    (document.getElementById("startLat") as HTMLInputElement).value = state.startLat ?? 54.6045;
+    (document.getElementById("startLon") as HTMLInputElement).value = state.startLon ?? -5.9125;
+    (document.getElementById("distance") as HTMLInputElement).value = state.distance ?? 40;
+    (document.getElementById("difficulty") as HTMLInputElement).value = state.difficulty ?? "2";
+    (document.getElementById("avgSpeed") as HTMLInputElement).value = state.avgSpeed ?? 15;
+    if (state.rideTime) (document.getElementById("rideTime") as HTMLInputElement).value = state.rideTime;
+
+    const diffLabels: Record<string, string> = { "1": "Some main roads", "2": "Low traffic", "3": "Very quiet" };
+    const diffLabel = document.getElementById("diffLabel");
+    if (diffLabel) diffLabel.textContent = diffLabels[state.difficulty || "2"];
+
+    const validProfiles = ["flat", "mixed", "hilly"];
+    selectedProfile = validProfiles.includes(state.profile) ? state.profile : "flat";
+    document.querySelectorAll(".profile-btn").forEach((b) => {
+      b.classList.toggle("active-profile", (b as HTMLElement).dataset.profile === selectedProfile);
+    });
+
+    const validDirs = ["any", "N", "NE", "E", "SE", "S", "SW", "W", "NW"];
+    const restoredDir = validDirs.includes(state.direction) ? state.direction : "any";
+    setDirection(restoredDir);
+
+    updateDistanceLabel();
+    highlightActivePreset();
+
+    if (map && startMarker) {
+      const lat = state.startLat ?? 54.6045;
+      const lon = state.startLon ?? -5.9125;
+      startMarker.setLatLng([lat, lon]);
+      map.setView([lat, lon], 13);
+    }
+  }
+
+  // Debounce persist so we don't thrash localStorage on every slider tick
+  let persistTimer: ReturnType<typeof setTimeout>;
+  function debouncedPersist() {
+    clearTimeout(persistTimer);
+    persistTimer = setTimeout(persistState, 300);
+  }
+
+  // Highlight the matching preset button based on current lat/lon
+  function highlightActivePreset() {
+    const lat = parseFloat((document.getElementById("startLat") as HTMLInputElement).value);
+    const lon = parseFloat((document.getElementById("startLon") as HTMLInputElement).value);
+    document.querySelectorAll(".start-preset").forEach((btn) => {
+      const pLat = parseFloat((btn as HTMLElement).dataset.lat || "0");
+      const pLon = parseFloat((btn as HTMLElement).dataset.lon || "0");
+      const isMatch = Math.abs(lat - pLat) < 0.001 && Math.abs(lon - pLon) < 0.001;
+      btn.classList.toggle("active-dir", isMatch); // reuse the yellow active style
+    });
+  }
+
+  function selectPreset(btn: HTMLElement) {
+    const name = btn.dataset.name!;
+    const lat = btn.dataset.lat!;
+    const lon = btn.dataset.lon!;
+    (document.getElementById("startName") as HTMLInputElement).value = name;
+    (document.getElementById("startLat") as HTMLInputElement).value = lat;
+    (document.getElementById("startLon") as HTMLInputElement).value = lon;
+    if (map && startMarker) {
+      startMarker.setLatLng([parseFloat(lat), parseFloat(lon)]);
+      map.setView([parseFloat(lat), parseFloat(lon)], 13);
+    }
+    highlightActivePreset();
+    debouncedPersist();
+  }
+
+  // ── Setup UI ──
+  function setupUI() {
+    // Distance
+    document.getElementById("distance")?.addEventListener("input", () => { updateDistanceLabel("slider"); debouncedPersist(); });
+    document.getElementById("distanceNumber")?.addEventListener("change", () => { updateDistanceLabel("number"); debouncedPersist(); });
+
+    // Difficulty
+    document.getElementById("difficulty")?.addEventListener("input", function (this: HTMLInputElement) {
+      const labels: Record<string, string> = { "1": "Some main roads", "2": "Low traffic", "3": "Very quiet" };
+      const diffLabel = document.getElementById("diffLabel");
+      if (diffLabel) diffLabel.textContent = labels[this.value];
+      debouncedPersist();
+    });
+
+    // Routing profile
+    document.querySelectorAll(".profile-btn").forEach((btn) => {
+      btn.addEventListener("click", function (this: HTMLElement) {
+        document.querySelectorAll(".profile-btn").forEach((b) => b.classList.remove("active-profile"));
+        this.classList.add("active-profile");
+        selectedProfile = this.dataset.profile || "flat";
+        debouncedPersist();
+      });
+    });
+
+    // Direction — compass segments + dropdown stay in sync
+    document.querySelectorAll(".compass-seg").forEach((seg) => {
+      seg.addEventListener("click", () => {
+        setDirection((seg as SVGElement).dataset.dir || "any");
+        debouncedPersist();
+      });
+    });
+
+    document.getElementById("directionSelect")?.addEventListener("change", (e) => {
+      setDirection((e.target as HTMLSelectElement).value);
+      debouncedPersist();
+    });
+
+    // Starting location presets
+    document.querySelectorAll(".start-preset").forEach((btn) => {
+      btn.addEventListener("click", () => selectPreset(btn as HTMLElement));
+    });
+
+    // Persist on any start location input change
+    ["startName", "startLat", "startLon"].forEach((id) => {
+      document.getElementById(id)?.addEventListener("change", () => { highlightActivePreset(); debouncedPersist(); });
+    });
+
+    // Persist on other input changes
+    ["avgSpeed"].forEach((id) => {
+      document.getElementById(id)?.addEventListener("change", debouncedPersist);
+    });
+
+    // Auto-fetch wind when day or time changes
+    document.getElementById("rideDay")?.addEventListener("change", () => { debouncedPersist(); fetchWindAndSetDirection(); });
+    document.getElementById("rideTime")?.addEventListener("change", () => { debouncedPersist(); fetchWindAndSetDirection(); });
+
+    // Actions
+    // Map click mode toggles
+    document.querySelectorAll(".map-mode-btn").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const mode = (btn as HTMLElement).dataset.mode as "none" | "start" | "stop";
+        mapClickMode = mode;
+        document.querySelectorAll(".map-mode-btn").forEach((b) => b.classList.remove("active-map-mode"));
+        btn.classList.add("active-map-mode");
+        const hint = document.getElementById("mapModeHint")!;
+        const mapEl = document.getElementById("map")!;
+        mapEl.classList.remove("map-mode-start", "map-mode-stop");
+        if (mode === "start") {
+          hint.textContent = "Click the map to set start point";
+          mapEl.classList.add("map-mode-start");
+        } else if (mode === "stop") {
+          hint.textContent = "Click the map to add a stop";
+          mapEl.classList.add("map-mode-stop");
+        } else {
+          hint.textContent = "Map clicks disabled";
+        }
+      });
+    });
+
+    document.getElementById("btnGenerate")?.addEventListener("click", generateRoute);
+    document.getElementById("btnDownload")?.addEventListener("click", downloadGPX);
+    document.getElementById("btnClearRoute")?.addEventListener("click", clearRoute);
+
+    // Stop management
+    setupTownSearch();
+    setupCafeSearch();
+    document.getElementById("toggleCafesOnMap")?.addEventListener("change", (e) => {
+      const checked = (e.target as HTMLInputElement).checked;
+      if (checked) showAllCafesOnMap(); else clearCafeMarkers();
+    });
+    document.getElementById("btnClearStops")?.addEventListener("click", clearAllStops);
+
+    // Wind
+    document.getElementById("btnFetchWind")?.addEventListener("click", fetchWind);
+    document.getElementById("btnUseWind")?.addEventListener("click", setWindDirection);
+
+    // Unit changes
+    window.addEventListener("unit-change", () => {
+      updateDistanceLabel();
+      updateSpeedLabel();
+    });
+
+    populateRideDays();
+    restoreState();
+    // Initialize compass if restoreState didn't (no saved state)
+    if (!document.querySelector(".compass-seg.active-dir")) {
+      setDirection("any");
+    }
+    updateDistanceLabel();
+    updateSpeedLabel();
+    highlightActivePreset();
+
+    // Auto-fetch wind for today's default and set direction
+    fetchWindAndSetDirection();
+  }
+
+  // ── Init ──
+  function init() {
+    const content = document.getElementById("members-content");
+    if (content && !content.classList.contains("hidden")) {
+      initMap();
+      setupUI();
+    }
+  }
+
+  window.addEventListener("route-builder-unlocked", () => {
+    initMap();
+    setupUI();
+  });
+
+  document.addEventListener("astro:page-load", init);
+</script>
