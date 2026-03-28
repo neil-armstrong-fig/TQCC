@@ -1,0 +1,126 @@
+<script>
+  import "vanilla-cookieconsent/dist/cookieconsent.css";
+  import * as CookieConsent from "vanilla-cookieconsent";
+
+  CookieConsent.run({
+    mode: "opt-in",
+    autoShow: true,
+    manageScriptTags: true,
+    autoClearCookies: true,
+    hideFromBots: true,
+
+    cookie: {
+      name: "cc_cookie",
+      expiresAfterDays: 365,
+      sameSite: "Lax",
+    },
+
+    categories: {
+      necessary: {
+        enabled: true,
+        readOnly: true,
+      },
+      analytics: {
+        enabled: false,
+        autoClear: {
+          cookies: [
+            { name: /^_ga/ },
+            { name: "_gid" },
+            { name: "_clck" },
+            { name: "_clsk" },
+          ],
+        },
+      },
+    },
+
+    guiOptions: {
+      consentModal: {
+        layout: "box",
+        position: "bottom right",
+        equalWeightButtons: true,
+        flipButtons: false,
+      },
+      preferencesModal: {
+        layout: "box",
+        equalWeightButtons: true,
+        flipButtons: false,
+      },
+    },
+
+    language: {
+      default: "en",
+      translations: {
+        en: {
+          consentModal: {
+            title: "We use cookies",
+            description:
+              "We use cookies to analyse site traffic and understand how visitors use our website. By accepting analytics cookies, you help us improve the TQCC website.",
+            acceptAllBtn: "Accept all",
+            acceptNecessaryBtn: "Reject all",
+            showPreferencesBtn: "Manage preferences",
+          },
+          preferencesModal: {
+            title: "Cookie preferences",
+            acceptAllBtn: "Accept all",
+            acceptNecessaryBtn: "Reject all",
+            savePreferencesBtn: "Save preferences",
+            closeIconLabel: "Close",
+            sections: [
+              {
+                title: "Cookie usage",
+                description:
+                  "We use cookies to ensure basic site functionality and to improve your experience on our website.",
+              },
+              {
+                title: "Necessary cookies",
+                description:
+                  "These cookies are essential for the website to function and cannot be switched off.",
+                linkedCategory: "necessary",
+              },
+              {
+                title: "Analytics cookies",
+                description:
+                  "These cookies help us understand how visitors interact with the site by collecting anonymous information.",
+                linkedCategory: "analytics",
+                cookieTable: {
+                  headers: {
+                    name: "Name",
+                    domain: "Domain",
+                    description: "Description",
+                    duration: "Duration",
+                  },
+                  body: [
+                    {
+                      name: "_ga",
+                      domain: "google.com",
+                      description: "Google Analytics, used to distinguish users",
+                      duration: "2 years",
+                    },
+                    {
+                      name: "_gid",
+                      domain: "google.com",
+                      description: "Google Analytics, used to distinguish users",
+                      duration: "1 day",
+                    },
+                    {
+                      name: "_clck",
+                      domain: "clarity.ms",
+                      description: "Microsoft Clarity, used to store a unique user ID",
+                      duration: "1 year",
+                    },
+                    {
+                      name: "_clsk",
+                      domain: "clarity.ms",
+                      description: "Microsoft Clarity, used to store and combine page views",
+                      duration: "1 day",
+                    },
+                  ],
+                },
+              },
+            ],
+          },
+        },
+      },
+    },
+  });
+</script>

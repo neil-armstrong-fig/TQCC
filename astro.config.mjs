@@ -23,7 +23,11 @@ export default defineConfig({
       // when new pages are added that shouldn't be publicly indexed.
       filter: (page) =>
         !page.includes("/admin") &&
-        !page.includes("/members"),
+        !page.includes("/members") &&
+        !page.includes("/ni-boccia-league") &&
+        !page.includes("/news") &&
+        !page.includes("/faqs") &&
+        !page.includes("/data-deletion"),
     }),
   ],
 });

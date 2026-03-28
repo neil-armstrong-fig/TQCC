@@ -8,9 +8,12 @@ interface Props {
   image?: string;
   location?: string;
   eventDate?: Date;
+  eventEndDate?: Date;
+  eventUrl?: string;
+  eventImage?: string;
 }
 
-const { type, title, description, datePublished, author, image, location, eventDate } =
+const { type, title, description, datePublished, author, image, location, eventDate, eventEndDate, eventUrl, eventImage } =
   Astro.props;
 const siteUrl = Astro.site?.toString().replace(/\/$/, "") || "https://titanicquartercc.com";
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
@@ -78,18 +81,38 @@ function buildSchema() {
   }
 
   if (type === "Event" && title && eventDate) {
-    schemas.push({
+    const eventSchema: Record<string, unknown> = {
       "@type": "SportsEvent",
       name: title,
       description,
       startDate: eventDate.toISOString(),
+      ...(eventEndDate && { endDate: eventEndDate.toISOString() }),
+      eventStatus: "https://schema.org/EventScheduled",
+      eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
       location: {
         "@type": "Place",
         name: location || "Belfast",
-        address: { addressLocality: "Belfast", addressCountry: "GB" },
+        address: {
+          "@type": "PostalAddress",
+          addressLocality: "Belfast",
+          addressRegion: "Northern Ireland",
+          addressCountry: "GB",
+        },
       },
       organizer: { "@id": `${siteUrl}/#organization` },
-    });
+      sport: "Cycling",
+    };
+    if (eventImage) {
+      eventSchema.image = eventImage.startsWith("/") ? `${siteUrl}${baseUrl}${eventImage}` : eventImage;
+    }
+    if (eventUrl) {
+      eventSchema.offers = {
+        "@type": "Offer",
+        url: eventUrl,
+        availability: "https://schema.org/InStock",
+      };
+    }
+    schemas.push(eventSchema);
   }
 
   return { "@context": "https://schema.org", "@graph": schemas };

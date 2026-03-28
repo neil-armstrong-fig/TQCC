@@ -66,11 +66,8 @@ export function metersToPreferredUnit(meters: number, unit: DistanceUnit): numbe
  * Format distance with the appropriate unit
  * Miles: 1 decimal place, Kilometers: whole numbers (unless keepDecimals is true)
  */
-export function formatDistance(meters: number, unit: DistanceUnit, keepDecimals = false): string {
+export function formatDistance(meters: number, unit: DistanceUnit): string {
   const distance = metersToPreferredUnit(meters, unit);
-  if (unit === "km" && !keepDecimals) {
-    return `${Math.round(distance)} ${unit}`;
-  }
   return `${distance.toFixed(1)} ${unit}`;
 }
 
@@ -80,9 +77,9 @@ export function formatDistance(meters: number, unit: DistanceUnit, keepDecimals 
  * Miles: 1 decimal place, Kilometers: whole numbers
  */
 export function convertDistanceString(distanceStr: string, targetUnit: DistanceUnit): string {
-  // If already in target unit, return as-is
+  // If already in target unit, round to whole numbers to hide precision decimals
   if (distanceStr.toLowerCase().includes(targetUnit)) {
-    return distanceStr;
+    return distanceStr.replace(/(\d+)\.\d+/g, '$1');
   }
 
   // Extract numbers and convert

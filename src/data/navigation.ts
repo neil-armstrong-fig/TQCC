@@ -1,6 +1,7 @@
 export interface NavItem {
   label: string;
   href: string;
+  highlight?: boolean;
 }
 
 export const mainNavigation: NavItem[] = [
@@ -11,6 +12,7 @@ export const mainNavigation: NavItem[] = [
   { label: "Membership", href: "/membership" },
   { label: "Gallery", href: "/gallery" },
   { label: "Contact", href: "/contact" },
+  { label: "Sportive", href: "/sportive", highlight: true },
 ];
 
 export const socialLinks = [
@@ -23,5 +25,10 @@ export const socialLinks = [
     platform: "Strava",
     url: "https://www.strava.com/clubs/110633",
     icon: "strava",
+  },
+  {
+    platform: "GitHub",
+    url: "https://github.com/neil-armstrong-fig/TQCC",
+    icon: "github",
   },
 ];

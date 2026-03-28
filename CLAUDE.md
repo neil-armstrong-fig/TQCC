@@ -32,3 +32,13 @@ The sitemap is generated automatically by `@astrojs/sitemap` at build time (conf
 - Password-gated or admin pages — add a `!page.includes("/your-path")` condition to the `filter` in `astro.config.mjs`.
 
 Currently excluded: `/admin`, `/members` (and all sub-paths).
+
+## Copy Style
+
+- Prefer **commas** over **em dashes** (—) for mid-sentence asides and parenthetical clauses in website copy.
+
+## External Links
+
+- When referencing an external organisation, venue, or resource in content, **link to their website** where possible.
+- All external links must open in a **new tab** (`target="_blank" rel="noopener noreferrer"`).
+- In markdown content files, use inline HTML `<a>` tags (not markdown link syntax) so that `target="_blank"` can be set.

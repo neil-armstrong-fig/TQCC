@@ -1,0 +1,55 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { getLastUpdated } from "../lib/git-date";
+const lastUpdated = getLastUpdated("src/pages/data-deletion.astro");
+---
+
+<BaseLayout
+  title="Data Deletion"
+  description="Data deletion instructions for Titanic Quarter Cycling Club."
+  lastUpdated={lastUpdated}
+>
+  <section class="py-12">
+    <div class="max-w-3xl mx-auto px-4 prose prose-invert prose-tqcc">
+      <h1 class="text-4xl font-bold mb-8">Data Deletion</h1>
+
+      <p>
+        Titanic Quarter Cycling Club does not collect, store, or process any personal data from
+        visitors to our website. Our use of the Instagram API is limited to displaying posts
+        from our own club account. No visitor authentication or login is required.
+      </p>
+
+      <h2>Requesting data deletion</h2>
+      <p>
+        If you believe we hold any personal data about you and would like to request its deletion,
+        please email us at
+        <a href="mailto:titanicquartercc@gmail.com">titanicquartercc@gmail.com</a>.
+        We will respond to your request within 30 days.
+      </p>
+
+      <h2>Clearing local data</h2>
+      <p>
+        Our website stores some preferences (such as unit settings and cookie consent) in your
+        browser's local storage. This data is stored only on your device and is never sent to us.
+        You can clear it at any time through your browser settings by clearing local storage and
+        cookies for this site.
+      </p>
+
+      <h2>Managing your Instagram data</h2>
+      <p>
+        If you wish to manage or delete data associated with your Instagram account, you can do so
+        directly through your
+        <a href="https://www.instagram.com/accounts/privacy_and_security/" target="_blank" rel="noopener noreferrer">
+          Instagram privacy and security settings</a>.
+      </p>
+
+      <h2>Analytics data</h2>
+      <p>
+        If you previously accepted analytics cookies, data may have been collected by Google Analytics
+        and Microsoft Clarity. You can opt out at any time using the "Manage cookies" link in the
+        footer. To request deletion of previously collected analytics data, please contact us and we
+        will make reasonable efforts to remove it from these services.
+      </p>
+    </div>
+  </section>
+</BaseLayout>

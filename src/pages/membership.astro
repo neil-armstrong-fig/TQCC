@@ -1,231 +1,241 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import FAQSchema from "../components/seo/FAQSchema.astro";
+import { getLastUpdated } from "../lib/git-date";
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
+const lastUpdated = getLastUpdated("src/pages/membership.astro");
 ---
 
 <BaseLayout
   title="Membership"
   description="Join Titanic Quarter Cycling Club in Belfast. Cycling club memberships for all abilities - beginners to experienced riders. Weekly group rides, social events, and a welcoming cycling community in Belfast, Northern Ireland."
+  lastUpdated={lastUpdated}
 >
   <FAQSchema />
   <section class="py-12">
-    <div class="max-w-4xl mx-auto px-4">
+    <div class="max-w-7xl mx-auto px-4">
       <h1 class="text-4xl font-bold mb-8">Join Belfast's Cycling Club</h1>
 
-      <div class="prose prose-lg max-w-none">
-        <p class="text-xl text-tqcc-gray leading-relaxed">
-          Looking to join a cycling club in Belfast? Whether you're a complete beginner
-          or a seasoned racer, Titanic Quarter Cycling Club (TQCC) welcomes all abilities.
-          We're Belfast's friendliest cycling club with weekly group rides, social events,
-          and a supportive community of cyclists across Northern Ireland.
-        </p>
+      <p class="text-xl text-tqcc-gray leading-relaxed mb-4">
+        Looking to join a cycling club in Belfast? Whether you're a complete beginner
+        or a seasoned racer, Titanic Quarter Cycling Club (TQCC) welcomes all abilities.
+        We're Belfast's friendliest cycling club with weekly group rides, social events,
+        and a supportive community of cyclists across Northern Ireland.
+      </p>
 
-        <p class="text-tqcc-gray mb-8">
-          If you have any queries, please e-mail our membership officer at <a href="mailto:titanicquartercc@gmail.com" class="text-tqcc-pink hover:underline">titanicquartercc@gmail.com</a>
-        </p>
+      <p class="text-tqcc-gray mb-8">
+        If you have any queries, please <a href={`${baseUrl}/contact`} class="text-tqcc-pink hover:underline">contact our membership officer</a>
+      </p>
 
-        <h2>How to Join</h2>
+      <h2 class="text-2xl font-bold mb-6">How do I join TQCC?</h2>
 
-        <h3 class="flex items-center gap-3">
-          <span class="bg-tqcc-yellow text-tqcc-black font-bold rounded-full w-10 h-10 flex items-center justify-center flex-shrink-0">1</span>
-          Join us for a taster ride
-        </h3>
-        <p>
-          As with all cycling clubs, members are required to be covered by third party liability insurance and this is included with a Cycling Ireland licence. Potential members are welcome to come out on <strong>two 'taster rides'</strong> with the club and you can sign a form before the ride which will mean you are covered by insurance during the group ride.
-        </p>
-
-        <div class="not-prose bg-tqcc-pink/10 border-l-4 border-tqcc-pink p-6 rounded-r-lg my-6">
-          <p class="text-tqcc-gray mb-3">
-            <strong>Interested in a taster ride?</strong> Please <a href={`${baseUrl}/contact`} class="text-tqcc-pink hover:underline font-semibold">contact us</a> before your first ride so we can provide details on upcoming rides that suit your ability level and ensure you're set up with the proper insurance waiver.
+      <div class="space-y-6 mb-12">
+        <div>
+          <h3 class="flex items-center gap-3 text-lg font-bold mb-2">
+            <span class="bg-tqcc-yellow text-tqcc-black font-bold rounded-full w-10 h-10 flex items-center justify-center flex-shrink-0">1</span>
+            Join us for a taster ride
+          </h3>
+          <p class="text-tqcc-gray ml-13">
+            As with all cycling clubs, members are required to be covered by third party liability insurance and this is included with a Cycling Ireland licence. Potential members are welcome to come out on <strong class="text-tqcc-black">two 'taster rides'</strong> with the club and you can sign a form before the ride which will mean you are covered by insurance during the group ride.
+          </p>
+          <p class="text-tqcc-gray ml-13 mt-4">
+            Please <a href={`${baseUrl}/contact`} class="text-tqcc-pink hover:underline font-semibold">contact us</a> before your first ride so we can provide details on upcoming rides that suit your ability level and ensure you're set up with the proper insurance waiver.
           </p>
         </div>
 
-        <h3 class="flex items-center gap-3">
-          <span class="bg-tqcc-yellow text-tqcc-black font-bold rounded-full w-10 h-10 flex items-center justify-center flex-shrink-0">2</span>
-          Already have a valid Cycling Ireland licence?
-        </h3>
-        <p>
-          If you already have a valid Cycling Ireland licence and are 'unattached', you can request a transfer to TQCC. If you're a member of another club, you will need to request a transfer from your current club. Please <a href="mailto:titanicquartercc@gmail.com" class="text-tqcc-pink hover:underline">contact us</a> to arrange your club membership.
-        </p>
-
-        <h3 class="flex items-center gap-3">
-          <span class="bg-tqcc-yellow text-tqcc-black font-bold rounded-full w-10 h-10 flex items-center justify-center flex-shrink-0">3</span>
-          Don't have a Cycling Ireland licence?
-        </h3>
-        <p>
-          <strong>We strongly recommend joining via Cycling Ireland to keep things simple.</strong> You can register by clicking the link below (90% of our members hold a 'Leisure Licence').
-        </p>
-        <p>
-          When you register, you will be asked what club you wish to join — select <strong>Titanic Quarter Cycling Club</strong>. You'll pay both the Cycling Ireland licence fee and your TQCC club membership fee together in one transaction via the CI portal.
-        </p>
-
-        <div class="not-prose my-6">
-          <a
-            href="https://www.cyclingireland.ie/get-involved/membership/"
-            target="_blank"
-            rel="noopener noreferrer"
-            class="inline-block bg-tqcc-yellow text-tqcc-black font-bold px-8 py-3 rounded-lg hover:bg-tqcc-yellow-dark transition-colors"
-          >
-            Join via Cycling Ireland &rarr;
-          </a>
-        </div>
-
-        <p class="text-sm text-tqcc-gray">
-          <strong>British Cycling and UK Cycling members</strong> are also welcome — please <a href={`${baseUrl}/contact`} class="text-tqcc-pink hover:underline">contact the club</a> for registration details.
-        </p>
-
-        <h3 class="flex items-center gap-3">
-          <span class="bg-tqcc-yellow text-tqcc-black font-bold rounded-full w-10 h-10 flex items-center justify-center flex-shrink-0">4</span>
-          Membership Fees
-        </h3>
-        <p>
-          Annual membership of TQCC runs from 1st January to 31st December. Club membership fees for 2026 are:
-        </p>
-        <ul>
-          <li><strong>18 & over</strong> = £20</li>
-          <li><strong>65 & over</strong> = £10</li>
-          <li><strong>Associate membership</strong> (non-cycling) = £10</li>
-        </ul>
-        <p class="text-sm text-tqcc-gray">
-          Note: These are TQCC club fees only. If registering via Cycling Ireland (Step 3), you'll also pay the separate CI licence fee in the same transaction.
-        </p>
-
-        <h2>What to Bring</h2>
-        <p>
-          For your first ride with us, make sure you have:
-        </p>
-        <ul>
-          <li><strong>A road bike</strong> in good working condition</li>
-          <li><strong>Helmet</strong> (mandatory)</li>
-          <li><strong>Spare tube</strong> and basic repair kit</li>
-          <li><strong>Water bottles</strong></li>
-          <li><strong>Appropriate clothing</strong> for the weather</li>
-          <li><strong>Money</strong> for a coffee stop!</li>
-        </ul>
-
-        <div class="not-prose bg-tqcc-yellow/10 border-l-4 border-tqcc-yellow p-6 rounded-r-lg my-8">
-          <h3 class="font-bold text-lg mb-2">New to cycling?</h3>
-          <p class="text-tqcc-gray">
-            We recommend starting with our <strong>Sunday Scone Run</strong> or
-            <strong>Wednesday Evening Laps</strong> — both are relaxed,
-            conversational-pace rides perfect for new riders.
-            Check our <a href={`${baseUrl}/rides-events`} class="text-tqcc-pink hover:underline">Rides & Events</a>
-            page for details.
+        <div>
+          <h3 class="flex items-center gap-3 text-lg font-bold mb-2">
+            <span class="bg-tqcc-yellow text-tqcc-black font-bold rounded-full w-10 h-10 flex items-center justify-center flex-shrink-0">2</span>
+            Already have a valid Cycling Ireland licence?
+          </h3>
+          <p class="text-tqcc-gray ml-13">
+            If you already have a valid Cycling Ireland licence and are 'unattached', you can request a transfer to TQCC. If you're a member of another club, you will need to request a transfer from your current club. Please <a href={`${baseUrl}/contact`} class="text-tqcc-pink hover:underline">contact us</a> to arrange your club membership.
           </p>
         </div>
 
-        <div class="not-prose my-10">
-          <h2 class="text-2xl font-bold mb-2">Ride Groups</h2>
-          <p class="text-tqcc-gray mb-6">
-            Our rides are organised into ability groups so everyone rides at a pace that suits them. Choose the group that best reflects your current fitness and experience — you're not locked in, and many riders naturally progress through the groups over time.
-          </p>
-          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
-
-            <div class="border-t-4 border-tqcc-yellow rounded-b-lg bg-tqcc-yellow/10 p-4">
-              <div class="text-3xl font-black text-tqcc-yellow-dark mb-1">A</div>
-              <div class="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-1">Fast / Tempo</div>
-              <div class="text-lg font-bold text-tqcc-black mb-3"><span class="pace-string" data-pace="17–18 mph+">17–18 mph+</span></div>
-              <p class="text-sm text-tqcc-gray leading-relaxed">Requires vigorous riding with excellent group handling abilities. Not suitable for inexperienced group cyclists. Weekend rides typically span <span class="distance-string" data-distance="60–70 miles">60–70 miles</span>, sometimes longer.</p>
-            </div>
-
-            <div class="border-t-4 border-tqcc-pink rounded-b-lg bg-tqcc-pink/10 p-4">
-              <div class="text-3xl font-black text-tqcc-pink mb-1">B1</div>
-              <div class="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-1">Quite Fast</div>
-              <div class="text-lg font-bold text-tqcc-black mb-3"><span class="pace-string" data-pace="16–17 mph">16–17 mph</span></div>
-              <p class="text-sm text-tqcc-gray leading-relaxed">Brisk to vigorous pacing with above-average group skills. Similar to A but a touch slower. Prior group riding experience is essential. Typical weekend distances are <span class="distance-string" data-distance="50–60 miles">50–60 miles</span>.</p>
-            </div>
-
-            <div class="border-t-4 border-tqcc-pink rounded-b-lg bg-tqcc-pink/10 p-4">
-              <div class="text-3xl font-black text-tqcc-pink mb-1">B2</div>
-              <div class="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-1">Brisk</div>
-              <div class="text-lg font-bold text-tqcc-black mb-3"><span class="pace-string" data-pace="15–16 mph">15–16 mph</span></div>
-              <p class="text-sm text-tqcc-gray leading-relaxed">Good bike handling and solid group riding skills required. Slightly slower than B1 and ideal for riders building their fitness and confidence. Weekend rides are often around <span class="distance-string" data-distance="50 miles">50 miles</span>.</p>
-            </div>
-
-            <div class="border-t-4 border-tqcc-pink rounded-b-lg bg-tqcc-pink/10 p-4">
-              <div class="text-3xl font-black text-tqcc-pink mb-1">B3</div>
-              <div class="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-1">Steady</div>
-              <div class="text-lg font-bold text-tqcc-black mb-3"><span class="pace-string" data-pace="14–15 mph">14–15 mph</span></div>
-              <p class="text-sm text-tqcc-gray leading-relaxed">A stepping stone between C and B2. Riders should be comfortable in a group environment and ready to push their pace. A great fit for those progressing from C. Weekend rides are typically around <span class="distance-string" data-distance="40 miles">40 miles</span>.</p>
-            </div>
-
-            <div class="border-t-4 border-tqcc-black rounded-b-lg bg-tqcc-black/5 p-4">
-              <div class="text-3xl font-black text-tqcc-black mb-1">C</div>
-              <div class="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-1">Moderate</div>
-              <div class="text-lg font-bold text-tqcc-black mb-3"><span class="pace-string" data-pace="12–14 mph">12–14 mph</span></div>
-              <p class="text-sm text-tqcc-gray leading-relaxed">Focused on general fitness and developing group riding skills. The ideal entry point for those new to club cycling. Riders capable of <span class="distance-string" data-distance="25–30 miles">25–30 miles</span> at a comfortable pace will feel right at home here.</p>
-            </div>
-
+        <div>
+          <h3 class="flex items-center gap-3 text-lg font-bold mb-2">
+            <span class="bg-tqcc-yellow text-tqcc-black font-bold rounded-full w-10 h-10 flex items-center justify-center flex-shrink-0">3</span>
+            Don't have a Cycling Ireland licence?
+          </h3>
+          <div class="ml-13 space-y-4">
+            <p class="text-tqcc-gray">
+              <strong class="text-tqcc-black">We strongly recommend joining via Cycling Ireland to keep things simple.</strong> You can register by clicking the link below (90% of our members hold a 'Leisure Licence').
+            </p>
+            <p class="text-tqcc-gray">
+              When you register, you will be asked what club you wish to join — select <strong class="text-tqcc-black">Titanic Quarter Cycling Club</strong>. You'll pay both the Cycling Ireland licence fee and your TQCC club membership fee together in one transaction via the CI portal.
+            </p>
+            <a
+              href="https://www.cyclingireland.ie/get-involved/membership/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="inline-block bg-tqcc-yellow text-tqcc-black font-bold px-8 py-3 rounded-lg hover:bg-tqcc-yellow-dark transition-colors"
+            >
+              Join via Cycling Ireland &rarr;
+            </a>
+            <p class="text-sm text-tqcc-gray">
+              <strong class="text-tqcc-black">British Cycling and UK Cycling members</strong> are also welcome — please <a href={`${baseUrl}/contact`} class="text-tqcc-pink hover:underline">contact the club</a> for registration details.
+            </p>
           </div>
-          <p class="text-sm text-tqcc-gray mt-4">
-            Speeds are rolling averages, not targets — choose based on your ability, not your ambition. If you're unsure which group suits you, start in C or B3 and work your way up.
-          </p>
         </div>
 
-        <hr class="not-prose border-t-2 border-gray-200 my-12" />
-
-        <h2>Why Join TQCC?</h2>
-        <ul>
-          <li><strong>Access to all club rides and events</strong> — from leisurely social spins to challenging training rides</li>
-          <li><strong>Club kit at discounted rates</strong> — look the part in official TQCC colours</li>
-          <li><strong>Cycling Ireland affiliation and insurance</strong> — third party liability coverage included</li>
-          <li><strong>Social events</strong> and end-of-season gatherings</li>
-          <li><strong>A supportive community</strong> of fellow cyclists who share your passion</li>
-        </ul>
-
-        <h2>Before Your First Ride</h2>
-
-        <h3>Ride Etiquette</h3>
-        <p>
-          Safety and respect are at the heart of everything we do. All riders are
-          expected to follow basic group riding etiquette:
-        </p>
-        <ul>
-          <li>Arrive on time with your bike in good working order</li>
-          <li>Wear a helmet at all times</li>
-          <li>Ride two abreast where safe, single file on busy roads</li>
-          <li>Call out hazards and signal turns for the group</li>
-          <li>Respect the pace of the group you've joined</li>
-          <li>Be friendly and welcoming to new riders</li>
-        </ul>
-
-        <h3>About Our Ride Leaders</h3>
-        <p>
-          Every TQCC group ride is led by a volunteer <strong>Ride Leader (RL)</strong> — an experienced club member who plans and guides the ride. Before each ride, your Ride Leader will have planned a suitable route, considered road conditions and traffic patterns, and prepared a briefing on pace and group riding signals.
-        </p>
-        <p>
-          At the start of the ride, the RL will explain the route, discuss the planned pace, and review the calls and hand signals we use to communicate on the road. They're there to help new riders feel confident and to ensure everyone knows what to expect.
-        </p>
-
-        <div class="not-prose bg-tqcc-yellow/10 border-l-4 border-tqcc-yellow p-6 rounded-r-lg my-8">
-          <h3 class="font-bold text-lg mb-2">Understanding the Risks</h3>
-          <p class="text-tqcc-gray text-base mb-3">
-            While cycling is an outstanding recreational sport, it also involves inherent risks. These include but are not limited to: traveling on or crossing busy roads, winding roads, steep descents, potholes, accidents, unexpected moves by other riders, physical exertion, fatigue, mechanical issues, and interactions with motorists.
-          </p>
-          <p class="text-tqcc-gray text-base">
-            By participating in a TQCC group ride, all riders acknowledge these risks and agree to assume responsibility for their own safety. TQCC officers, committee members, and Ride Leaders are volunteers who organize rides in good faith, and are not liable for any injury or damage resulting from participation in club activities.
-          </p>
+        <div>
+          <h3 class="flex items-center gap-3 text-lg font-bold mb-2">
+            <span class="bg-tqcc-yellow text-tqcc-black font-bold rounded-full w-10 h-10 flex items-center justify-center flex-shrink-0">4</span>
+            Membership Fees
+          </h3>
+          <div class="ml-13 space-y-3">
+            <p class="text-tqcc-gray">
+              Annual membership of TQCC runs from 1st January to 31st December. Club membership fees for 2026 are:
+            </p>
+            <ul class="list-disc pl-6 space-y-1 text-tqcc-gray">
+              <li><strong class="text-tqcc-black">18 & over</strong> = £20</li>
+              <li><strong class="text-tqcc-black">65 & over</strong> = £10</li>
+              <li><strong class="text-tqcc-black">Associate membership</strong> (non-cycling) = £10</li>
+            </ul>
+            <p class="text-sm text-tqcc-gray">
+              Note: These are TQCC club fees only. If registering via Cycling Ireland (Step 3), you'll also pay the separate CI licence fee in the same transaction.
+            </p>
+          </div>
         </div>
+      </div>
 
-        <h3>Your Safety is Your Responsibility</h3>
-        <p>
-          Ride Leaders provide guidance and structure, but every rider is ultimately responsible for their own safety. Ride within your abilities, maintain your bike in good working order, and speak up if you're uncomfortable with any aspect of the ride. Safe group riding requires the attention and cooperation of everyone on the ride.
+      <!-- What to Bring -->
+      <h2 class="text-2xl font-bold mb-4">What do I need for my first ride?</h2>
+      <p class="text-tqcc-gray mb-4">
+        For your first ride with us, make sure you have:
+      </p>
+      <ul class="list-disc pl-6 space-y-2 text-tqcc-gray mb-6">
+        <li><strong class="text-tqcc-black">A road bike</strong> in good working condition</li>
+        <li><strong class="text-tqcc-black">Helmet</strong> (mandatory)</li>
+        <li><strong class="text-tqcc-black">Spare tube</strong> and basic repair kit</li>
+        <li><strong class="text-tqcc-black">Water bottles</strong></li>
+        <li><strong class="text-tqcc-black">Appropriate clothing</strong> for the weather</li>
+        <li><strong class="text-tqcc-black">Money</strong> for a coffee stop!</li>
+      </ul>
+
+      <div class="bg-tqcc-yellow/10 border-l-4 border-tqcc-yellow p-6 rounded-r-lg mb-12">
+        <h3 class="font-bold text-lg mb-2">New to cycling?</h3>
+        <p class="text-tqcc-gray">
+          We recommend starting with our <strong>Sunday Scone Run</strong> or
+          <strong>Wednesday Evening Laps</strong> — both are relaxed,
+          conversational-pace rides perfect for new riders.
+          Check our <a href={`${baseUrl}/rides-events`} class="text-tqcc-pink hover:underline">Rides & Events</a>
+          page for details.
         </p>
       </div>
 
+      <!-- Ride Groups — full width -->
+      <div class="mb-12">
+        <h2 class="text-2xl font-bold mb-2">What ride groups does TQCC have?</h2>
+        <p class="text-tqcc-gray mb-6">
+          Our rides are organised into ability groups so everyone rides at a pace that suits them. Choose the group that best reflects your current fitness and experience — you're not locked in, and many riders naturally progress through the groups over time.
+        </p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
+          <div class="border-t-4 border-tqcc-yellow rounded-b-lg bg-tqcc-yellow/10 p-4">
+            <div class="text-3xl font-black text-tqcc-yellow-dark mb-1">A</div>
+            <div class="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-1">Fast / Tempo</div>
+            <div class="text-lg font-bold text-tqcc-black mb-3"><span class="pace-string" data-pace="17–18 mph+">17–18 mph+</span></div>
+            <p class="text-sm text-tqcc-gray leading-relaxed">Requires vigorous riding with excellent group handling abilities. Not suitable for inexperienced group cyclists. Weekend rides typically span <span class="distance-string" data-distance="60–70 miles">60–70 miles</span>, sometimes longer.</p>
+          </div>
+
+          <div class="border-t-4 border-tqcc-pink rounded-b-lg bg-tqcc-pink/10 p-4">
+            <div class="text-3xl font-black text-tqcc-pink mb-1">B1</div>
+            <div class="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-1">Quite Fast</div>
+            <div class="text-lg font-bold text-tqcc-black mb-3"><span class="pace-string" data-pace="16–17 mph">16–17 mph</span></div>
+            <p class="text-sm text-tqcc-gray leading-relaxed">Brisk to vigorous pacing with above-average group skills. Similar to A but a touch slower. Prior group riding experience is essential. Typical weekend distances are <span class="distance-string" data-distance="50–60 miles">50–60 miles</span>.</p>
+          </div>
+
+          <div class="border-t-4 border-tqcc-pink rounded-b-lg bg-tqcc-pink/10 p-4">
+            <div class="text-3xl font-black text-tqcc-pink mb-1">B2</div>
+            <div class="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-1">Brisk</div>
+            <div class="text-lg font-bold text-tqcc-black mb-3"><span class="pace-string" data-pace="15–16 mph">15–16 mph</span></div>
+            <p class="text-sm text-tqcc-gray leading-relaxed">Good bike handling and solid group riding skills required. Slightly slower than B1 and ideal for riders building their fitness and confidence. Weekend rides are often around <span class="distance-string" data-distance="50 miles">50 miles</span>.</p>
+          </div>
+
+          <div class="border-t-4 border-tqcc-pink rounded-b-lg bg-tqcc-pink/10 p-4">
+            <div class="text-3xl font-black text-tqcc-pink mb-1">B3</div>
+            <div class="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-1">Steady</div>
+            <div class="text-lg font-bold text-tqcc-black mb-3"><span class="pace-string" data-pace="14–15 mph">14–15 mph</span></div>
+            <p class="text-sm text-tqcc-gray leading-relaxed">A stepping stone between C and B2. Riders should be comfortable in a group environment and ready to push their pace. A great fit for those progressing from C. Weekend rides are typically around <span class="distance-string" data-distance="40 miles">40 miles</span>.</p>
+          </div>
+
+          <div class="border-t-4 border-tqcc-black rounded-b-lg bg-tqcc-black/5 p-4">
+            <div class="text-3xl font-black text-tqcc-black mb-1">C</div>
+            <div class="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-1">Moderate</div>
+            <div class="text-lg font-bold text-tqcc-black mb-3"><span class="pace-string" data-pace="12–14 mph">12–14 mph</span></div>
+            <p class="text-sm text-tqcc-gray leading-relaxed">Focused on general fitness and developing group riding skills. The ideal entry point for those new to club cycling. Riders capable of <span class="distance-string" data-distance="25–30 miles">25–30 miles</span> at a comfortable pace will feel right at home here.</p>
+          </div>
+        </div>
+        <p class="text-sm text-tqcc-gray mt-4">
+          Speeds are rolling averages, not targets — choose based on your ability, not your ambition. If you're unsure which group suits you, start in C or B3 and work your way up.
+        </p>
+      </div>
+
+      <hr class="border-t-2 border-gray-200 my-12" />
+
+      <!-- Why Join TQCC -->
+      <h2 class="text-2xl font-bold mb-4">Why Join TQCC?</h2>
+      <ul class="list-disc pl-6 space-y-2 text-tqcc-gray mb-12">
+        <li><strong class="text-tqcc-black">Access to all club rides and events</strong> — from leisurely social spins to challenging training rides</li>
+        <li><strong class="text-tqcc-black">Club kit at discounted rates</strong> — look the part in official TQCC colours</li>
+        <li><strong class="text-tqcc-black">Cycling Ireland affiliation and insurance</strong> — third party liability coverage included</li>
+        <li><strong class="text-tqcc-black">Social events</strong> and end-of-season gatherings</li>
+        <li><strong class="text-tqcc-black">A supportive community</strong> of fellow cyclists who share your passion</li>
+      </ul>
+
+      <!-- Before Your First Ride -->
+      <h2 class="text-2xl font-bold mb-6">What should I know before my first ride?</h2>
+
+      <h3 class="text-xl font-bold mb-4">What is the ride etiquette?</h3>
+      <p class="text-tqcc-gray mb-4">
+        Safety and respect are at the heart of everything we do. All riders are
+        expected to follow basic group riding etiquette:
+      </p>
+      <ul class="list-disc pl-6 space-y-2 text-tqcc-gray mb-8">
+        <li>Arrive on time with your bike in good working order</li>
+        <li>Wear a helmet at all times</li>
+        <li>Ride two abreast where safe, single file on busy roads</li>
+        <li>Call out hazards and signal turns for the group</li>
+        <li>Respect the pace of the group you've joined</li>
+        <li>Be friendly and welcoming to new riders</li>
+      </ul>
+
+      <h3 class="text-xl font-bold mb-4">Who are the ride leaders?</h3>
+      <p class="text-tqcc-gray mb-4">
+        Every TQCC group ride is led by a volunteer <strong class="text-tqcc-black">Ride Leader (RL)</strong> — an experienced club member who plans and guides the ride. Before each ride, your Ride Leader will have planned a suitable route, considered road conditions and traffic patterns, and prepared a briefing on pace and group riding signals.
+      </p>
+      <p class="text-tqcc-gray mb-8">
+        At the start of the ride, the RL will explain the route, discuss the planned pace, and review the calls and hand signals we use to communicate on the road. They're there to help new riders feel confident and to ensure everyone knows what to expect.
+      </p>
+
+      <div class="bg-tqcc-yellow/10 border-l-4 border-tqcc-yellow p-6 rounded-r-lg mb-8">
+        <h3 class="font-bold text-lg mb-2">Understanding the Risks</h3>
+        <p class="text-tqcc-gray text-base mb-3">
+          While cycling is an outstanding recreational sport, it also involves inherent risks. These include but are not limited to: traveling on or crossing busy roads, winding roads, steep descents, potholes, accidents, unexpected moves by other riders, physical exertion, fatigue, mechanical issues, and interactions with motorists.
+        </p>
+        <p class="text-tqcc-gray text-base">
+          By participating in a TQCC group ride, all riders acknowledge these risks and agree to assume responsibility for their own safety. TQCC officers, committee members, and Ride Leaders are volunteers who organize rides in good faith, and are not liable for any injury or damage resulting from participation in club activities.
+        </p>
+      </div>
+
+      <h3 class="text-xl font-bold mb-4">Your Safety is Your Responsibility</h3>
+      <p class="text-tqcc-gray mb-12">
+        Ride Leaders provide guidance and structure, but every rider is ultimately responsible for their own safety. Ride within your abilities, maintain your bike in good working order, and speak up if you're uncomfortable with any aspect of the ride. Safe group riding requires the attention and cooperation of everyone on the ride.
+      </p>
+
       <!-- CTA -->
-      <div class="bg-tqcc-black text-white p-8 rounded-lg mt-12 text-center">
+      <div class="bg-tqcc-black text-white p-8 rounded-lg text-center">
         <h2 class="text-2xl font-bold text-tqcc-yellow mb-4">
           Ready to get started?
         </h2>
-        <p class="text-white/80 mb-6 max-w-xl mx-auto">
+        <p class="text-white/80 mb-4">
           Get in touch to arrange a taster ride or ask any questions about membership.
           We'd love to see you out on the road with us!
         </p>
         <a
           href={`${baseUrl}/contact`}
-          class="inline-block bg-tqcc-yellow text-tqcc-black font-bold px-8 py-3 rounded-lg hover:bg-tqcc-yellow-dark transition-colors"
+          class="inline-block bg-tqcc-yellow text-tqcc-black font-bold px-6 py-2 rounded-lg hover:bg-tqcc-yellow-dark transition-colors"
         >
           Contact Us
         </a>

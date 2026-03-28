@@ -1,6 +1,8 @@
 ---
 import { getCollection, render } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import JsonLd from "../components/seo/JsonLd.astro";
+import { getLastUpdated } from "../lib/git-date";
 
 const events = await getCollection("events");
 const event = events.find((e) => e.id === "summer-solstice-sportive-2026")!;
@@ -9,39 +11,71 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
 
 const eventDate = event.data.date.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
 const eventTime = event.data.date.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
+
+// TODO: Replace registrationUrl with actual registration URL when available,
+// e.g. "https://www.entrycentral.com/event/XXXXX"
+// Then restore the Register Now buttons (currently "Registration Opening Soon" spans),
+// converting them back to <a> tags with cursor-pointer, restore the clickable poster
+// link, and pass eventUrl={registrationUrl} to JsonLd.
+// Delete this comment block when done.
+const lastUpdated = getLastUpdated("src/pages/sportive.astro");
 ---
 
 <BaseLayout
-  title="Summer Solstice Sportive | TQCC"
-  description={event.data.description}
+  title="Summer Solstice Sportive Belfast 2026 | Titanic Quarter Cycling Club"
+  description="Join the TQCC Summer Solstice Sportive in Belfast, a Friday evening cycling sportive open to all abilities. Approximately 38 miles through the Belfast hills with hot food at the finish. Register now for the 2026 Titanic Quarter Cycling Club sportive."
+  lastUpdated={lastUpdated}
 >
+  <JsonLd
+    type="Event"
+    title="TQCC Summer Solstice Sportive Belfast 2026"
+    description="The Titanic Quarter Cycling Club Summer Solstice Sportive, a Friday evening cycling sportive through the Belfast hills. Open to all abilities, approximately 38 miles with hot food at the finish."
+    eventDate={event.data.date}
+    location={event.data.location}
+    eventImage={event.data.image}
+  />
+
   <!-- Hero -->
   <section class="bg-tqcc-black text-white py-16">
-    <div class="max-w-4xl mx-auto px-4 text-center">
-      <p class="text-tqcc-pink font-semibold uppercase tracking-widest mb-3">Annual Event</p>
-      <h1 class="text-4xl sm:text-5xl font-extrabold text-tqcc-yellow mb-4">Summer Solstice Sportive</h1>
-      <p class="text-xl text-white/80 max-w-2xl mx-auto leading-relaxed">
-        An evening sportive open to all abilities — TQCC members and non-members welcome.
-        Celebrating the longest days of the year with great roads, great people, and hot food at the finish.
+    <div class="max-w-7xl mx-auto px-4 text-center">
+      <p class="text-tqcc-pink font-semibold uppercase tracking-widest mb-3">Friday Evening Sportive</p>
+      <h1 class="text-4xl sm:text-5xl font-extrabold text-tqcc-yellow mb-4">Summer Solstice Sportive Belfast 2026</h1>
+      <p class="text-xl text-white/80 max-w-4xl mx-auto leading-relaxed mb-8">
+        A Friday evening cycling sportive through the Belfast hills, open to all abilities.
+        TQCC members and non-members welcome. Great roads, great people, and hot food at the finish.
       </p>
+      <span class="inline-block bg-tqcc-pink/40 text-white/50 font-bold text-lg px-10 py-4 rounded-lg cursor-not-allowed">
+        Registration Opening Soon
+      </span>
     </div>
   </section>
 
   <section class="py-12">
-    <div class="max-w-4xl mx-auto px-4">
+    <div class="max-w-7xl mx-auto px-4">
+
+      <!-- Sportive poster -->
+      {event.data.image && (
+        <div class="mb-12 mx-auto" style="max-width: 864px;">
+          <img
+            src={`${baseUrl}${event.data.image}`}
+            alt="Summer Solstice Sportive 2026 poster"
+            class="w-full h-auto rounded-lg shadow-lg"
+          />
+        </div>
+      )}
 
       <!-- Key details cards -->
       <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-12">
         <div class="text-center p-5 bg-tqcc-gray-light rounded-lg">
-          <span class="text-2xl font-bold text-tqcc-yellow">{eventDate}</span>
-          <p class="mt-1 text-sm text-tqcc-gray">2026 Date</p>
+          <span class="text-2xl font-bold text-tqcc-pink">Fri {eventDate}</span>
+          <p class="mt-1 text-sm text-tqcc-gray">Friday Evening</p>
         </div>
         <div class="text-center p-5 bg-tqcc-gray-light rounded-lg">
-          <span class="distance-string text-2xl font-bold text-tqcc-yellow" data-distance={event.data.distance}>{event.data.distance}</span>
+          <span class="distance-string text-2xl font-bold text-tqcc-pink" data-distance="38.5 miles">38 miles</span>
           <p class="mt-1 text-sm text-tqcc-gray">Distance</p>
         </div>
         <div class="text-center p-5 bg-tqcc-gray-light rounded-lg">
-          <span class="text-2xl font-bold text-tqcc-yellow">{eventTime}</span>
+          <span class="text-2xl font-bold text-tqcc-pink">{eventTime}</span>
           <p class="mt-1 text-sm text-tqcc-gray">Ride Out</p>
         </div>
         <div class="text-center p-5 bg-tqcc-gray-light rounded-lg">
@@ -50,34 +84,19 @@ const eventTime = event.data.date.toLocaleTimeString("en-GB", { hour: "2-digit",
         </div>
       </div>
 
-      <!-- Sportive poster -->
-      {event.data.image && (
-        <div class="mb-12">
-          <img
-            src={`${baseUrl}${event.data.image}`}
-            alt="Summer Solstice Sportive 2026 poster"
-            class="w-full rounded-lg shadow-lg"
-          />
-        </div>
-      )}
-
       <div class="prose prose-lg max-w-none">
         <Content />
       </div>
 
-      <!-- CTA -->
+      <!-- Registration CTA -->
       <div class="mt-12 bg-tqcc-black text-white p-8 rounded-lg text-center">
-        <h2 class="text-2xl font-bold text-tqcc-yellow mb-3">Registration Coming Soon</h2>
-        <p class="text-white/80 mb-6">
-          Registration details for the 2026 Solstice Sportive will be announced in spring 2026.
-          Follow us on social media to be the first to know.
+        <h2 class="text-2xl font-bold text-tqcc-yellow mb-4">Ready to Ride?</h2>
+        <p class="text-white/80 mb-4">
+          Secure your place on the Friday evening Summer Solstice Sportive via EntryCentral.
         </p>
-        <a
-          href={`${baseUrl}/contact`}
-          class="inline-block bg-tqcc-yellow text-tqcc-black font-bold px-8 py-3 rounded-lg hover:bg-tqcc-yellow-dark transition-colors"
-        >
-          Get in Touch
-        </a>
+        <span class="inline-block bg-tqcc-yellow/60 text-tqcc-black font-bold px-6 py-2 rounded-lg cursor-not-allowed">
+          Registration Opening Soon
+        </span>
       </div>
 
     </div>

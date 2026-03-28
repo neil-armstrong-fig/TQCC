@@ -1,97 +1,109 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
+import FAQSchema from "../components/seo/FAQSchema.astro";
+import { getLastUpdated } from "../lib/git-date";
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
+const lastUpdated = getLastUpdated("src/pages/about.astro");
 ---
 
 <BaseLayout
   title="About"
   description="Learn about Titanic Quarter Cycling Club (TQCC) - Belfast's community cycling club since 2014. Discover our history, values, and commitment to cycling in Northern Ireland."
+  lastUpdated={lastUpdated}
 >
+  <FAQSchema />
   <section class="py-12">
-    <div class="max-w-4xl mx-auto px-4">
+    <div class="max-w-7xl mx-auto px-4">
       <h1 class="text-4xl font-bold mb-8">About Belfast's Cycling Club</h1>
 
-      <div class="prose prose-lg max-w-none">
-        <p class="text-xl text-tqcc-gray leading-relaxed">
-          Titanic Quarter Cycling Club was established in November 2014, born out
-          of a conversation at the media launch of the Giro d'Italia's Big Start
-          in Belfast the year before.
-        </p>
+      <p class="text-xl text-tqcc-gray leading-relaxed mb-12">
+        Titanic Quarter Cycling Club was established in November 2014, born out
+        of a conversation at the media launch of the Giro d'Italia's Big Start
+        in Belfast the year before.
+      </p>
 
-        <h2>Our Story</h2>
-        <p>
-          In 2013, Alex McGreevy and Phil Corr discovered a shared passion for
-          cycling at the Giro d'Italia media launch in Belfast. Alex had already
-          drawn up a proposal for a cycling club based in the locality where RMS
-          Titanic, the world's most famous ship, was constructed.
-        </p>
-        <p>
-          Using the positive momentum of the Giro to spur on their efforts, Phil
-          and Alex were joined by enthusiasts James Loughrey, Colin O'Carroll,
-          Julie Beckett, Andrew Davies and Maeve Curran. Each took on roles to
-          make TQCC a reality, and the club was officially founded in November
-          2014.
-        </p>
-        <p>
-          The initial concept for the club kit was further developed by the new
-          committee, and sponsors were sought to support the mobilisation of the
-          club.
-        </p>
-        <p>
-          The aims and objectives of the club were simple — to promote Titanic
-          Quarter as a shared space for cycling, and to embrace the social,
-          leisure and competitive camaraderie of the sport.
-        </p>
-
-        <div class="not-prose my-8">
+      <!-- Our Story — text + image side by side -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-12">
+        <div class="prose prose-lg max-w-none">
+          <h2>How did TQCC start?</h2>
+          <p>
+            In 2013, Alex McGreevy and Phil Corr discovered a shared passion for
+            cycling at the Giro d'Italia media launch in Belfast. Alex had already
+            drawn up a proposal for a cycling club based in the locality where RMS
+            Titanic, the world's most famous ship, was constructed.
+          </p>
+          <p>
+            Using the positive momentum of the Giro to spur on their efforts, Phil
+            and Alex were joined by enthusiasts James Loughrey, Colin O'Carroll,
+            Julie Beckett, Andrew Davies and Maeve Curran. Each took on roles to
+            make TQCC a reality, and the club was officially founded in November
+            2014.
+          </p>
+          <p>
+            The initial concept for the club kit was further developed by the new
+            committee, and sponsors were sought to support the mobilisation of the
+            club.
+          </p>
+          <p>
+            The aims and objectives of the club were simple — to promote Titanic
+            Quarter as a shared space for cycling, and to embrace the social,
+            leisure and competitive camaraderie of the sport.
+          </p>
+        </div>
+        <div class="flex items-center">
           <img
             src={`${baseUrl}/images/history/origins.jpg`}
             alt="TQCC origins"
-            class="rounded-lg shadow-lg mx-auto"
+            class="rounded-lg shadow-lg w-full"
             loading="lazy"
           />
         </div>
+      </div>
 
-        <h2>Our Kit</h2>
-        <div class="not-prose my-8">
+      <!-- Our Kit — image + text side by side -->
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-12">
+        <div class="flex items-center order-2 lg:order-1">
           <img
             src={`${baseUrl}/images/kit.jpg`}
             alt="TQCC club cycling kit in yellow and black with pink stripe"
-            class="rounded-lg shadow-lg max-w-md mx-auto"
+            class="rounded-lg shadow-lg w-full"
             loading="lazy"
           />
         </div>
-        <p>
-          Our club kit features <strong>yellow and black colours</strong>,
-          referencing the iconic Titanic ship and White Star Line funnels. The
-          club badge incorporates industrial heritage imagery alongside the
-          modern Titanic Quarter identity.
-        </p>
-        <p>
-          A distinctive <strong>pink stripe</strong> appears on the left arm and
-          shorts, honouring the 2014 Giro d'Italia arrival in Belfast that
-          coincided with TQCC's founding.
-        </p>
+        <div class="prose prose-lg max-w-none order-1 lg:order-2">
+          <h2>What does the TQCC kit look like?</h2>
+          <p>
+            Our club kit features <strong>yellow and black colours</strong>,
+            referencing the iconic Titanic ship and White Star Line funnels. The
+            club badge incorporates industrial heritage imagery alongside the
+            modern Titanic Quarter identity.
+          </p>
+          <p>
+            A distinctive <strong>pink stripe</strong> appears on the left arm and
+            shorts, honouring the 2014 Giro d'Italia arrival in Belfast that
+            coincided with TQCC's founding.
+          </p>
+        </div>
       </div>
 
       <!-- Key Facts -->
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6 my-12">
-        <div class="text-center p-6 bg-tqcc-gray-light rounded-lg">
+        <div class="text-center p-6 bg-tqcc-gray-dark rounded-lg">
           <span class="text-3xl font-bold text-tqcc-yellow">2014</span>
-          <p class="mt-2 text-tqcc-gray">Founded</p>
+          <p class="mt-2 text-white/70">Founded</p>
         </div>
-        <div class="text-center p-6 bg-tqcc-gray-light rounded-lg">
+        <div class="text-center p-6 bg-tqcc-gray-dark rounded-lg">
           <span class="text-3xl font-bold text-tqcc-yellow">Belfast</span>
-          <p class="mt-2 text-tqcc-gray">Titanic Quarter</p>
+          <p class="mt-2 text-white/70">Titanic Quarter</p>
         </div>
-        <div class="text-center p-6 bg-tqcc-gray-light rounded-lg">
+        <div class="text-center p-6 bg-tqcc-gray-dark rounded-lg">
           <span class="text-3xl font-bold text-tqcc-pink">Giro</span>
-          <p class="mt-2 text-tqcc-gray">Pink Stripe Heritage</p>
+          <p class="mt-2 text-white/70">Pink Stripe Heritage</p>
         </div>
       </div>
 
       <!-- Constitution -->
-      <div class="bg-tqcc-black text-white p-8 rounded-lg">
+      <div class="bg-tqcc-black text-white p-8 rounded-lg text-center">
         <h2 class="text-2xl font-bold text-tqcc-yellow mb-4">
           Club Constitution
         </h2>

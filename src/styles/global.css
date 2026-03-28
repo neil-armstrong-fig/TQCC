@@ -10,6 +10,7 @@
   --color-tqcc-pink-light: #FF6EB4;
   --color-tqcc-white: #FAFAFA;
   --color-tqcc-gray: #6B7280;
+  --color-tqcc-gray-dark: #3E4248;
   --color-tqcc-gray-light: #F3F4F6;
 
   --font-heading: "Inter", system-ui, sans-serif;
@@ -18,7 +19,6 @@
 
 /* Prose styling for blog content */
 .prose {
-  max-width: 75ch;
   line-height: 1.75;
 }
 

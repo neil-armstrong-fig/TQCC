@@ -15,6 +15,7 @@
     "@tailwindcss/vite": "^4.1.18",
     "astro": "^5.17.2",
     "tailwindcss": "^4.1.18",
-    "typescript": "^5.9.3"
+    "typescript": "^5.9.3",
+    "vanilla-cookieconsent": "^3.1.0"
   }
 }

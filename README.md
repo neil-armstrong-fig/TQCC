@@ -104,6 +104,11 @@ tqcc-website/
 
 **Important**: Always use **miles** for distances in events and rides, not kilometers.
 
+## 📊 Analytics
+
+- [Google Analytics (GA4)](https://analytics.google.com/analytics/web/?authuser=1#/a389021498p530277920/reports/intelligenthome)
+- [Microsoft Clarity](https://clarity.microsoft.com/projects/view/w2v17wpdru/impressions?date=Last%203%20days)
+
 ## 📚 Learn More
 
 - [Astro Documentation](https://docs.astro.build)
