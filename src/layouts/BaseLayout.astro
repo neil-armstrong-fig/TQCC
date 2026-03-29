@@ -15,6 +15,7 @@ interface Props {
   noindex?: boolean;
   preloadImage?: string;
   lastUpdated?: string;
+  keywords?: string;
 }
 
 const {
@@ -26,6 +27,7 @@ const {
   noindex = false,
   preloadImage,
   lastUpdated,
+  keywords,
 } = Astro.props;
 
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
@@ -44,6 +46,7 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
       type={type}
       publishDate={publishDate}
       noindex={noindex}
+      keywords={keywords}
     />
     {lastUpdated && <meta property="article:modified_time" content={lastUpdated} />}
     <ClientRouter />

@@ -12,7 +12,7 @@ membershipRequired: false
 
 ## About the Event
 
-The TQCC Summer Solstice Sportive is our flagship annual event, and the only Titanic Quarter Cycling Club ride open to cyclists outside the club. Whether you're a seasoned racer or a leisure rider, you're welcome to join us for a Friday evening route through some of Belfast's finest roads, making the most of the long summer daylight.
+The TQCC Summer Solstice Sportive is our flagship annual event, and the only Titanic Quarter Cycling Club ride open to cyclists outside the club. Looking for a Belfast cycling sportive? Whether you're a seasoned racer or a leisure rider, you're welcome to join us for a Friday evening route through some of Belfast's finest roads, making the most of the long summer daylight.
 
 Held on a Friday evening to kick off the weekend, the route takes in the rolling hills of the greater Belfast area before returning to the finish for hot food and a BBQ. Multiple pace groups ensure the event is accessible to all abilities.
 
