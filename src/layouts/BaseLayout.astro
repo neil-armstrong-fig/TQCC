@@ -4,6 +4,7 @@ import Header from "../components/global/Header.astro";
 import Footer from "../components/global/Footer.astro";
 import CookieConsent from "../components/global/CookieConsent.astro";
 import SEOHead from "../components/seo/SEOHead.astro";
+import BreadcrumbSchema from "../components/seo/BreadcrumbSchema.astro";
 import { ClientRouter } from "astro:transitions";
 
 interface Props {
@@ -49,6 +50,7 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
       keywords={keywords}
     />
     {lastUpdated && <meta property="article:modified_time" content={lastUpdated} />}
+    <BreadcrumbSchema />
     <ClientRouter />
     {preloadImage && <link rel="preload" as="image" href={preloadImage} />}
     <link rel="icon" type="image/x-icon" href={`${baseUrl}/favicon.ico`} sizes="48x48" />

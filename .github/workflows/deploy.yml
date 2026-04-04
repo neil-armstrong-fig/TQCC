@@ -118,6 +118,73 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
 
+  notify-indexnow:
+    needs: deploy
+    runs-on: ubuntu-latest
+    if: github.event_name == 'push'
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Ping IndexNow with changed URLs
+        run: |
+          INDEXNOW_KEY=$(cat public/b787f745-3c70-48eb-9abf-159e5e4607b4.txt)
+
+          # Get list of changed content files from the push
+          CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD -- 'src/pages/' 'src/content/' 2>/dev/null || echo "")
+
+          if [ -z "$CHANGED_FILES" ]; then
+            echo "No content changes detected, submitting homepage only"
+            URLS='["https://www.titanicquartercc.com/"]'
+          else
+            # Map changed files to site URLs
+            URLS="["
+            FIRST=true
+
+            for FILE in $CHANGED_FILES; do
+              URL=""
+              case "$FILE" in
+                src/pages/index.astro) URL="https://www.titanicquartercc.com/" ;;
+                src/pages/*.astro)
+                  SLUG=$(basename "$FILE" .astro)
+                  URL="https://www.titanicquartercc.com/${SLUG}/"
+                  ;;
+                src/content/events/*)
+                  SLUG=$(basename "$FILE" .md)
+                  URL="https://www.titanicquartercc.com/events/${SLUG}/"
+                  ;;
+                src/content/newsletters/*)
+                  SLUG=$(basename "$FILE" .md)
+                  URL="https://www.titanicquartercc.com/newsletters/${SLUG}/"
+                  ;;
+              esac
+
+              if [ -n "$URL" ]; then
+                if [ "$FIRST" = true ]; then
+                  FIRST=false
+                else
+                  URLS+=","
+                fi
+                URLS+="\"${URL}\""
+              fi
+            done
+
+            URLS+="]"
+          fi
+
+          echo "Submitting URLs: $URLS"
+
+          curl -s -X POST "https://api.indexnow.org/indexnow" \
+            -H "Content-Type: application/json" \
+            -d "{
+              \"host\": \"www.titanicquartercc.com\",
+              \"key\": \"${INDEXNOW_KEY}\",
+              \"keyLocation\": \"https://www.titanicquartercc.com/b787f745-3c70-48eb-9abf-159e5e4607b4.txt\",
+              \"urlList\": ${URLS}
+            }"
+
+          echo "✅ IndexNow submission complete"
+
   trigger-netlify:
     runs-on: ubuntu-latest
     if: github.event_name == 'schedule' || github.event_name == 'workflow_dispatch'

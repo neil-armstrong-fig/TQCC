@@ -1,0 +1,55 @@
+---
+const siteUrl = Astro.site?.toString().replace(/\/$/, "") || "https://titanicquartercc.com";
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
+const pathname = Astro.url.pathname.replace(baseUrl, "").replace(/\/$/, "") || "/";
+
+// Human-readable names for path segments
+const segmentNames: Record<string, string> = {
+  about: "About",
+  membership: "Membership",
+  contact: "Contact",
+  events: "Events",
+  rides: "Rides",
+  "rides-events": "Rides & Events",
+  newsletters: "Newsletters",
+  sportive: "Sportive",
+  boccia: "Boccia",
+  gallery: "Gallery",
+  privacy: "Privacy Policy",
+};
+
+// Only emit breadcrumbs for pages beyond the homepage
+const segments = pathname.split("/").filter(Boolean);
+
+function buildBreadcrumbs() {
+  if (segments.length === 0) return null;
+
+  const items: { name: string; item: string }[] = [
+    { name: "Home", item: `${siteUrl}${baseUrl}/` },
+  ];
+
+  let currentPath = "";
+  for (const segment of segments) {
+    currentPath += `/${segment}`;
+    const name = segmentNames[segment] || segment.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+    items.push({ name, item: `${siteUrl}${baseUrl}${currentPath}` });
+  }
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: items.map((crumb, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: crumb.name,
+      item: crumb.item,
+    })),
+  };
+}
+
+const schema = buildBreadcrumbs();
+---
+
+{schema && (
+  <script is:inline type="application/ld+json" set:html={JSON.stringify(schema)} />
+)}

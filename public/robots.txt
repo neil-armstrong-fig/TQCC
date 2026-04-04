@@ -3,6 +3,10 @@ Allow: /
 
 Disallow: /admin
 
+# Search engine crawlers — explicitly allowed
+User-agent: bingbot
+Allow: /
+
 # AI crawlers — explicitly allowed
 User-agent: GPTBot
 Allow: /
