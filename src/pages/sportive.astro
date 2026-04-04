@@ -12,12 +12,7 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
 const eventDate = event.data.date.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
 const eventTime = event.data.date.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
 
-// TODO: Replace registrationUrl with actual registration URL when available,
-// e.g. "https://www.entrycentral.com/event/XXXXX"
-// Then restore the Register Now buttons (currently "Registration Opening Soon" spans),
-// converting them back to <a> tags with cursor-pointer, restore the clickable poster
-// link, and pass eventUrl={registrationUrl} to JsonLd.
-// Delete this comment block when done.
+const registrationUrl = "https://www.entrycentral.com/tqccsportive26";
 const lastUpdated = getLastUpdated("src/pages/sportive.astro");
 ---
 
@@ -34,6 +29,7 @@ const lastUpdated = getLastUpdated("src/pages/sportive.astro");
     eventDate={event.data.date}
     location={event.data.location}
     eventImage={event.data.image}
+    eventUrl={registrationUrl}
   />
 
   <!-- Hero -->
@@ -45,9 +41,9 @@ const lastUpdated = getLastUpdated("src/pages/sportive.astro");
         Friday evening cycling sportive in Belfast, open to all abilities.
         TQCC members and non-members welcome. Great roads, great people, and hot food at the finish.
       </p>
-      <span class="inline-block bg-tqcc-pink/40 text-white/50 font-bold text-lg px-10 py-4 rounded-lg cursor-not-allowed">
-        Registration Opening Soon
-      </span>
+      <a href={registrationUrl} target="_blank" rel="noopener noreferrer" class="inline-block bg-tqcc-pink text-white font-bold text-lg px-10 py-4 rounded-lg cursor-pointer hover:bg-tqcc-pink/80 transition-colors">
+        Register Now
+      </a>
     </div>
   </section>
 
@@ -57,11 +53,13 @@ const lastUpdated = getLastUpdated("src/pages/sportive.astro");
       <!-- Sportive poster -->
       {event.data.image && (
         <div class="mb-12 mx-auto" style="max-width: 864px;">
-          <img
-            src={`${baseUrl}${event.data.image}`}
-            alt="Summer Solstice Sportive 2026 poster"
-            class="w-full h-auto rounded-lg shadow-lg"
-          />
+          <a href={registrationUrl} target="_blank" rel="noopener noreferrer">
+            <img
+              src={`${baseUrl}${event.data.image}`}
+              alt="Summer Solstice Sportive 2026 poster"
+              class="w-full h-auto rounded-lg shadow-lg hover:shadow-xl transition-shadow"
+            />
+          </a>
         </div>
       )}
 
@@ -79,7 +77,7 @@ const lastUpdated = getLastUpdated("src/pages/sportive.astro");
           <span class="text-2xl font-bold text-tqcc-pink">{eventTime}</span>
           <p class="mt-1 text-sm text-tqcc-gray">Ride Out</p>
         </div>
-        <div class="text-center p-5 bg-tqcc-gray-light rounded-lg">
+<div class="text-center p-5 bg-tqcc-gray-light rounded-lg">
           <span class="text-2xl font-bold text-tqcc-pink">All</span>
           <p class="mt-1 text-sm text-tqcc-gray">Abilities Welcome</p>
         </div>
@@ -89,17 +87,135 @@ const lastUpdated = getLastUpdated("src/pages/sportive.astro");
         <Content />
       </div>
 
+      <!-- Route Map -->
+      <div class="mt-2 mb-12">
+        <h3 class="text-xl font-bold mb-4">Route Map</h3>
+        <div id="sportive-map" style="height: 450px; width: 100%;" class="rounded-lg shadow-lg z-0"></div>
+        <div id="elevation-chart" class="mt-2 rounded-lg overflow-hidden"></div>
+        <div class="grid grid-cols-2 sm:flex sm:flex-wrap gap-3 mt-4">
+          <a
+            href={`${baseUrl}/gpx/sportive-route.gpx`}
+            download="tqcc-summer-solstice-sportive-2026.gpx"
+            class="inline-flex items-center justify-center gap-2 bg-tqcc-black text-white font-semibold px-5 py-2.5 rounded-lg hover:bg-tqcc-black/80 transition-colors"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+            Download GPX
+          </a>
+          <a
+            href="https://www.strava.com/routes/2960499863763510476"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="inline-flex items-center justify-center gap-2 bg-[#FC4C02] text-white font-semibold px-5 py-2.5 rounded-lg hover:bg-[#FC4C02]/80 transition-colors"
+          >
+            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M15.387 17.944l-2.089-4.116h-3.065L15.387 24l5.15-10.172h-3.066m-7.008-5.599l2.836 5.598h4.172L10.463 0l-7 13.828h4.169" /></svg>
+            View on Strava
+          </a>
+        </div>
+      </div>
+
       <!-- Registration CTA -->
       <div class="mt-12 bg-tqcc-black text-white p-8 rounded-lg text-center">
         <h2 class="text-2xl font-bold text-tqcc-yellow mb-4">Ready to Ride?</h2>
         <p class="text-white/80 mb-4">
-          Secure your place on the Friday evening Summer Solstice Sportive via EntryCentral.
+          Secure your place on the Friday evening Summer Solstice Sportive.
         </p>
-        <span class="inline-block bg-tqcc-yellow/60 text-tqcc-black font-bold px-6 py-2 rounded-lg cursor-not-allowed">
-          Registration Opening Soon
-        </span>
+        <a href={registrationUrl} target="_blank" rel="noopener noreferrer" class="inline-block bg-tqcc-yellow text-tqcc-black font-bold px-6 py-2 rounded-lg cursor-pointer hover:bg-tqcc-yellow/80 transition-colors">
+          Register Now
+        </a>
       </div>
 
     </div>
   </section>
+
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/@raruto/leaflet-elevation/dist/leaflet-elevation.css" />
+  <script is:inline src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script is:inline src="https://unpkg.com/d3@7.9.0/dist/d3.min.js"></script>
+  <script is:inline src="https://unpkg.com/@raruto/leaflet-elevation/dist/leaflet-elevation.js"></script>
+  <style is:global>
+    .elevation-detached {
+      font-family: inherit;
+    }
+    .elevation-detached .mouse-focus-line {
+      stroke: #E91E8C;
+    }
+    #elevation-chart .elevation-summary,
+    #elevation-chart .elevation-summary * {
+      display: none !important;
+      height: 0 !important;
+      overflow: hidden !important;
+    }
+    .magenta-theme .area {
+      --ele-area: #E91E8C !important;
+      fill: #E91E8C !important;
+      stroke: #E91E8C !important;
+    }
+  </style>
+  <script is:inline define:vars={{ baseUrl }}>
+    document.addEventListener("DOMContentLoaded", function () {
+      var mapEl = document.getElementById("sportive-map");
+      if (!mapEl) return;
+
+      var gpxUrl = baseUrl + "/gpx/sportive-route.gpx";
+      var map = L.map("sportive-map", { scrollWheelZoom: false }).setView([54.56, -5.94], 11);
+      L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+        maxZoom: 18,
+      }).addTo(map);
+
+      var currentElevation = null;
+
+      function getIsImperial() {
+        try {
+          return localStorage.getItem("tqcc-distance-unit") !== "km";
+        } catch (e) {
+          return true;
+        }
+      }
+
+      function buildElevation() {
+        if (currentElevation) {
+          currentElevation.remove();
+          currentElevation = null;
+          // Clear the chart container
+          var chartDiv = document.getElementById("elevation-chart");
+          if (chartDiv) chartDiv.innerHTML = "";
+        }
+
+        currentElevation = L.control.elevation({
+          detached: true,
+          elevationDiv: "#elevation-chart",
+          height: 140,
+          autofitBounds: true,
+          collapsed: false,
+          closeBtn: false,
+          summary: false,
+          slope: false,
+          speed: false,
+          acceleration: false,
+          time: false,
+          legend: false,
+          almostOver: true,
+          imperial: getIsImperial(),
+          ruler: false,
+          distanceMarkers: { lazy: false, distance: false, direction: false },
+          edgeScale: false,
+          theme: "magenta-theme",
+          polyline: {
+            color: "#E91E8C",
+            weight: 4,
+            opacity: 0.85,
+          },
+        }).addTo(map);
+
+        currentElevation.load(gpxUrl);
+      }
+
+      buildElevation();
+
+      window.addEventListener("unit-change", function () {
+        buildElevation();
+      });
+    });
+  </script>
 </BaseLayout>
