@@ -1,7 +1,7 @@
 ---
 name: "Group B1"
 order: 2
-description: "Quite fast pace group for riders with strong group skills at a slightly slower pace than A. ~16 mph."
+description: "Quite fast pace group for riders with strong group skills at a slightly slower pace than A. 16–17 mph."
 routes:
   - name: "TQCC Anniversary Fondo 2025"
     stravaUrl: "https://www.strava.com/routes/3349155756860279424"
