@@ -1,6 +1,6 @@
 ---
 title: "Big Italian Bike Ride 2026"
-date: 2026-05-02
+date: 2026-05-16
 location: "Antrim Coast"
 description: "A nod to the Club's origins, a slight replica of the Giro d'Italia route. There is a short and long version of this route available."
 rideType: "Club Ride"
