@@ -1,6 +1,7 @@
 ---
 import Navigation from "./Navigation.astro";
 import UnitToggle from "./UnitToggle.astro";
+import { mainNavigation } from "../../data/navigation";
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
 ---
 
@@ -55,13 +56,23 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
     class="hidden lg:hidden bg-tqcc-black-light border-t border-white/10"
   >
     <div class="px-4 py-4 space-y-2">
-      <a href={baseUrl || "/"} class="block text-white py-2 hover:text-tqcc-yellow transition-colors">Home</a>
-      <a href={`${baseUrl}/about`} class="block text-white py-2 hover:text-tqcc-yellow transition-colors">About</a>
-      <a href={`${baseUrl}/rides-events`} class="block text-white py-2 hover:text-tqcc-yellow transition-colors">Rides & Events</a>
-      <a href={`${baseUrl}/membership`} class="block text-white py-2 hover:text-tqcc-yellow transition-colors">Membership</a>
-      <a href={`${baseUrl}/gallery`} class="block text-white py-2 hover:text-tqcc-yellow transition-colors">Gallery</a>
-      <a href={`${baseUrl}/contact`} class="block text-white py-2 hover:text-tqcc-yellow transition-colors">Contact</a>
-      <a href={`${baseUrl}/sportive`} class="block text-tqcc-black bg-tqcc-pink font-bold py-2 px-3 rounded-md hover:bg-tqcc-pink/80 transition-colors">Sportive</a>
+      {
+        mainNavigation.map((item) => {
+          const fullHref = item.href === "/" ? (baseUrl || "/") : `${baseUrl}${item.href}`;
+          return (
+            <a
+              href={fullHref}
+              class:list={[
+                item.highlight
+                  ? "block text-tqcc-black bg-tqcc-pink font-bold py-2 px-3 rounded-md hover:bg-tqcc-pink/80 transition-colors"
+                  : "block text-white py-2 hover:text-tqcc-yellow transition-colors",
+              ]}
+            >
+              {item.label}
+            </a>
+          );
+        })
+      }
 
       <!-- Unit toggle in mobile menu -->
       <div class="pt-2 border-t border-white/10">
