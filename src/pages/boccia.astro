@@ -3,6 +3,8 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 import { getBocciaEvents } from "../lib/boccia";
 import type { BocciaEvent } from "../lib/boccia";
 
+const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
+
 const allEvents = await getBocciaEvents();
 const niEvents = allEvents.filter((e) => e.category === "ni");
 const ukEvents = allEvents.filter((e) => e.category === "uk");
@@ -59,6 +61,15 @@ function formatDateRange(start: Date, end: Date): string {
         Boccia League, supporting the growth of Paralympic sport in Northern Ireland.
       </p>
 
+      <figure class="mb-12">
+        <img
+          src={`${baseUrl}/images/boccia/ni-boccia-progressive.jpg`}
+          alt="A Northern Ireland boccia athlete in a green Progressive jersey lines up a throw during an NI Boccia League match"
+          class="rounded-lg shadow-lg w-full"
+          loading="lazy"
+        />
+      </figure>
+
       <h2 class="text-2xl font-bold mb-4">What is Boccia?</h2>
       <p class="text-tqcc-gray mb-4">
         Boccia is a Paralympic precision ball sport, similar in concept to bowls
@@ -112,6 +123,27 @@ function formatDateRange(start: Date, end: Date): string {
         supporting elite athletes through the Boccia UK World Class Athlete
         Performance Pathway towards international representation.
       </p>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
+        <img
+          src={`${baseUrl}/images/boccia/ni-boccia-match.jpg`}
+          alt="Officials and players courtside at an NI Boccia League fixture, with red and blue balls grouped around the jack"
+          class="rounded-lg shadow-lg w-full h-64 object-cover"
+          loading="lazy"
+        />
+        <img
+          src={`${baseUrl}/images/boccia/ni-boccia-action.jpg`}
+          alt="Two NI boccia athletes facing off across the court, with red, blue and white balls in the foreground"
+          class="rounded-lg shadow-lg w-full h-64 object-cover"
+          loading="lazy"
+        />
+        <img
+          src={`${baseUrl}/images/boccia/ni-boccia-throw.jpg`}
+          alt="An NI boccia athlete releases a red ball down the court during a match"
+          class="rounded-lg shadow-lg w-full h-64 object-cover"
+          loading="lazy"
+        />
+      </div>
 
       <h2 class="text-2xl font-bold mb-4">Why does TQCC sponsor Boccia?</h2>
       <p class="text-tqcc-gray mb-6">
