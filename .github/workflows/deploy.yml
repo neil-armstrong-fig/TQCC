@@ -17,65 +17,6 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
-  refresh-instagram-token:
-    runs-on: ubuntu-latest
-    if: github.event_name == 'schedule'
-    steps:
-      - name: Refresh Instagram token
-        run: |
-          if [ -z "$INSTAGRAM_ACCESS_TOKEN" ] || [ -z "$INSTAGRAM_APP_SECRET" ]; then
-            echo "⚠️  Instagram secrets not configured, skipping refresh"
-            exit 0
-          fi
-
-          RESPONSE=$(curl -s "https://graph.instagram.com/refresh_access_token?grant_type=ig_refresh_token&access_token=$INSTAGRAM_ACCESS_TOKEN")
-
-          if echo "$RESPONSE" | grep -q '"error"'; then
-            echo "❌ Token refresh failed:"
-            echo "$RESPONSE"
-            exit 1
-          fi
-
-          NEW_TOKEN=$(echo "$RESPONSE" | jq -r '.access_token')
-          if [ "$NEW_TOKEN" = "null" ] || [ -z "$NEW_TOKEN" ]; then
-            echo "❌ No token in response"
-            exit 1
-          fi
-          echo "::add-mask::$NEW_TOKEN"
-
-          # Update the repository secret via GitHub API
-          if [ -z "$TOKEN_UPDATER_PAT" ]; then
-            echo "⚠️  TOKEN_UPDATER_PAT not configured — cannot auto-update secret"
-            exit 1
-          fi
-
-          KEY_RESPONSE=$(curl -s -H "Authorization: token $TOKEN_UPDATER_PAT" \
-            "https://api.github.com/repos/${{ github.repository }}/actions/secrets/public-key")
-          KEY_ID=$(echo "$KEY_RESPONSE" | jq -r '.key_id')
-          PUBLIC_KEY=$(echo "$KEY_RESPONSE" | jq -r '.key')
-
-          pip install pynacl -q
-          ENCRYPTED=$(python3 -c "
-          import base64
-          from nacl import encoding, public
-          pk = public.PublicKey('$PUBLIC_KEY'.encode('utf-8'), encoding.Base64Encoder())
-          sealed_box = public.SealedBox(pk)
-          encrypted = sealed_box.encrypt('$NEW_TOKEN'.encode('utf-8'))
-          print(base64.b64encode(encrypted).decode('utf-8'))
-          ")
-
-          curl -s -X PUT \
-            -H "Authorization: token $TOKEN_UPDATER_PAT" \
-            -H "Content-Type: application/json" \
-            "https://api.github.com/repos/${{ github.repository }}/actions/secrets/INSTAGRAM_ACCESS_TOKEN" \
-            -d "{\"encrypted_value\":\"$ENCRYPTED\",\"key_id\":\"$KEY_ID\"}"
-
-          echo "✅ Instagram token refreshed and secret updated"
-        env:
-          INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
-          INSTAGRAM_APP_SECRET: ${{ secrets.INSTAGRAM_APP_SECRET }}
-          TOKEN_UPDATER_PAT: ${{ secrets.TOKEN_UPDATER_PAT }}
-
   build:
     runs-on: ubuntu-latest
     steps:
@@ -94,8 +35,6 @@ jobs:
       - name: Build site
         run: npm run build
         env:
-          INSTAGRAM_ACCESS_TOKEN: ${{ secrets.INSTAGRAM_ACCESS_TOKEN }}
-          INSTAGRAM_USER_ID: ${{ secrets.INSTAGRAM_USER_ID }}
           STRAVA_CLIENT_ID: ${{ secrets.STRAVA_CLIENT_ID }}
           STRAVA_CLIENT_SECRET: ${{ secrets.STRAVA_CLIENT_SECRET }}
           STRAVA_REFRESH_TOKEN: ${{ secrets.STRAVA_REFRESH_TOKEN }}
