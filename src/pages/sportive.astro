@@ -14,6 +14,17 @@ const eventTime = event.data.date.toLocaleTimeString("en-GB", { hour: "2-digit",
 
 const registrationUrl = "https://www.entrycentral.com/tqccsportive26";
 const lastUpdated = getLastUpdated("src/pages/sportive.astro");
+
+// Route + Strava link.
+// 2026 uses a rerouted course due to road conditions on the original route.
+// To swap back to the original route next year, comment out the active lines
+// below and uncomment the "original route" lines.
+const routeGpxFile = "sportive-route-2026-reroute.gpx";
+const stravaRouteUrl = "https://www.strava.com/routes/3499699149342567630?utm_medium=web_embed&utm_source=route_embed&strava_deeplink_url=strava%3A%2F%2Froutes%2F3499699149342567630";
+// const routeGpxFile = "sportive-route.gpx"; // original route
+// const stravaRouteUrl = "https://www.strava.com/routes/2960499863763510476"; // original route
+
+const routeGpxUrl = `${baseUrl}/gpx/${routeGpxFile}`;
 ---
 
 <BaseLayout
@@ -94,7 +105,7 @@ const lastUpdated = getLastUpdated("src/pages/sportive.astro");
         <div id="elevation-chart" class="mt-2 rounded-lg overflow-hidden"></div>
         <div class="grid grid-cols-2 sm:flex sm:flex-wrap gap-3 mt-4">
           <a
-            href={`${baseUrl}/gpx/sportive-route.gpx`}
+            href={routeGpxUrl}
             download="tqcc-summer-solstice-sportive-2026.gpx"
             class="inline-flex items-center justify-center gap-2 bg-tqcc-black text-white font-semibold px-5 py-2.5 rounded-lg hover:bg-tqcc-black/80 transition-colors"
           >
@@ -102,7 +113,7 @@ const lastUpdated = getLastUpdated("src/pages/sportive.astro");
             Download GPX
           </a>
           <a
-            href="https://www.strava.com/routes/2960499863763510476"
+            href={stravaRouteUrl}
             target="_blank"
             rel="noopener noreferrer"
             class="inline-flex items-center justify-center gap-2 bg-[#FC4C02] text-white font-semibold px-5 py-2.5 rounded-lg hover:bg-[#FC4C02]/80 transition-colors"
@@ -151,12 +162,12 @@ const lastUpdated = getLastUpdated("src/pages/sportive.astro");
       stroke: #E91E8C !important;
     }
   </style>
-  <script is:inline define:vars={{ baseUrl }}>
+  <script is:inline define:vars={{ routeGpxUrl }}>
     document.addEventListener("DOMContentLoaded", function () {
       var mapEl = document.getElementById("sportive-map");
       if (!mapEl) return;
 
-      var gpxUrl = baseUrl + "/gpx/sportive-route.gpx";
+      var gpxUrl = routeGpxUrl;
       var map = L.map("sportive-map", { scrollWheelZoom: false }).setView([54.56, -5.94], 11);
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',

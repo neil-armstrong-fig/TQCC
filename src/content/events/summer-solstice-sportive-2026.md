@@ -16,6 +16,8 @@ The TQCC Summer Solstice Sportive is our flagship annual event, and the only Tit
 
 Held on a Friday evening to kick off the weekend, the route takes in the rolling hills of the greater Belfast area before returning to the finish for hot food and a BBQ. Multiple pace groups ensure the event is accessible to all abilities.
 
+**Please note:** we have a new route for 2026 due to road conditions on the original course. The updated route map and GPX file below reflect the course you'll be riding this year, so be sure to download the latest version.
+
 ## Schedule
 
 - **5:30 pm – 6:00 pm** — Sign-on
