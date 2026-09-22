@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+:root {
+  color-scheme: light;
+}
+
 @theme {
   --color-tqcc-yellow: #FFD700;
   --color-tqcc-yellow-light: #FFF3B0;

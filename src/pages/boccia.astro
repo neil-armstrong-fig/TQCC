@@ -1,9 +1,12 @@
 ---
+import { Image } from "astro:assets";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { getBocciaEvents } from "../lib/boccia";
 import type { BocciaEvent } from "../lib/boccia";
-
-const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
+import bocciaProgressive from "../assets/images/boccia/ni-boccia-progressive.jpg";
+import bocciaMatch from "../assets/images/boccia/ni-boccia-match.jpg";
+import bocciaAction from "../assets/images/boccia/ni-boccia-action.jpg";
+import bocciaThrow from "../assets/images/boccia/ni-boccia-throw.jpg";
 
 const allEvents = await getBocciaEvents();
 const niEvents = allEvents.filter((e) => e.category === "ni");
@@ -62,11 +65,13 @@ function formatDateRange(start: Date, end: Date): string {
       </p>
 
       <figure class="mb-12">
-        <img
-          src={`${baseUrl}/images/boccia/ni-boccia-progressive.jpg`}
+        <Image
+          src={bocciaProgressive}
           alt="A Northern Ireland boccia athlete in a green Progressive jersey lines up a throw during an NI Boccia League match"
           class="rounded-lg shadow-lg w-full"
           loading="lazy"
+          widths={[640, 1024, 1600]}
+          sizes="100vw"
         />
       </figure>
 
@@ -125,23 +130,29 @@ function formatDateRange(start: Date, end: Date): string {
       </p>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
-        <img
-          src={`${baseUrl}/images/boccia/ni-boccia-match.jpg`}
+        <Image
+          src={bocciaMatch}
           alt="Officials and players courtside at an NI Boccia League fixture, with red and blue balls grouped around the jack"
           class="rounded-lg shadow-lg w-full h-64 object-cover"
           loading="lazy"
+          widths={[400, 600, 1600]}
+          sizes="(min-width: 768px) 33vw, 100vw"
         />
-        <img
-          src={`${baseUrl}/images/boccia/ni-boccia-action.jpg`}
+        <Image
+          src={bocciaAction}
           alt="Two NI boccia athletes facing off across the court, with red, blue and white balls in the foreground"
           class="rounded-lg shadow-lg w-full h-64 object-cover"
           loading="lazy"
+          widths={[400, 600, 1600]}
+          sizes="(min-width: 768px) 33vw, 100vw"
         />
-        <img
-          src={`${baseUrl}/images/boccia/ni-boccia-throw.jpg`}
+        <Image
+          src={bocciaThrow}
           alt="An NI boccia athlete releases a red ball down the court during a match"
           class="rounded-lg shadow-lg w-full h-64 object-cover"
           loading="lazy"
+          widths={[400, 600, 1600]}
+          sizes="(min-width: 768px) 33vw, 100vw"
         />
       </div>
 

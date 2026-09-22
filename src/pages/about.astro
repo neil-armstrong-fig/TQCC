@@ -1,7 +1,10 @@
 ---
+import { Image } from "astro:assets";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import FAQSchema from "../components/seo/FAQSchema.astro";
 import { getLastUpdated } from "../lib/git-date";
+import origins from "../assets/images/history/origins.jpg";
+import kit from "../assets/images/kit.jpg";
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
 const lastUpdated = getLastUpdated("src/pages/about.astro");
 ---
@@ -51,11 +54,13 @@ const lastUpdated = getLastUpdated("src/pages/about.astro");
           </p>
         </div>
         <div class="flex items-center">
-          <img
-            src={`${baseUrl}/images/history/origins.jpg`}
+          <Image
+            src={origins}
             alt="TQCC origins"
             class="rounded-lg shadow-lg w-full"
             loading="lazy"
+            widths={[640, 960, 1293]}
+            sizes="(min-width: 1024px) 50vw, 100vw"
           />
         </div>
       </div>
@@ -63,11 +68,13 @@ const lastUpdated = getLastUpdated("src/pages/about.astro");
       <!-- Our Kit — image + text side by side -->
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-12">
         <div class="flex items-center order-2 lg:order-1">
-          <img
-            src={`${baseUrl}/images/kit.jpg`}
+          <Image
+            src={kit}
             alt="TQCC club cycling kit in yellow and black with pink stripe"
             class="rounded-lg shadow-lg w-full"
             loading="lazy"
+            widths={[640, 960, 1157]}
+            sizes="(min-width: 1024px) 50vw, 100vw"
           />
         </div>
         <div class="prose prose-lg max-w-none order-1 lg:order-2">

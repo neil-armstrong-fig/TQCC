@@ -1,22 +1,31 @@
 ---
 // Hero component — full-width banner with TQCC branding
+import { Image } from "astro:assets";
+import heroBg from "../../assets/images/hero-bg.jpg";
+import badge from "../../assets/images/badge.png";
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
 ---
 
 <section class="relative bg-tqcc-black overflow-hidden">
-  <div
-    class="absolute inset-0 bg-cover bg-center"
-    style={`background-image: url('${baseUrl}/images/hero-bg.jpg');`}
-  >
-    <div class="absolute inset-0 bg-tqcc-black/65"></div>
-  </div>
+  <Image
+    src={heroBg}
+    alt=""
+    aria-hidden="true"
+    class="absolute inset-0 w-full h-full object-cover"
+    widths={[640, 1024, 1184]}
+    sizes="100vw"
+    loading="eager"
+    fetchpriority="high"
+  />
+  <div class="absolute inset-0 bg-tqcc-black/65"></div>
   <div class="max-w-7xl mx-auto px-4 py-20 md:py-28 relative z-10">
     <div class="max-w-5xl">
-      <img
-        src={`${baseUrl}/images/badge.png`}
+      <Image
+        src={badge}
         alt="TQCC Badge"
-        width="80"
-        height="80"
+        width={80}
+        height={80}
+        loading="eager"
         class="mb-6 rounded-full"
       />
       <h1 class="text-4xl sm:text-5xl md:text-6xl font-extrabold text-tqcc-yellow mb-4 leading-tight">

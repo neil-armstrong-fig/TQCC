@@ -1,18 +1,21 @@
 ---
+import { Image } from "astro:assets";
 import Navigation from "./Navigation.astro";
 import UnitToggle from "./UnitToggle.astro";
 import { mainNavigation } from "../../data/navigation";
+import badge from "../../assets/images/badge.png";
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
 ---
 
 <header class="bg-tqcc-black sticky top-0 z-50">
   <div class="max-w-7xl mx-auto px-4 py-4 flex items-center">
     <a href={baseUrl || "/"} data-astro-prefetch class="flex items-center gap-3 group">
-      <img
-        src={`${baseUrl}/images/badge.png`}
+      <Image
+        src={badge}
         alt="TQCC Badge"
-        width="40"
-        height="40"
+        width={40}
+        height={40}
+        loading="eager"
         class="rounded-full"
       />
       <span

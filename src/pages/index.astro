@@ -1,4 +1,5 @@
 ---
+import { getImage } from "astro:assets";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import Hero from "../components/home/Hero.astro";
 import UpcomingEvents from "../components/home/UpcomingEvents.astro";
@@ -8,6 +9,11 @@ import LatestNewsletter from "../components/home/LatestNewsletter.astro";
 import JsonLd from "../components/seo/JsonLd.astro";
 import { getClubActivities } from "../lib/strava";
 import { getCollection } from "astro:content";
+import heroBg from "../assets/images/hero-bg.jpg";
+
+// Matches the largest srcset entry Hero.astro renders, so the preload hint
+// actually points at the image the browser will use.
+const optimizedHeroBg = await getImage({ src: heroBg });
 
 const stravaActivities = await getClubActivities(100);
 
@@ -26,7 +32,7 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
 <BaseLayout
   title="TQCC | Belfast Cycling Club"
   description="Join Titanic Quarter Cycling Club (TQCC) - Belfast's friendliest cycling club. Weekly group rides for all abilities, beginners welcome. Cycling club in Belfast, Northern Ireland since 2014."
-  preloadImage={`${baseUrl}/images/hero-bg.jpg`}
+  preloadImage={optimizedHeroBg.src}
 >
   <JsonLd type="Organization" />
 
