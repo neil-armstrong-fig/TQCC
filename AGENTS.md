@@ -1,4 +1,12 @@
-# TQCC Website — Claude Instructions
+# TQCC Website — Agent Instructions
+
+Astro 5 + Tailwind 4 site (Node version in `.nvmrc`). These instructions apply to any coding agent.
+
+## Commands
+
+- `npm run dev` starts the dev server.
+- `npm run build` builds the site; run it to verify changes.
+- `npx astro check` runs type checking.
 
 ## Distance & Speed Values
 
