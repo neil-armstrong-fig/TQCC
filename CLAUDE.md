@@ -42,3 +42,12 @@ Currently excluded: `/admin`, `/members` (and all sub-paths).
 - When referencing an external organisation, venue, or resource in content, **link to their website** where possible.
 - All external links must open in a **new tab** (`target="_blank" rel="noopener noreferrer"`).
 - In markdown content files, use inline HTML `<a>` tags (not markdown link syntax) so that `target="_blank"` can be set.
+
+## Newsletter Images
+
+Newsletter hero images (`heroImage` in `src/content/newsletters/*.md`, stored in `public/images/uploads/`) often come from screenshots and have a dark/semi-transparent strip baked into the **right edge**, which shows as a visible bar on the homepage card. **Whenever a new newsletter is added, check and fix its image:**
+
+- Inspect the rightmost pixel columns at a few header rows (e.g. y=0, 100) and compare with the left edge. The yellow header band should run to the edge; a run of dark (`5,21,36` / black) or semi-transparent columns on the right is the artifact.
+- Crop those columns off (including the anti-aliased column) with `sharp` (`extract({ left: 0, top: 0, width: width - n, height })`), overwriting the file.
+- Don't paper over it with a dark card background; fix the image itself.
+- Past crops: September 2026 (6px), March (10px), April (11px). JPEGs have been fine so far.
