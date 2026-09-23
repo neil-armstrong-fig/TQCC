@@ -1,0 +1,216 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+import { getLastUpdated } from "../lib/git-date";
+import { getDonationTotal } from "../lib/givestar";
+
+const lastUpdated = getLastUpdated("src/pages/operation-ironwoman.astro");
+
+const total = await getDonationTotal();
+const formatGBP = (n: number) =>
+  `£${n.toLocaleString("en-GB", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+const totalDisplay = formatGBP(total.amount + total.giftAid);
+const asOfDisplay = total.asOf.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
+
+const donateUrl = "https://givestar.io/gs/operation-ironwoman-68905";
+const instagramUrl = "https://www.instagram.com/operationironwoman";
+
+// PLACEHOLDER: confirm names, dates and results with Emily.
+const races = [
+  { race: "Race 1", name: "[PLACEHOLDER: race name]", date: "[PLACEHOLDER: date]", result: "[PLACEHOLDER: result]" },
+  { race: "Race 2", name: "IRONMAN 70.3 Swansea", date: "12 July 2026", result: "[PLACEHOLDER: result]" },
+  { race: "Race 3", name: "IRONMAN Leeds", date: "[PLACEHOLDER: date]", result: "13:48:57" },
+  { race: "Race 4", name: "IRONMAN Wales, Tenby", date: "[PLACEHOLDER: date]", result: "[PLACEHOLDER: result]" },
+  { race: "Race 5", name: "[PLACEHOLDER: final race name]", date: "[PLACEHOLDER: date]", result: "[PLACEHOLDER: result]" },
+];
+
+const isPlaceholder = (text: string) => text.includes("PLACEHOLDER");
+
+const charities = [
+  {
+    name: "Cycle Against Suicide",
+    url: "https://www.cycleagainstsuicide.com/",
+    reason: "Gave Emily a space to talk and share with others.",
+  },
+  {
+    name: "Childline",
+    url: "https://www.childline.org.uk/",
+    reason: "A place to turn to when she was younger and facing tough times.",
+  },
+  {
+    name: "Extern Crisis & Counselling",
+    url: "https://www.extern.org/",
+    reason: "Provided support during one of the toughest periods of her life.",
+  },
+  {
+    name: "St John Ambulance Cymru",
+    url: "https://www.sja.org.uk/",
+    reason: "Providing first aid and emergency care in communities across Wales.",
+  },
+];
+---
+
+<BaseLayout
+  title="Operation Ironwoman"
+  description="TQCC member Emily Bond is taking on five UK IRONMAN races in one season to raise £10,000 for four charities. Find out more and donate."
+  lastUpdated={lastUpdated}
+  noindex
+>
+  <section class="py-12">
+    <div class="max-w-7xl mx-auto px-4">
+      <h1 class="text-4xl font-bold mb-8">Operation Ironwoman</h1>
+
+      <p class="text-xl text-tqcc-gray leading-relaxed mb-8">
+        TQCC member Emily Bond is aiming to become the first woman to complete
+        every UK IRONMAN race in a single season, raising
+        <strong class="text-tqcc-black">£10,000</strong> for four charities along the way.
+      </p>
+
+      <div class="flex flex-col sm:flex-row gap-4 mb-12">
+        <a
+          href={donateUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-block text-center bg-tqcc-yellow text-tqcc-black font-bold px-6 py-3 rounded-lg hover:bg-tqcc-yellow-dark transition-colors"
+        >
+          Donate now &rarr;
+        </a>
+        <a
+          href={instagramUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-block text-center border border-tqcc-pink text-tqcc-pink font-bold px-6 py-3 rounded-lg hover:bg-tqcc-pink/10 transition-colors"
+        >
+          Follow the journey on Instagram
+        </a>
+      </div>
+
+      <div class="flex items-center justify-center text-center animate-pulse border-2 border-dashed border-red-400 bg-red-50 text-red-600 font-semibold rounded-lg p-4 w-full h-72 md:h-96 mb-12">
+          [PHOTO PLACEHOLDER: main photo of Emily, ideally racing or at a finish line]
+        </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-12">
+        <div class="bg-tqcc-gray-light p-5 rounded-lg text-center">
+          <span class="text-2xl font-bold text-tqcc-pink">5 Races</span>
+          <p class="mt-1 text-tqcc-gray text-sm">One season, every UK IRONMAN</p>
+        </div>
+        <div class="bg-tqcc-gray-light p-5 rounded-lg text-center">
+          <span class="text-2xl font-bold text-tqcc-pink">£10,000</span>
+          <p class="mt-1 text-tqcc-gray text-sm">Fundraising target</p>
+        </div>
+        <div class="bg-tqcc-gray-light p-5 rounded-lg text-center">
+          <span class="text-2xl font-bold text-tqcc-pink">4 Charities</span>
+          <p class="mt-1 text-tqcc-gray text-sm">Every penny shared between them</p>
+        </div>
+        <div class="bg-tqcc-gray-light p-5 rounded-lg text-center">
+          <span class="text-2xl font-bold text-tqcc-pink">{totalDisplay}</span>
+          <p class="mt-1 text-tqcc-gray text-sm">Raised including Gift Aid, as of {asOfDisplay} ({formatGBP(total.amount)} donated + {formatGBP(total.giftAid)} Gift Aid)</p>
+        </div>
+      </div>
+
+      <h2 class="text-2xl font-bold mb-4">The challenge</h2>
+      <p class="text-tqcc-gray mb-4">
+        A full IRONMAN is a <span class="distance-string" data-distance="2.4 miles">2.4 miles</span> swim, a <span class="distance-string" data-distance="112 miles">112 miles</span> bike ride and a <span class="distance-string" data-distance="26.2 miles">26.2 miles</span>
+        run, back to back. Emily is taking on the UK's IRONMAN races in a single
+        season, a feat no woman has completed before. She calls it
+        <strong class="text-tqcc-black">Operation Ironwoman</strong>.
+      </p>
+      <p class="text-tqcc-gray mb-8">
+        Emily is an aerospace engineering PhD student and endurance athlete. So
+        far the season has included IRONMAN 70.3 Swansea, IRONMAN Leeds and
+        IRONMAN Wales in Tenby, with more still to come.
+      </p>
+
+      <div class="bg-tqcc-yellow/10 border-l-4 border-tqcc-yellow p-6 rounded-r-lg mb-12">
+        <p class="text-tqcc-gray italic">
+          &ldquo;It all started with me seeing what I could do after my surgery,
+          but it's become so much more.&rdquo;
+        </p>
+        <p class="text-sm text-tqcc-gray mt-2">Emily Bond</p>
+      </div>
+
+      <h2 class="text-2xl font-bold mb-4">Emily's story</h2>
+      <p class="text-tqcc-gray mb-4">
+        In 2018, major surgery on both of Emily's legs left her unable to run for
+        around two and a half years. Completing an IRONMAN seemed impossible.
+      </p>
+      <p class="text-tqcc-gray mb-4">
+        In October 2024 she signed up for her first 5k. Within months she had
+        bought a second-hand bike from a friend and entered her first triathlon.
+        After just four months of unstructured training she completed IRONMAN
+        70.3 Weymouth, and the idea for Operation Ironwoman was born.
+      </p>
+      <p class="text-tqcc-gray mb-12">
+        At IRONMAN Leeds she covered the <span class="distance-string" data-distance="112 miles">112 miles</span> bike course and the full marathon
+        run in a time of 13 hours 48 minutes 57 seconds.
+      </p>
+
+      <h2 class="text-2xl font-bold mb-4">The races</h2>
+      <p class="text-tqcc-gray mb-6">
+        <span class="animate-pulse text-red-600 font-semibold">[PLACEHOLDER: confirm the full list of five races, dates and results with Emily.]</span>
+      </p>
+      <div class="space-y-3 mb-12">
+        {races.map((r) => (
+          <div class="border border-gray-200 rounded-lg p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+            <div>
+              <span class="text-tqcc-pink font-semibold text-sm">{r.race}</span>
+              <h3 class={isPlaceholder(r.name) ? "font-bold animate-pulse text-red-600" : "font-bold"}>{r.name}</h3>
+            </div>
+            <div class="sm:text-right text-sm text-tqcc-gray">
+              <p class={isPlaceholder(r.date) ? "animate-pulse text-red-600 font-semibold" : ""}>{r.date}</p>
+              <p>Finish time: <span class={isPlaceholder(r.result) ? "animate-pulse text-red-600 font-semibold" : ""}>{r.result}</span></p>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
+        <div class="flex items-center justify-center text-center animate-pulse border-2 border-dashed border-red-400 bg-red-50 text-red-600 font-semibold rounded-lg p-4 h-48">
+          [PHOTO PLACEHOLDER: training photo]
+        </div>
+        <div class="flex items-center justify-center text-center animate-pulse border-2 border-dashed border-red-400 bg-red-50 text-red-600 font-semibold rounded-lg p-4 h-48">
+          [PHOTO PLACEHOLDER: race day photo]
+        </div>
+        <div class="flex items-center justify-center text-center animate-pulse border-2 border-dashed border-red-400 bg-red-50 text-red-600 font-semibold rounded-lg p-4 h-48">
+          [PHOTO PLACEHOLDER: finish line photo]
+        </div>
+      </div>
+
+      <h2 class="text-2xl font-bold mb-4">Who is Emily raising money for?</h2>
+      <p class="text-tqcc-gray mb-6">
+        Each of the four charities has played a part in Emily's own life.
+      </p>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12">
+        {charities.map((charity) => (
+          <a
+            href={charity.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="block border border-gray-200 rounded-lg p-6 hover:border-tqcc-pink hover:shadow-md transition-all"
+          >
+            <h3 class="text-lg font-bold text-tqcc-pink">{charity.name}</h3>
+            <p class="text-tqcc-gray text-sm mt-2">{charity.reason}</p>
+          </a>
+        ))}
+      </div>
+
+      <div class="bg-tqcc-black text-white p-8 rounded-lg text-center">
+        <h2 class="text-2xl font-bold text-tqcc-yellow mb-4">
+          Support Emily
+        </h2>
+        <p class="text-white/80 mb-4">
+          Every donation, big or small, helps Emily reach her target and
+          supports four brilliant charities. Follow along on Instagram to cheer
+          her on for the final races.
+        </p>
+        <a
+          href={donateUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="inline-block bg-tqcc-yellow text-tqcc-black font-bold px-6 py-2 rounded-lg hover:bg-tqcc-yellow-dark transition-colors"
+        >
+          Donate on Givestar &rarr;
+        </a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

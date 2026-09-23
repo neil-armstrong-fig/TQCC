@@ -26,6 +26,7 @@ export default defineConfig({
         !page.includes("/members") &&
         !page.includes("/ni-boccia-league") &&
         !page.includes("/news") &&
+        !page.includes("/operation-ironwoman") &&
         !page.includes("/faqs") &&
         !page.includes("/data-deletion"),
     }),
