@@ -1,14 +1,12 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { getLastUpdated } from "../lib/git-date";
+import DonationWidget from "../components/ironwoman/DonationWidget.astro";
 import { getDonationTotal } from "../lib/givestar";
 
 const lastUpdated = getLastUpdated("src/pages/operation-ironwoman.astro");
 
 const total = await getDonationTotal();
-const formatGBP = (n: number) =>
-  `£${n.toLocaleString("en-GB", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
-const totalDisplay = formatGBP(total.amount + total.giftAid);
 const asOfDisplay = total.asOf.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
 
 const donateUrl = "https://givestar.io/gs/operation-ironwoman-68905";
@@ -88,7 +86,7 @@ const charities = [
           [PHOTO PLACEHOLDER: main photo of Emily, ideally racing or at a finish line]
         </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-12">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
         <div class="bg-tqcc-gray-light p-5 rounded-lg text-center">
           <span class="text-2xl font-bold text-tqcc-pink">5 Races</span>
           <p class="mt-1 text-tqcc-gray text-sm">One season, every UK IRONMAN</p>
@@ -101,11 +99,15 @@ const charities = [
           <span class="text-2xl font-bold text-tqcc-pink">4 Charities</span>
           <p class="mt-1 text-tqcc-gray text-sm">Every penny shared between them</p>
         </div>
-        <div class="bg-tqcc-gray-light p-5 rounded-lg text-center">
-          <span class="text-2xl font-bold text-tqcc-pink">{totalDisplay}</span>
-          <p class="mt-1 text-tqcc-gray text-sm">Raised including Gift Aid, as of {asOfDisplay} ({formatGBP(total.amount)} donated + {formatGBP(total.giftAid)} Gift Aid)</p>
-        </div>
       </div>
+
+      <DonationWidget
+        amount={total.amount}
+        giftAid={total.giftAid}
+        target={10000}
+        asOf={asOfDisplay}
+        donateUrl={donateUrl}
+      />
 
       <h2 class="text-2xl font-bold mb-4">The challenge</h2>
       <p class="text-tqcc-gray mb-4">
