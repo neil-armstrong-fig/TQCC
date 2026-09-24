@@ -20,4 +20,4 @@ Allow: /
 User-agent: Google-Extended
 Allow: /
 
-Sitemap: https://titanicquartercc.com/sitemap-index.xml
+Sitemap: https://www.titanicquartercc.com/sitemap-index.xml
