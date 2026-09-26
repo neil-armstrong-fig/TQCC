@@ -4,6 +4,16 @@ import sitemap from "@astrojs/sitemap";
 
 // Detect build environment
 const isNetlify = process.env.NETLIFY === "true";
+const sitemapExclusions = [
+  "/admin",
+  "/members",
+  "/ni-boccia-league",
+  "/news",
+  "/operation-ironwoman",
+  "/faqs",
+  "/data-deletion",
+  "/events/summer-solstice-sportive-2026",
+];
 
 export default defineConfig({
   site: isNetlify
@@ -21,14 +31,12 @@ export default defineConfig({
     sitemap({
       // Exclude password-gated and admin pages — keep this list updated
       // when new pages are added that shouldn't be publicly indexed.
-      filter: (page) =>
-        !page.includes("/admin") &&
-        !page.includes("/members") &&
-        !page.includes("/ni-boccia-league") &&
-        !page.includes("/news") &&
-        !page.includes("/operation-ironwoman") &&
-        !page.includes("/faqs") &&
-        !page.includes("/data-deletion"),
+      filter: (page) => {
+        const pathname = new URL(page).pathname.replace(/\/$/, "") || "/";
+        return !sitemapExclusions.some(
+          (excludedPath) => pathname === excludedPath || pathname.startsWith(`${excludedPath}/`),
+        );
+      },
     }),
   ],
 });

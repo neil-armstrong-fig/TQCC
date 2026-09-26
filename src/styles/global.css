@@ -10,15 +10,25 @@
   --color-tqcc-yellow-dark: #C7A600;
   --color-tqcc-black: #1A1A1A;
   --color-tqcc-black-light: #2D2D2D;
-  --color-tqcc-pink: #E91E8C;
+  --color-tqcc-pink: #C9177A;
   --color-tqcc-pink-light: #FF6EB4;
   --color-tqcc-white: #FAFAFA;
-  --color-tqcc-gray: #6B7280;
+  --color-tqcc-gray: #5B6470;
   --color-tqcc-gray-dark: #3E4248;
   --color-tqcc-gray-light: #F3F4F6;
 
-  --font-heading: "Inter", system-ui, sans-serif;
-  --font-body: "Inter", system-ui, sans-serif;
+  --font-heading: "Inter", "Inter Fallback", system-ui, sans-serif;
+  --font-body: "Inter", "Inter Fallback", system-ui, sans-serif;
+}
+
+/* Metric-matched fallback so the Inter web-font swap does not shift layout (CLS) */
+@font-face {
+  font-family: "Inter Fallback";
+  src: local("Arial"), local("Liberation Sans"), local("Helvetica");
+  size-adjust: 107.06%;
+  ascent-override: 90.49%;
+  descent-override: 22.56%;
+  line-gap-override: 0%;
 }
 
 /* Prose styling for blog content */

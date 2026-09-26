@@ -1,0 +1,81 @@
+{
+  "ci": {
+    "collect": {
+      "staticDistDir": "./dist",
+      "numberOfRuns": 3,
+      "url": [
+        "http://localhost/index.html",
+        "http://localhost/about/index.html",
+        "http://localhost/boccia/index.html",
+        "http://localhost/contact/index.html",
+        "http://localhost/events/index.html",
+        "http://localhost/events/agm-2026/index.html",
+        "http://localhost/events/bel-dub-bel-2026/index.html",
+        "http://localhost/events/big-italian-bike-ride-2026/index.html",
+        "http://localhost/events/colour-run-2026/index.html",
+        "http://localhost/events/end-of-season-social-2026/index.html",
+        "http://localhost/events/lap-the-lough-2026/index.html",
+        "http://localhost/events/mallorca-2026/index.html",
+        "http://localhost/events/mondello-24hr-race-2026/index.html",
+        "http://localhost/events/st-johns-lighthouse-2026/index.html",
+        "http://localhost/events/tqcc-grand-fondo-2026/index.html",
+        "http://localhost/events/tuesday-cruise-2026/index.html",
+        "http://localhost/membership/index.html",
+        "http://localhost/newsletters/index.html",
+        "http://localhost/newsletters/2026-02/index.html",
+        "http://localhost/newsletters/2026-03/index.html",
+        "http://localhost/newsletters/2026-04/index.html",
+        "http://localhost/newsletters/2026-05/index.html",
+        "http://localhost/newsletters/2026-09/index.html",
+        "http://localhost/newsletters/2026-january/index.html",
+        "http://localhost/privacy/index.html",
+        "http://localhost/rides-events/index.html",
+        "http://localhost/sportive/index.html"
+      ]
+    },
+    "assert": {
+      "assertMatrix": [
+        {
+          "matchingUrlPattern": "^(?!.*[/]newsletters[/]).*$",
+          "aggregationMethod": "median",
+          "assertions": {
+            "categories:performance": ["error", { "minScore": 0.9 }],
+            "categories:accessibility": ["error", { "minScore": 0.95 }],
+            "categories:best-practices": ["error", { "minScore": 0.95 }],
+            "categories:seo": ["error", { "minScore": 0.95 }],
+            "largest-contentful-paint": ["error", { "maxNumericValue": 2500 }],
+            "cumulative-layout-shift": ["error", { "maxNumericValue": 0.1 }]
+          }
+        },
+        {
+          "matchingUrlPattern": "[/]newsletters[/]index[.]html$",
+          "aggregationMethod": "median",
+          "assertions": {
+            "categories:performance": ["error", { "minScore": 0.7 }],
+            "categories:accessibility": ["error", { "minScore": 0.95 }],
+            "categories:best-practices": ["error", { "minScore": 0.95 }],
+            "categories:seo": ["error", { "minScore": 0.95 }],
+            "largest-contentful-paint": ["error", { "maxNumericValue": 6500 }],
+            "cumulative-layout-shift": ["error", { "maxNumericValue": 0.1 }]
+          }
+        },
+        {
+          "matchingUrlPattern": "[/]newsletters[/](?!index[.]html$)[^/]+[/]index[.]html$",
+          "aggregationMethod": "median",
+          "assertions": {
+            "categories:performance": ["error", { "minScore": 0.85 }],
+            "categories:accessibility": ["error", { "minScore": 0.95 }],
+            "categories:best-practices": ["error", { "minScore": 0.95 }],
+            "categories:seo": ["error", { "minScore": 0.95 }],
+            "largest-contentful-paint": ["error", { "maxNumericValue": 4500 }],
+            "cumulative-layout-shift": ["error", { "maxNumericValue": 0.1 }]
+          }
+        }
+      ]
+    },
+    "upload": {
+      "target": "filesystem",
+      "outputDir": ".lighthouseci"
+    }
+  }
+}

@@ -34,13 +34,13 @@ const sortedDays = dayOrder.filter(day => ridesByDay[day]);
   {
     sortedDays.map((day) => (
       <div>
-        <h3 class="text-2xl font-bold text-tqcc-black mb-4">{day}s</h3>
+        <h2 class="text-2xl font-bold text-tqcc-black mb-4">{day}s</h2>
         <div class:list={["grid gap-4", compact ? "grid-cols-1" : "grid-cols-1 md:grid-cols-2"]}>
           {ridesByDay[day].map((ride) => (
             <div class="bg-white rounded-lg shadow-md p-6 hover:shadow-lg transition-shadow">
               <div class="flex items-start justify-between mb-3">
                 <div>
-                  <h4 class="font-bold text-lg">{ride.data.title}</h4>
+                  <h3 class="font-bold text-lg">{ride.data.title}</h3>
                   <p class="text-tqcc-pink font-semibold">
                     {ride.data.time || <a href="https://www.strava.com/clubs/110633" target="_blank" rel="noopener noreferrer" class="underline hover:text-tqcc-pink/80">Check Strava for details</a>}
                   </p>

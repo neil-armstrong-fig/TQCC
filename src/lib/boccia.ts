@@ -94,7 +94,7 @@ export async function getBocciaEvents(): Promise<BocciaEvent[]> {
     const events = data.upcoming ?? [];
 
     return events
-      .map((event) => {
+      .map((event): BocciaEvent | null => {
         const body = event.body ? stripHtml(event.body) : undefined;
         const category = categoriseEvent(event.title, body);
         if (!category) return null;

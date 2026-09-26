@@ -69,17 +69,73 @@ const lastUpdated = getLastUpdated("src/pages/contact.astro");
         </div>
       </div>
 
-      <!-- Map -->
-      <div class="rounded-lg overflow-hidden h-80 bg-tqcc-gray-light">
+      <!-- The third-party map is loaded only after an explicit user action. -->
+      <div id="contact-map" class="relative rounded-lg overflow-hidden h-80 bg-tqcc-gray-light">
         <iframe
-          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2311.89!2d-5.9124913!3d54.6044995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x486109aebda60a5f%3A0xa865162525e04631!2sSPAR%20Titanic!5e0!3m2!1sen!2suk!4v1700000000000!5m2!1sen!2suk"
+          id="contact-map-frame"
+          title="Map showing the TQCC meeting point at SPAR Titanic"
+          data-src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2311.89!2d-5.9124913!3d54.6044995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x486109aebda60a5f%3A0xa865162525e04631!2sSPAR%20Titanic!5e0!3m2!1sen!2suk!4v1700000000000!5m2!1sen!2suk"
           width="100%"
           height="100%"
           style="border:0"
           allowfullscreen
           loading="lazy"
-          referrerpolicy="no-referrer-when-downgrade"></iframe>
+          referrerpolicy="no-referrer-when-downgrade"
+          class="hidden h-full w-full"
+        ></iframe>
+
+        <div
+          id="contact-map-facade"
+          class="absolute inset-0 flex flex-col items-center justify-center gap-4 p-6 text-center"
+        >
+          <svg class="w-10 h-10 text-tqcc-pink" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a2 2 0 01-2.828 0l-4.243-4.243a8 8 0 1111.314 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+          </svg>
+          <div>
+            <h2 class="text-xl font-bold">SPAR Titanic Quarter</h2>
+            <p class="text-tqcc-gray">Titanic Quarter, Belfast, Northern Ireland</p>
+          </div>
+          <button
+            type="button"
+            id="load-contact-map"
+            class="bg-tqcc-pink text-white font-semibold px-5 py-2.5 rounded-lg hover:bg-tqcc-pink-light hover:text-tqcc-black transition-colors cursor-pointer"
+          >
+            Load interactive map
+          </button>
+          <p class="text-sm text-tqcc-gray">
+            This loads content from Google Maps. You can also
+            <a
+              href="https://www.google.com/maps/search/?api=1&query=SPAR+Titanic+Quarter+Belfast"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="text-tqcc-pink underline"
+            >open the location in a new tab</a>.
+          </p>
+        </div>
       </div>
     </div>
   </section>
+
+  <script>
+    function initContactMap() {
+      const button = document.querySelector<HTMLButtonElement>("#load-contact-map");
+      const frame = document.querySelector<HTMLIFrameElement>("#contact-map-frame");
+      const facade = document.querySelector<HTMLElement>("#contact-map-facade");
+
+      if (!button || !frame || !facade || button.dataset.initialized === "true") return;
+      button.dataset.initialized = "true";
+
+      button.addEventListener("click", () => {
+        const src = frame.dataset.src;
+        if (!src) return;
+
+        frame.src = src;
+        frame.classList.remove("hidden");
+        facade.remove();
+      });
+    }
+
+    document.addEventListener("astro:page-load", initContactMap);
+  </script>
 </BaseLayout>

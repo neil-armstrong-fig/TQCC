@@ -26,61 +26,34 @@
 <script>
   import { getPreferredUnit, setPreferredUnit, type DistanceUnit } from "../../lib/units";
 
+  const baseClasses = "px-4 py-2 rounded-full text-sm font-medium transition-all duration-200";
+  const activeClasses = "bg-tqcc-yellow text-tqcc-black shadow-lg";
+  const inactiveClasses = "text-white";
+
+  function updateToggle(container: Element, activeUnit: DistanceUnit) {
+    const milesLabel = container.querySelector<HTMLElement>('[data-unit="miles"]');
+    const kmLabel = container.querySelector<HTMLElement>('[data-unit="km"]');
+
+    if (!milesLabel || !kmLabel) return;
+
+    const milesClasses = activeUnit === "miles" ? activeClasses : inactiveClasses;
+    const kmClasses = activeUnit === "km" ? activeClasses : inactiveClasses;
+    milesLabel.className = `unit-toggle-label ${baseClasses} ${milesClasses}`;
+    kmLabel.className = `unit-toggle-label ${baseClasses} ${kmClasses}`;
+  }
+
+  function updateAllToggles(unit: DistanceUnit) {
+    document.querySelectorAll(".unit-toggle-container").forEach((container) => {
+      updateToggle(container, unit);
+    });
+  }
+
   function initUnitToggles() {
-    // Find all toggle containers on the page
     const containers = document.querySelectorAll(".unit-toggle-container");
 
     containers.forEach((container) => {
-      const labels = container.querySelectorAll(".unit-toggle-label");
-      const milesLabel = Array.from(labels).find(label => label.getAttribute("data-unit") === "miles");
-      const kmLabel = Array.from(labels).find(label => label.getAttribute("data-unit") === "km");
+      updateToggle(container, getPreferredUnit());
 
-      if (!milesLabel || !kmLabel) return;
-
-      // Update label styles based on active unit
-      function updateLabelStyles(activeUnit: DistanceUnit) {
-        const baseClasses = "px-4 py-2 rounded-full text-sm font-medium transition-all duration-200";
-        const activeClasses = "bg-tqcc-yellow text-tqcc-black shadow-lg";
-        const inactiveClasses = "text-white";
-
-        if (activeUnit === "miles") {
-          milesLabel.className = `unit-toggle-label ${baseClasses} ${activeClasses}`;
-          kmLabel.className = `unit-toggle-label ${baseClasses} ${inactiveClasses}`;
-        } else {
-          kmLabel.className = `unit-toggle-label ${baseClasses} ${activeClasses}`;
-          milesLabel.className = `unit-toggle-label ${baseClasses} ${inactiveClasses}`;
-        }
-      }
-
-      // Function to update all toggles on the page
-      function updateAllToggles(unit: DistanceUnit) {
-        const allContainers = document.querySelectorAll(".unit-toggle-container");
-        allContainers.forEach((c) => {
-          const lbls = c.querySelectorAll(".unit-toggle-label");
-          const mLabel = Array.from(lbls).find(label => label.getAttribute("data-unit") === "miles");
-          const kLabel = Array.from(lbls).find(label => label.getAttribute("data-unit") === "km");
-
-          if (!mLabel || !kLabel) return;
-
-          const baseClasses = "px-4 py-2 rounded-full text-sm font-medium transition-all duration-200";
-          const activeClasses = "bg-tqcc-yellow text-tqcc-black shadow-lg";
-          const inactiveClasses = "text-white";
-
-          if (unit === "miles") {
-            mLabel.className = `unit-toggle-label ${baseClasses} ${activeClasses}`;
-            kLabel.className = `unit-toggle-label ${baseClasses} ${inactiveClasses}`;
-          } else {
-            kLabel.className = `unit-toggle-label ${baseClasses} ${activeClasses}`;
-            mLabel.className = `unit-toggle-label ${baseClasses} ${inactiveClasses}`;
-          }
-        });
-      }
-
-      // Set initial state
-      const currentUnit = getPreferredUnit();
-      updateLabelStyles(currentUnit);
-
-      // Add click handler to entire container - clicking anywhere toggles the unit
       container.addEventListener("click", () => {
         const current = getPreferredUnit();
         const newUnit: DistanceUnit = current === "miles" ? "km" : "miles";
@@ -90,6 +63,5 @@
     });
   }
 
-  // Initialize on page load
   document.addEventListener("astro:page-load", initUnitToggles);
 </script>

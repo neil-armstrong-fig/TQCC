@@ -1,5 +1,6 @@
 ---
 import { getCollection } from "astro:content";
+import { getPublicImage } from "../../lib/image-size";
 
 // Get the latest newsletter
 const MONTHS = ["January","February","March","April","May","June","July","August","September","October","November","December"];
@@ -10,6 +11,7 @@ const latestNewsletter = allNewsletters
     return MONTHS.indexOf(b.data.month) - MONTHS.indexOf(a.data.month);
   })[0];
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
+const hero = latestNewsletter ? await getPublicImage(latestNewsletter.data.heroImage, baseUrl) : {};
 ---
 
 {latestNewsletter && (
@@ -36,6 +38,12 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
             <img
               src={latestNewsletter.data.heroImage.startsWith('/') ? `${baseUrl}${latestNewsletter.data.heroImage}` : latestNewsletter.data.heroImage}
               alt={`${latestNewsletter.data.month} ${latestNewsletter.data.year} Newsletter`}
+              srcset={hero.srcset}
+              sizes="(min-width: 896px) 864px, 100vw"
+              width={hero.width}
+              height={hero.height}
+              loading="lazy"
+              decoding="async"
               class="block max-w-full h-auto group-hover:opacity-95 transition-opacity"
             />
           </a>

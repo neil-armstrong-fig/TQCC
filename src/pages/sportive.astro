@@ -3,12 +3,14 @@ import { getCollection, render } from "astro:content";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import JsonLd from "../components/seo/JsonLd.astro";
 import { getLastUpdated } from "../lib/git-date";
+import { getPublicImage } from "../lib/image-size";
 
 const events = await getCollection("events");
 const event = events.find((e) => e.id === "summer-solstice-sportive-2026")!;
 const { Content } = await render(event);
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
 
+const posterSize = event.data.image ? await getPublicImage(event.data.image) : {};
 const eventDate = event.data.date.toLocaleDateString("en-GB", { day: "numeric", month: "short", year: "numeric" });
 const eventTime = event.data.date.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
 
@@ -46,7 +48,7 @@ const routeGpxUrl = `${baseUrl}/gpx/${routeGpxFile}`;
   <!-- Hero -->
   <section class="bg-tqcc-black text-white py-16">
     <div class="max-w-7xl mx-auto px-4 text-center">
-      <p class="text-tqcc-pink font-semibold uppercase tracking-widest mb-3">Friday Evening Sportive</p>
+      <p class="text-tqcc-pink-light font-semibold uppercase tracking-widest mb-3">Friday Evening Sportive</p>
       <h1 class="text-4xl sm:text-5xl font-extrabold text-tqcc-yellow mb-4">Belfast Summer Solstice Sportive 2026</h1>
       <p class="text-xl text-white/80 max-w-4xl mx-auto leading-relaxed mb-8">
         Friday evening cycling sportive in Belfast, open to all abilities.
@@ -68,6 +70,9 @@ const routeGpxUrl = `${baseUrl}/gpx/${routeGpxFile}`;
             <img
               src={`${baseUrl}${event.data.image}`}
               alt="Summer Solstice Sportive 2026 poster"
+              width={posterSize.width}
+              height={posterSize.height}
+              decoding="async"
               class="w-full h-auto rounded-lg shadow-lg hover:shadow-xl transition-shadow"
             />
           </a>
@@ -138,11 +143,6 @@ const routeGpxUrl = `${baseUrl}/gpx/${routeGpxFile}`;
     </div>
   </section>
 
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-  <link rel="stylesheet" href="https://unpkg.com/@raruto/leaflet-elevation/dist/leaflet-elevation.css" />
-  <script is:inline src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-  <script is:inline src="https://unpkg.com/d3@7.9.0/dist/d3.min.js"></script>
-  <script is:inline src="https://unpkg.com/@raruto/leaflet-elevation/dist/leaflet-elevation.js"></script>
   <style is:global>
     .elevation-detached {
       font-family: inherit;
@@ -163,10 +163,65 @@ const routeGpxUrl = `${baseUrl}/gpx/${routeGpxFile}`;
     }
   </style>
   <script is:inline define:vars={{ routeGpxUrl }}>
+    // Leaflet, d3 and the elevation plugin are large and the map is below the fold,
+    // so only fetch them when the map is about to scroll into view.
+    var MAP_STYLES = [
+      "https://unpkg.com/leaflet@1.9.4/dist/leaflet.css",
+      "https://unpkg.com/@raruto/leaflet-elevation/dist/leaflet-elevation.css",
+    ];
+    var MAP_SCRIPTS = [
+      "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js",
+      "https://unpkg.com/d3@7.9.0/dist/d3.min.js",
+      "https://unpkg.com/@raruto/leaflet-elevation/dist/leaflet-elevation.js",
+    ];
+
+    function loadScript(src) {
+      return new Promise(function (resolve, reject) {
+        var el = document.createElement("script");
+        el.src = src;
+        el.onload = resolve;
+        el.onerror = reject;
+        document.head.appendChild(el);
+      });
+    }
+
+    function loadMapLibraries() {
+      MAP_STYLES.forEach(function (href) {
+        var link = document.createElement("link");
+        link.rel = "stylesheet";
+        link.href = href;
+        document.head.appendChild(link);
+      });
+      // Scripts depend on each other, so load them in order.
+      return MAP_SCRIPTS.reduce(function (chain, src) {
+        return chain.then(function () { return loadScript(src); });
+      }, Promise.resolve());
+    }
+
     document.addEventListener("DOMContentLoaded", function () {
       var mapEl = document.getElementById("sportive-map");
       if (!mapEl) return;
 
+      function start() {
+        loadMapLibraries().then(initMap).catch(function (err) {
+          console.error("Failed to load route map", err);
+        });
+      }
+
+      if ("IntersectionObserver" in window) {
+        var observer = new IntersectionObserver(function (entries) {
+          if (entries.some(function (e) { return e.isIntersecting; })) {
+            observer.disconnect();
+            start();
+          }
+        }, { rootMargin: "400px 0px" });
+        observer.observe(mapEl);
+      } else {
+        start();
+      }
+    });
+
+    function initMap() {
       var gpxUrl = routeGpxUrl;
       var map = L.map("sportive-map", { scrollWheelZoom: false }).setView([54.56, -5.94], 11);
       L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
@@ -227,6 +282,6 @@ const routeGpxUrl = `${baseUrl}/gpx/${routeGpxFile}`;
       window.addEventListener("unit-change", function () {
         buildElevation();
       });
-    });
+    }
   </script>
 </BaseLayout>

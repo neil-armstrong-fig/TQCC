@@ -61,3 +61,9 @@ coverage/
 # Misc
 *.tsbuildinfo
 .cache/
+
+# Lighthouse CI
+.lighthouseci/
+
+# Windows-style paths (C:\Users\…) that Chrome under WSL creates as literal directory names.
+/C:*

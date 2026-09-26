@@ -6,7 +6,15 @@ Astro 5 + Tailwind 4 site (Node version in `.nvmrc`). These instructions apply t
 
 - `npm run dev` starts the dev server.
 - `npm run build` builds the site; run it to verify changes.
-- `npx astro check` runs type checking.
+- `npm run check` runs type checking.
+- `npm run lighthouse` runs Lighthouse CI against `dist` (run `npm run build` first). Config is in `lighthouserc.json`; reports go to `.lighthouseci/` (gitignored). If no Chrome is found, set `CHROME_PATH` (for example to a Playwright Chromium).
+- Keep Lighthouse non-blocking for deployment. It runs in the separate `.github/workflows/lighthouse.yml` workflow so
+  failures can trigger GitHub Actions notifications without preventing the Pages workflow from deploying. Do not add
+  Lighthouse back to the deployment job.
+- On WSL, Lighthouse's Chrome launcher can create literal top-level directories named like
+  `C:\Users\<user>\AppData\Local\lighthouse.<digits>` in the repository, even when `CHROME_PATH` points to Linux
+  Chromium. After every Lighthouse run, remove only those generated profile directories and verify that no top-level
+  `C:` entries remain. Never leave them behind or treat the `/C:*` gitignore rule as cleanup.
 
 ## Distance & Speed Values
 
@@ -37,9 +45,10 @@ The sitemap is generated automatically by `@astrojs/sitemap` at build time (conf
 
 **Keep the `filter` exclusion list up to date.** Whenever a new page is added, decide whether it should be publicly indexed:
 - Public pages (rides, events, about, membership, etc.) — no action needed, included by default.
-- Password-gated or admin pages — add a `!page.includes("/your-path")` condition to the `filter` in `astro.config.mjs`.
+- Password-gated, admin, redirect, or work-in-progress pages — add their exact path to `sitemapExclusions` in `astro.config.mjs`.
 
-Currently excluded: `/admin`, `/members` (and all sub-paths).
+Currently excluded: `/admin`, `/members`, `/ni-boccia-league` (and their sub-paths), plus `/news`,
+`/operation-ironwoman`, `/faqs`, `/data-deletion`, and the duplicate `/events/summer-solstice-sportive-2026` route.
 
 ## Copy Style
 
@@ -59,3 +68,4 @@ Newsletter hero images (`heroImage` in `src/content/newsletters/*.md`, stored in
 - Crop those columns off (including the anti-aliased column) with `sharp` (`extract({ left: 0, top: 0, width: width - n, height })`), overwriting the file.
 - Don't paper over it with a dark card background; fix the image itself.
 - Past crops: September 2026 (6px), March (10px), April (11px). JPEGs have been fine so far.
+- Newsletter images are WebP, about 1600 px wide. After adding one, run `npm run newsletter:variants -- public/images/uploads/<file>.webp` to create the `-720`/`-1100` variants; `src/lib/image-size.ts` uses them for `srcset` and reads the intrinsic size for `width`/`height`.

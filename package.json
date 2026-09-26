@@ -6,7 +6,10 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build",
+    "check": "astro check",
     "preview": "astro preview",
+    "lighthouse": "lhci autorun",
+    "newsletter:variants": "node src/scripts/newsletter-variants/NewsletterVariants.ts",
     "astro": "astro"
   },
   "dependencies": {
@@ -17,5 +20,8 @@
     "tailwindcss": "^4.1.18",
     "typescript": "^5.9.3",
     "vanilla-cookieconsent": "^3.1.0"
+  },
+  "devDependencies": {
+    "@lhci/cli": "^0.15.1"
   }
 }
