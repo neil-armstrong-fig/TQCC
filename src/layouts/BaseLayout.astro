@@ -134,7 +134,8 @@ const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
         document.querySelectorAll(".distance-string").forEach((el) => {
           const originalDistance = el.getAttribute("data-distance");
           if (originalDistance) {
-            el.textContent = convertDistanceString(originalDistance, unit);
+            const exactKilometers = el.getAttribute("data-kilometers") || undefined;
+            el.textContent = convertDistanceString(originalDistance, unit, exactKilometers);
           }
         });
 
