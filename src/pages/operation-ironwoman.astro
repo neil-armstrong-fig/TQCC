@@ -1,6 +1,7 @@
 ---
 import { Image } from "astro:assets";
 import BaseLayout from "../layouts/BaseLayout.astro";
+import JsonLd from "../components/seo/JsonLd.astro";
 import { getLastUpdated } from "../lib/git-date";
 import DonationWidget from "../components/ironwoman/DonationWidget.astro";
 import { getDonationTotal } from "../lib/givestar";
@@ -14,14 +15,20 @@ import weymouthBikeGroup from "../assets/images/ironwoman/weymouth-bike-group.jp
 import weymouthBike from "../assets/images/ironwoman/weymouth-bike.jpeg";
 import weymouthMedal from "../assets/images/ironwoman/weymouth-medal.jpeg";
 
-const lastUpdated = getLastUpdated("src/pages/operation-ironwoman.astro");
+const publishDate = new Date("2026-09-29T00:00:00Z");
+const lastUpdated = getLastUpdated("src/pages/operation-ironwoman.astro") ?? publishDate.toISOString();
 
 const total = await getDonationTotal();
 const asOfDisplay = total.asOf.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric", timeZone: "UTC" });
 
 const donateUrl = "https://givestar.io/gs/operation-ironwoman-68905";
 const instagramUrl = "https://www.instagram.com/operationironwoman";
+const linkedinUrl = "https://uk.linkedin.com/in/emily-bond-3b2a0321b";
+const anyGivenRundayUrl = "https://open.spotify.com/episode/6KyM4rUO2sCAXgFNYJV7fl";
+const runningRulesUrl = "https://podcasts.apple.com/gb/podcast/161-operation-ironwoman-with-emily-bond-from-leg/id1670366028?i=1000752820287";
 const offlineDonations = 198;
+const pageTitle = "Operation Ironwoman: Emily Bond’s UK IRONMAN Story | TQCC";
+const pageDescription = "Emily Bond made history with Operation Ironwoman, completing all five UK IRONMAN races in one 2026 season with a £10,000 target for four charities.";
 
 const races = [
   { race: "Race 1", name: "IRONMAN 70.3 Bolton", date: "7 June 2026", result: "06:34:55" },
@@ -45,7 +52,7 @@ const gallery = [
   {
     src: tqccCafeStop,
     alt: "Emily Bond and two Titanic Quarter Cycling Club riders taking a break at a cafe",
-    caption: "A TQCC club ride cafe stop.",
+    caption: "A TQCC cafe stop during a club ride while Emily was ill.",
   },
   {
     src: portavoeSwimTraining,
@@ -55,7 +62,7 @@ const gallery = [
   {
     src: preSwanseaClubRide,
     alt: "Emily Bond on a Titanic Quarter Cycling Club training ride before IRONMAN 70.3 Swansea",
-    caption: "A TQCC club ride before Swansea, while Emily was ill.",
+    caption: "A TQCC club ride before IRONMAN 70.3 Swansea.",
   },
   {
     src: weymouthBikeGroup,
@@ -96,22 +103,72 @@ const charities = [
     reason: "Supported Emily's IRONMAN 70.3 Swansea entry alongside its first aid work across Wales.",
   },
 ];
+
+const relatedLinks = [
+  {
+    name: "Operation Ironwoman on Instagram",
+    description: "Follow Emily's updates and see more from the challenge.",
+    url: instagramUrl,
+  },
+  {
+    name: "Emily Bond on LinkedIn",
+    description: "Emily's professional profile and Operation Ironwoman updates.",
+    url: linkedinUrl,
+  },
+  {
+    name: "Any Given Runday podcast",
+    description: "Emily discusses Operation Ironwoman, endurance and personal growth.",
+    url: anyGivenRundayUrl,
+  },
+  {
+    name: "The Running Rules Podcast",
+    description: "Emily shares the story behind her challenge and return to running.",
+    url: runningRulesUrl,
+  },
+];
 ---
 
 <BaseLayout
-  title="Operation Ironwoman"
-  description="TQCC member Emily Bond became the first woman to complete every UK IRONMAN race in one season, raising money for four charities."
+  title={pageTitle}
+  description={pageDescription}
+  keywords="Operation Ironwoman, Emily Bond, UK IRONMAN, every UK IRONMAN race, women in triathlon, charity endurance challenge"
+  image={weymouthRun.src}
+  type="article"
+  publishDate={publishDate}
   lastUpdated={lastUpdated}
-  noindex
 >
+  <JsonLd
+    type="BlogPosting"
+    title="Operation Ironwoman: Emily Bond’s UK IRONMAN Story"
+    description={pageDescription}
+    datePublished={publishDate}
+    dateModified={lastUpdated}
+    image={weymouthRun.src}
+    aboutPerson={{
+      name: "Emily Bond",
+      description: "Northern Ireland endurance athlete, aerospace engineering PhD researcher and creator of Operation Ironwoman.",
+      sameAs: [instagramUrl, linkedinUrl],
+      subjectOf: [
+        {
+          name: "Emily Bond: Operation Ironwoman, Performing TEDx Talks, Learning Personal Growth from Rocket Science",
+          url: anyGivenRundayUrl,
+        },
+        {
+          name: "Operation Ironwoman with Emily Bond, from leg surgery to tackling every UK IRONMAN race in one season",
+          url: runningRulesUrl,
+        },
+      ],
+    }}
+  />
+
   <section class="py-12">
     <div class="max-w-7xl mx-auto px-4">
       <h1 class="text-4xl font-bold mb-8">Operation Ironwoman</h1>
 
       <p class="text-xl text-tqcc-gray leading-relaxed mb-8">
-        TQCC member Emily Bond has become the first woman to complete every UK
-        IRONMAN race in a single season, raising
-        <strong class="text-tqcc-black">£10,000</strong> for four charities along the way.
+        TQCC member Emily Bond became the first woman to complete every UK
+        IRONMAN race in a single season. Through Operation Ironwoman, she is
+        aiming to raise <strong class="text-tqcc-black">£10,000</strong> for four charities.
       </p>
 
       <div class="flex flex-col sm:flex-row gap-4 mb-12">
@@ -194,7 +251,7 @@ const charities = [
         <p class="text-sm text-tqcc-gray mt-2">Emily Bond</p>
       </div>
 
-      <h2 class="text-2xl font-bold mb-4">Emily's story</h2>
+      <h2 class="text-2xl font-bold mb-4">Emily Bond's story</h2>
       <p class="text-tqcc-gray mb-4">
         In 2018, major surgery on both of Emily's legs left her unable to run for
         around two and a half years. Completing an IRONMAN seemed impossible.
@@ -210,6 +267,24 @@ const charities = [
         At IRONMAN Leeds she covered the <span class="distance-string" data-distance="112 miles">112 miles</span> bike course and the full marathon
         run in a time of 13 hours 48 minutes 57 seconds.
       </p>
+
+      <h2 class="text-2xl font-bold mb-4">Emily Bond, profiles and interviews</h2>
+      <p class="text-tqcc-gray mb-6">
+        Follow Emily and hear her tell the story behind Operation Ironwoman in her own words.
+      </p>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-12">
+        {relatedLinks.map((link) => (
+          <a
+            href={link.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="block border border-gray-200 rounded-lg p-5 hover:border-tqcc-pink hover:shadow-md transition-all"
+          >
+            <h3 class="font-bold text-tqcc-pink">{link.name}</h3>
+            <p class="text-tqcc-gray text-sm mt-2">{link.description}</p>
+          </a>
+        ))}
+      </div>
 
       <h2 class="text-2xl font-bold mb-4">The races</h2>
       <p class="text-tqcc-gray mb-6">Five starts, five finishes, all in one season.</p>

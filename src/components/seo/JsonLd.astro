@@ -11,12 +11,20 @@ interface Props {
   eventEndDate?: Date;
   eventUrl?: string;
   eventImage?: string;
+  dateModified?: string;
+  aboutPerson?: {
+    name: string;
+    description?: string;
+    sameAs?: string[];
+    subjectOf?: { name: string; url: string }[];
+  };
 }
 
-const { type, title, description, datePublished, author, image, location, eventDate, eventEndDate, eventUrl, eventImage } =
+const { type, title, description, datePublished, author, image, location, eventDate, eventEndDate, eventUrl, eventImage, dateModified, aboutPerson } =
   Astro.props;
 const siteUrl = Astro.site?.toString().replace(/\/$/, "") || "https://titanicquartercc.com";
 const baseUrl = import.meta.env.BASE_URL.replace(/\/$/, "");
+const pageUrl = new URL(Astro.url.pathname, Astro.site || siteUrl).toString();
 
 function buildSchema() {
   const schemas: Record<string, unknown>[] = [];
@@ -77,14 +85,37 @@ function buildSchema() {
   });
 
   if (type === "BlogPosting" && title) {
+    const about = aboutPerson
+      ? {
+          "@type": "Person",
+          "@id": `${pageUrl}#person`,
+          name: aboutPerson.name,
+          description: aboutPerson.description,
+          memberOf: { "@id": `${siteUrl}/#organization` },
+          sameAs: aboutPerson.sameAs,
+          subjectOf: aboutPerson.subjectOf?.map((item) => ({
+            "@type": "PodcastEpisode",
+            name: item.name,
+            url: item.url,
+          })),
+        }
+      : undefined;
+
     schemas.push({
       "@type": "BlogPosting",
+      "@id": `${pageUrl}#article`,
+      url: pageUrl,
+      mainEntityOfPage: { "@type": "WebPage", "@id": pageUrl },
       headline: title,
       description,
       datePublished: datePublished?.toISOString(),
-      author: { "@type": "Person", name: author || "TQCC" },
+      dateModified,
+      author: author
+        ? { "@type": "Person", name: author }
+        : { "@id": `${siteUrl}/#organization` },
       publisher: { "@id": `${siteUrl}/#organization` },
       image: image ? (image.startsWith('/') ? `${siteUrl}${baseUrl}${image}` : image) : undefined,
+      about,
     });
   }
 

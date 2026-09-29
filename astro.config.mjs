@@ -9,7 +9,6 @@ const sitemapExclusions = [
   "/members",
   "/ni-boccia-league",
   "/news",
-  "/operation-ironwoman",
   "/faqs",
   "/data-deletion",
   "/events/summer-solstice-sportive-2026",

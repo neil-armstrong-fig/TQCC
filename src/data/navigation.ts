@@ -11,6 +11,7 @@ export const mainNavigation: NavItem[] = [
   { label: "Rides & Events", href: "/rides-events" },
   { label: "Membership", href: "/membership" },
   { label: "Contact", href: "/contact" },
+  { label: "Operation Ironwoman", href: "/operation-ironwoman", highlight: true },
 ];
 
 export const socialLinks = [

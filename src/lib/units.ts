@@ -74,12 +74,14 @@ export function formatDistance(meters: number, unit: DistanceUnit): string {
 /**
  * Parse a distance string and convert if needed
  * Examples: "50 miles", "30-40 miles", "~25 miles"
- * Miles: 1 decimal place, Kilometers: whole numbers
+ * Original mile values retain their supplied precision; kilometers are rounded
+ * to whole numbers.
  */
 export function convertDistanceString(distanceStr: string, targetUnit: DistanceUnit): string {
-  // If already in target unit, round to whole numbers to hide precision decimals
+  // Keep the original display value when it is already in the requested unit.
+  // This preserves meaningful values such as 2.4 and 26.2 miles.
   if (distanceStr.toLowerCase().includes(targetUnit)) {
-    return distanceStr.replace(/(\d+)\.\d+/g, '$1');
+    return distanceStr;
   }
 
   // Extract numbers and convert
