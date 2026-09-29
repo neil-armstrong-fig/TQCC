@@ -2,13 +2,14 @@
 interface Props {
   amount: number;
   giftAid: number;
+  offline: number;
   target: number;
   asOf: string;
   donateUrl: string;
 }
 
-const { amount, giftAid, target, asOf, donateUrl } = Astro.props;
-const raised = amount + giftAid;
+const { amount, giftAid, offline, target, asOf, donateUrl } = Astro.props;
+const raised = amount + giftAid + offline;
 const percent = Math.min(100, (raised / target) * 100);
 const remaining = Math.max(0, target - raised);
 
@@ -27,7 +28,10 @@ const gbpWhole = (n: number) => `£${Math.round(n).toLocaleString("en-GB")}`;
     </div>
     <p class="text-white/70 text-sm sm:text-right">
       of {gbpWhole(target)} target<br />
-      <span class="text-white/50">{gbp(amount)} donated + {gbp(giftAid)} Gift Aid, as of {asOf}</span>
+      <span class="text-white/50">
+        {gbp(amount)} donated online + {gbp(giftAid)} Gift Aid + {gbp(offline)} offline,<br />
+        Givestar updated {asOf}
+      </span>
     </p>
   </div>
 

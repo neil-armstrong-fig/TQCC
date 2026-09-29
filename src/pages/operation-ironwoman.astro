@@ -1,8 +1,18 @@
 ---
+import { Image } from "astro:assets";
 import BaseLayout from "../layouts/BaseLayout.astro";
 import { getLastUpdated } from "../lib/git-date";
 import DonationWidget from "../components/ironwoman/DonationWidget.astro";
 import { getDonationTotal } from "../lib/givestar";
+import walesMedal from "../assets/images/ironwoman/wales-medal.jpeg";
+import leedsFinish from "../assets/images/ironwoman/leeds-finish.jpeg";
+import weymouthRun from "../assets/images/ironwoman/weymouth-run.jpeg";
+import tqccCafeStop from "../assets/images/ironwoman/tqcc-cafe-stop.jpeg";
+import portavoeSwimTraining from "../assets/images/ironwoman/portavoe-swim-training.jpeg";
+import preSwanseaClubRide from "../assets/images/ironwoman/pre-swansea-club-ride.jpeg";
+import weymouthBikeGroup from "../assets/images/ironwoman/weymouth-bike-group.jpeg";
+import weymouthBike from "../assets/images/ironwoman/weymouth-bike.jpeg";
+import weymouthMedal from "../assets/images/ironwoman/weymouth-medal.jpeg";
 
 const lastUpdated = getLastUpdated("src/pages/operation-ironwoman.astro");
 
@@ -11,17 +21,58 @@ const asOfDisplay = total.asOf.toLocaleDateString("en-GB", { day: "numeric", mon
 
 const donateUrl = "https://givestar.io/gs/operation-ironwoman-68905";
 const instagramUrl = "https://www.instagram.com/operationironwoman";
+const offlineDonations = 198;
 
-// PLACEHOLDER: confirm names, dates and results with Emily.
 const races = [
-  { race: "Race 1", name: "[PLACEHOLDER: race name]", date: "[PLACEHOLDER: date]", result: "[PLACEHOLDER: result]" },
-  { race: "Race 2", name: "IRONMAN 70.3 Swansea", date: "12 July 2026", result: "[PLACEHOLDER: result]" },
-  { race: "Race 3", name: "IRONMAN Leeds", date: "[PLACEHOLDER: date]", result: "13:48:57" },
-  { race: "Race 4", name: "IRONMAN Wales, Tenby", date: "[PLACEHOLDER: date]", result: "[PLACEHOLDER: result]" },
-  { race: "Race 5", name: "[PLACEHOLDER: final race name]", date: "[PLACEHOLDER: date]", result: "[PLACEHOLDER: result]" },
+  { race: "Race 1", name: "IRONMAN 70.3 Bolton", date: "7 June 2026", result: "06:34:55" },
+  { race: "Race 2", name: "IRONMAN 70.3 Swansea", date: "12 July 2026", result: "07:07:50" },
+  { race: "Race 3", name: "IRONMAN Leeds", date: "16 August 2026", result: "13:48:57" },
+  { race: "Race 4", name: "IRONMAN Wales, Tenby", date: "13 September 2026", result: "16:03:59" },
+  { race: "Race 5", name: "IRONMAN 70.3 Weymouth", date: "20 September 2026", result: "06:55:57" },
 ];
 
-const isPlaceholder = (text: string) => text.includes("PLACEHOLDER");
+const gallery = [
+  {
+    src: walesMedal,
+    alt: "Emily Bond holding her medal and ceremonial key after completing IRONMAN Wales",
+    caption: "After completing IRONMAN Wales in Tenby.",
+  },
+  {
+    src: leedsFinish,
+    alt: "Emily Bond reacting emotionally beneath the IRONMAN Leeds finish arch",
+    caption: "An emotional finish at IRONMAN Leeds.",
+  },
+  {
+    src: tqccCafeStop,
+    alt: "Emily Bond and two Titanic Quarter Cycling Club riders taking a break at a cafe",
+    caption: "A TQCC club ride cafe stop.",
+  },
+  {
+    src: portavoeSwimTraining,
+    alt: "Emily Bond in her wetsuit after an open-water swim training session at Portavoe Beach",
+    caption: "Open-water swim training at Portavoe Beach.",
+  },
+  {
+    src: preSwanseaClubRide,
+    alt: "Emily Bond on a Titanic Quarter Cycling Club training ride before IRONMAN 70.3 Swansea",
+    caption: "A TQCC club ride before Swansea, while Emily was ill.",
+  },
+  {
+    src: weymouthBikeGroup,
+    alt: "Emily Bond riding with a group on the IRONMAN 70.3 Weymouth bike course",
+    caption: "Riding with the group at IRONMAN 70.3 Weymouth.",
+  },
+  {
+    src: weymouthBike,
+    alt: "Emily Bond racing on the bike course at IRONMAN 70.3 Weymouth",
+    caption: "On the bike at IRONMAN 70.3 Weymouth.",
+  },
+  {
+    src: weymouthMedal,
+    alt: "Emily Bond embracing her best friend at the IRONMAN 70.3 Weymouth finish line",
+    caption: "Emily's best friend presents her Weymouth medal after supporting her at every race.",
+  },
+];
 
 const charities = [
   {
@@ -41,15 +92,15 @@ const charities = [
   },
   {
     name: "St John Ambulance Cymru",
-    url: "https://www.sja.org.uk/",
-    reason: "Providing first aid and emergency care in communities across Wales.",
+    url: "https://www.sjacymru.org.uk/",
+    reason: "Supported Emily's IRONMAN 70.3 Swansea entry alongside its first aid work across Wales.",
   },
 ];
 ---
 
 <BaseLayout
   title="Operation Ironwoman"
-  description="TQCC member Emily Bond is taking on five UK IRONMAN races in one season to raise £10,000 for four charities. Find out more and donate."
+  description="TQCC member Emily Bond became the first woman to complete every UK IRONMAN race in one season, raising money for four charities."
   lastUpdated={lastUpdated}
   noindex
 >
@@ -58,8 +109,8 @@ const charities = [
       <h1 class="text-4xl font-bold mb-8">Operation Ironwoman</h1>
 
       <p class="text-xl text-tqcc-gray leading-relaxed mb-8">
-        TQCC member Emily Bond is aiming to become the first woman to complete
-        every UK IRONMAN race in a single season, raising
+        TQCC member Emily Bond has become the first woman to complete every UK
+        IRONMAN race in a single season, raising
         <strong class="text-tqcc-black">£10,000</strong> for four charities along the way.
       </p>
 
@@ -78,13 +129,24 @@ const charities = [
           rel="noopener noreferrer"
           class="inline-block text-center border border-tqcc-pink text-tqcc-pink font-bold px-6 py-3 rounded-lg hover:bg-tqcc-pink/10 transition-colors"
         >
-          Follow the journey on Instagram
+          Follow Operation Ironwoman on Instagram
         </a>
       </div>
 
-      <div class="flex items-center justify-center text-center animate-pulse border-2 border-dashed border-red-400 bg-red-50 text-red-600 font-semibold rounded-lg p-4 w-full h-72 md:h-96 mb-12">
-          [PHOTO PLACEHOLDER: main photo of Emily, ideally racing or at a finish line]
-        </div>
+      <figure class="mb-12">
+        <Image
+          src={weymouthRun}
+          alt="Emily Bond waving while running along the seafront at IRONMAN 70.3 Weymouth"
+          class="rounded-lg shadow-lg w-full"
+          loading="eager"
+          fetchpriority="high"
+          widths={[640, 1024, 1600]}
+          sizes="100vw"
+        />
+        <figcaption class="mt-2 text-sm text-tqcc-gray text-center">
+          The final race, IRONMAN 70.3 Weymouth.
+        </figcaption>
+      </figure>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
         <div class="bg-tqcc-gray-light p-5 rounded-lg text-center">
@@ -104,6 +166,7 @@ const charities = [
       <DonationWidget
         amount={total.amount}
         giftAid={total.giftAid}
+        offline={offlineDonations}
         target={10000}
         asOf={asOfDisplay}
         donateUrl={donateUrl}
@@ -111,15 +174,16 @@ const charities = [
 
       <h2 class="text-2xl font-bold mb-4">The challenge</h2>
       <p class="text-tqcc-gray mb-4">
-        A full IRONMAN is a <span class="distance-string" data-distance="2.4 miles">2.4 miles</span> swim, a <span class="distance-string" data-distance="112 miles">112 miles</span> bike ride and a <span class="distance-string" data-distance="26.2 miles">26.2 miles</span>
-        run, back to back. Emily is taking on the UK's IRONMAN races in a single
-        season, a feat no woman has completed before. She calls it
+        A full IRONMAN is a swim of <span class="distance-string" data-distance="2.4 miles">2.4 miles</span>, a bike ride of <span class="distance-string" data-distance="112 miles">112 miles</span> and a run of <span class="distance-string" data-distance="26.2 miles">26.2 miles</span>,
+        completed back to back. In 2026, Emily completed all five of the UK's
+        IRONMAN races in a single season and became the first woman to achieve
+        the feat. She calls it
         <strong class="text-tqcc-black">Operation Ironwoman</strong>.
       </p>
       <p class="text-tqcc-gray mb-8">
-        Emily is an aerospace engineering PhD student and endurance athlete. So
-        far the season has included IRONMAN 70.3 Swansea, IRONMAN Leeds and
-        IRONMAN Wales in Tenby, with more still to come.
+        Emily is an aerospace engineering PhD student and endurance athlete.
+        Her season began at IRONMAN 70.3 Bolton and concluded at IRONMAN 70.3
+        Weymouth, just one week after she completed IRONMAN Wales in Tenby.
       </p>
 
       <div class="bg-tqcc-yellow/10 border-l-4 border-tqcc-yellow p-6 rounded-r-lg mb-12">
@@ -136,10 +200,11 @@ const charities = [
         around two and a half years. Completing an IRONMAN seemed impossible.
       </p>
       <p class="text-tqcc-gray mb-4">
-        In October 2024 she signed up for her first 5k. Within months she had
-        bought a second-hand bike from a friend and entered her first triathlon.
-        After just four months of unstructured training she completed IRONMAN
-        70.3 Weymouth, and the idea for Operation Ironwoman was born.
+        In October 2024 she signed up for her first 5k, which she ran in April
+        2025. She then bought a second-hand bike from a friend and entered her
+        first triathlon. After just four months of unstructured training she
+        completed IRONMAN 70.3 Weymouth, and the idea for Operation Ironwoman
+        was born.
       </p>
       <p class="text-tqcc-gray mb-12">
         At IRONMAN Leeds she covered the <span class="distance-string" data-distance="112 miles">112 miles</span> bike course and the full marathon
@@ -147,34 +212,40 @@ const charities = [
       </p>
 
       <h2 class="text-2xl font-bold mb-4">The races</h2>
-      <p class="text-tqcc-gray mb-6">
-        <span class="animate-pulse text-red-600 font-semibold">[PLACEHOLDER: confirm the full list of five races, dates and results with Emily.]</span>
-      </p>
+      <p class="text-tqcc-gray mb-6">Five starts, five finishes, all in one season.</p>
       <div class="space-y-3 mb-12">
         {races.map((r) => (
           <div class="border border-gray-200 rounded-lg p-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
             <div>
               <span class="text-tqcc-pink font-semibold text-sm">{r.race}</span>
-              <h3 class={isPlaceholder(r.name) ? "font-bold animate-pulse text-red-600" : "font-bold"}>{r.name}</h3>
+              <h3 class="font-bold">{r.name}</h3>
             </div>
             <div class="sm:text-right text-sm text-tqcc-gray">
-              <p class={isPlaceholder(r.date) ? "animate-pulse text-red-600 font-semibold" : ""}>{r.date}</p>
-              <p>Finish time: <span class={isPlaceholder(r.result) ? "animate-pulse text-red-600 font-semibold" : ""}>{r.result}</span></p>
+              <p>{r.date}</p>
+              <p>Finish time: {r.result}</p>
             </div>
           </div>
         ))}
       </div>
 
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-12">
-        <div class="flex items-center justify-center text-center animate-pulse border-2 border-dashed border-red-400 bg-red-50 text-red-600 font-semibold rounded-lg p-4 h-48">
-          [PHOTO PLACEHOLDER: training photo]
-        </div>
-        <div class="flex items-center justify-center text-center animate-pulse border-2 border-dashed border-red-400 bg-red-50 text-red-600 font-semibold rounded-lg p-4 h-48">
-          [PHOTO PLACEHOLDER: race day photo]
-        </div>
-        <div class="flex items-center justify-center text-center animate-pulse border-2 border-dashed border-red-400 bg-red-50 text-red-600 font-semibold rounded-lg p-4 h-48">
-          [PHOTO PLACEHOLDER: finish line photo]
-        </div>
+      <h2 class="text-2xl font-bold mb-4">The journey</h2>
+      <p class="text-tqcc-gray mb-6">
+        From club rides and open-water training to five finish lines across the UK.
+      </p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 mb-12 items-start">
+        {gallery.map((photo) => (
+          <figure class="overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm">
+            <Image
+              src={photo.src}
+              alt={photo.alt}
+              class="w-full h-auto"
+              loading="lazy"
+              widths={[400, 720]}
+              sizes="(min-width: 1024px) 33vw, (min-width: 640px) 50vw, 100vw"
+            />
+            <figcaption class="p-3 text-sm text-tqcc-gray">{photo.caption}</figcaption>
+          </figure>
+        ))}
       </div>
 
       <h2 class="text-2xl font-bold mb-4">Who is Emily raising money for?</h2>
@@ -201,8 +272,8 @@ const charities = [
         </h2>
         <p class="text-white/80 mb-4">
           Every donation, big or small, helps Emily reach her target and
-          supports four brilliant charities. Follow along on Instagram to cheer
-          her on for the final races.
+          supports four brilliant charities. Follow Operation Ironwoman on
+          Instagram to celebrate the completed challenge and see what comes next.
         </p>
         <a
           href={donateUrl}
