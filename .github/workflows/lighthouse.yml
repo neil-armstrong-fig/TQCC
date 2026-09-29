@@ -48,3 +48,4 @@ jobs:
           path: .lighthouseci/
           if-no-files-found: ignore
           retention-days: 7
+          include-hidden-files: true
