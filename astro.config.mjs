@@ -2,8 +2,6 @@ import { defineConfig } from "astro/config";
 import tailwindcss from "@tailwindcss/vite";
 import sitemap from "@astrojs/sitemap";
 
-// Detect build environment
-const isNetlify = process.env.NETLIFY === "true";
 const sitemapExclusions = [
   "/admin",
   "/members",
@@ -15,9 +13,9 @@ const sitemapExclusions = [
 ];
 
 export default defineConfig({
-  site: isNetlify
-    ? "https://stirring-baklava-d1133c.netlify.app"
-    : "https://www.titanicquartercc.com",
+  // Canonicals, Open Graph URLs, structured data, and the sitemap must always
+  // identify the public site, including in builds made by preview hosts.
+  site: "https://www.titanicquartercc.com",
   base: "/",
   prefetch: {
     prefetchAll: false,
